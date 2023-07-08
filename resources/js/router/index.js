@@ -95,6 +95,7 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
+    //test change for github
     /*import.meta.env.BASE_URL*/
     scrollBehavior(to, from, savedPosition) {
         // always scroll to top
