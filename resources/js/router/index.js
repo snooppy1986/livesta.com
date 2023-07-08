@@ -95,7 +95,6 @@ const routes = [
 
 const router = createRouter({
     history: createWebHistory(),
-    //asdfasdfasdfasdfsadfsdfyhfhgc
     scrollBehavior(to, from, savedPosition) {
         // always scroll to top
         return { top: 0 }
