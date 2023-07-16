@@ -45,6 +45,11 @@ class Product extends Model
         return $this->hasMany(Review::class)->orderBy('created_at', 'DESC');
     }
 
+    public function meta()
+    {
+        return $this->hasOne(ProductMeta::class);
+    }
+
     public static function boot()
     {
         parent::boot();

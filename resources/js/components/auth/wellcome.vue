@@ -268,6 +268,12 @@
         </section>
         <!--== End My Account Area Wrapper ==-->
     </main>
+    <ScaleLoader
+        :loading="statusLoader"
+        color="#ff6565"
+        height="20px"
+        width="5px"
+    />
     <show_order_modal :order="order" :order_products="order_products"></show_order_modal>
     <address_editor_modal  :address="address" :user_id="user.id" @message="getMessage"></address_editor_modal>
 </template>
@@ -278,8 +284,13 @@
     import Dropzone from 'dropzone';
     import show_order_modal from "../elements/show_order_modal.vue";
     import address_editor_modal from "../elements/address_editor_modal.vue";
+    import { ScaleLoader } from "vue3-spinner";
     export default {
         name: "welcome",
+        // meta info
+        metaInfo:{
+            title: 'Особистий кабінет'
+        },
         data(){
             return{
                 user: {},
@@ -300,12 +311,14 @@
                 current_password: null,
                 new_password: null,
                 new_password_confirmation: null,
-                removeImage: false
+                removeImage: false,
+                statusLoader: true
             }
         },
         components:{
             show_order_modal,
-            address_editor_modal
+            address_editor_modal,
+            ScaleLoader
         },
         mounted() {
             this.getUser();
@@ -384,7 +397,7 @@
                 this.getUser();
             },
             getUser(){
-                Api.post('/api/auth/get-auth-user').then(response => {
+                Api.post('/api/get-auth-user').then(response => {
                     this.user = response.data.user;
                     this.orders = response.data.orders;
                     this.address = response.data.address;
@@ -397,6 +410,8 @@
                     //get file to dropzone
                     let file = { name: this.user.avatar, size: response.data.size };
                     this.avatar_dropzone.displayExistingFile(file, this.user.avatar_url);
+
+                    this.statusLoader = false;
                 })
             },
             getOrder(id){

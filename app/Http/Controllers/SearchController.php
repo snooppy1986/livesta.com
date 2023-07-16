@@ -5,15 +5,21 @@ namespace App\Http\Controllers;
 use App\Http\Filter\ProductFilter;
 use App\Models\Category;
 use App\Models\Product;
+use Butschster\Head\Facades\Meta;
+use Butschster\Head\Hydrator\VueMetaHydrator;
 use Illuminate\Http\Request;
 
 class SearchController extends Controller
 {
-    public function index(Request $request)
+    public function index(Request $request, VueMetaHydrator $hydrator)
     {
 
         $data=$request->all();
+        //get meta
+        $meta =  Meta::setTitle('Пошук ('.$data['search'].')')
+            ->setFavicon(url('/images/favicon.webp'));
 
+        $vue_meta = $hydrator->hydrate($meta);
         if($data['search']){
             $filter = app()->make(ProductFilter::class, ['queryParams'=>array_filter($data)]);
             $products = Product::filter($filter)->get();
@@ -46,9 +52,17 @@ class SearchController extends Controller
                 'categories' => $categories
             ];
 
-            return response()->json($search_result);
+            return response()->json([
+                'search_result' => $search_result,
+                'meta' => $vue_meta
+
+            ]);
         }else{
-            return response()->json(null);
+            return response()->json([
+                'search_result' => null,
+                'meta' => $vue_meta
+
+            ]);
         }
 
     }

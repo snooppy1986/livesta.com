@@ -8,13 +8,15 @@ use App\Http\Resources\CategoryResource;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Product;
+use Butschster\Head\Facades\Meta;
+use Butschster\Head\Hydrator\VueMetaHydrator;
 use Illuminate\Http\Request;
 use function Pest\json;
 use function Symfony\Component\String\reverse;
 
 class CategoryController extends Controller
 {
-    public function show( Request $request)
+    public function show( Request $request, VueMetaHydrator $hydrator)
     {
         $data = $request->validate([
             'id'=> "nullable|integer",
@@ -52,7 +54,12 @@ class CategoryController extends Controller
                 ->count();
         }
 
-        /*dd($count_product);*/
+        //get meta
+        $meta =  Meta::setTitle($category->title)
+            ->setFavicon(url('/images/favicon.webp'));
+
+        $vue_meta = $hydrator->hydrate($meta);
+
         return response()->json(
             [
                /*'id'=>$id,*/
@@ -62,7 +69,8 @@ class CategoryController extends Controller
                 'products' => $products,
                 'price_max' => isset($price_max) ? $price_max : null,
                 'price_min' => isset($price_min) ? $price_min : null,
-                'count_product'=> isset($count_product) ? $count_product : null
+                'count_product' => isset($count_product) ? $count_product : null,
+                'meta' => $vue_meta
             ]
         );
     }

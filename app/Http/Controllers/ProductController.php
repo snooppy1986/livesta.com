@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use Butschster\Head\Facades\Meta;
+use Butschster\Head\Hydrator\VueMetaHydrator;
 use Illuminate\Http\Request;
 use function Pest\json;
 use function Symfony\Component\String\reverse;
@@ -12,10 +14,17 @@ use function Symfony\Component\String\reverse;
 class ProductController extends Controller
 {
 
-    public function index(Request $request)
+    public function index(Request $request, VueMetaHydrator $hydrator)
     {
         $id = $request->id;
-        $product = Product::with('attributes', 'reviews', 'category')->whereId($id)->first();
+        $product = Product::with('attributes', 'reviews', 'category', 'meta')->whereId($id)->first();
+
+        $meta =  Meta::setTitle($product->title)
+            ->setFavicon(url('/images/favicon.webp'))
+            ->setKeywords($product->meta ? $product->meta->keywords : '')
+            ->setDescription($product->meta ? $product->meta->description : '');
+        $vue_meta = $hydrator->hydrate($meta);
+
         //dd($product->category);
         $category_id = $request->category_id ?  $request->category_id : null;
         if($category_id) {
@@ -34,8 +43,9 @@ class ProductController extends Controller
             'product'=> $product,
             'related_products' => $relate_products,
             'rating' => $rating,
-            'category'=>$category,
-            'categories' => $categories
+            'category'=> $category,
+            'categories' => $categories,
+            'meta' => $vue_meta
         ]);
     }
 }

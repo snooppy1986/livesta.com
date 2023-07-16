@@ -157,7 +157,11 @@
 
 <script>
     export default {
-        name: "faq"
+        name: "faq",
+        // meta info
+        metaInfo:{
+            title: 'Допомога'
+        },
     }
 </script>
 

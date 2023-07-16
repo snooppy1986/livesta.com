@@ -198,6 +198,12 @@
         </div>
     </section>
     <!--== End Product Area Wrapper ==-->
+    <ScaleLoader
+        :loading="statusLoader"
+        color="#ff6565"
+        height="20px"
+        width="5px"
+    />
 </template>
 
 <script>
@@ -210,8 +216,6 @@
     import rangeSlider from "../elements/rangeSlider.vue";
     import v_select from "../elements/v-select.vue";
     import { ScaleLoader } from "vue3-spinner";
-
-
 
     export default {
         name: "index",
@@ -234,25 +238,18 @@
                 ],
                 select_default: 'Сортувати по:',
                 statusLoader: true,
-
+                meta: {}
             }
         },
-       /* data(){
+       //meta info
+        metaInfo(){
+            const meta = this.meta;
             return{
-                count: 0,
-                price_max: 0,
-                price_min: 0,
-                options: [
-                    {name: 'По популярності', value: ['rating', 'DESC']},
-                    {name: 'За алфавітом А - Я', value: ['title', 'ASC']},
-                    {name: 'По зростанню цін', value: ['price_special', 'ASC']},
-                    {name: 'По зменшенню ціни', value: ['price_special', 'DESC']},
-
-                ],
-                select_default: 'Сортувати по:',
-                statusLoader: true
+                title: meta.title ? meta.title : '',
+                meta: meta.meta ? meta.meta : [],
+                link: meta.link ? meta.link : []
             }
-        },*/
+        },
         components:{
             StarRating,
             product_preview,
@@ -275,13 +272,14 @@
                     'search': this.search_req
                 }).then(res=>{
                     console.log(res.data);
-                    this.price_max = res.data.price_max;
-                    this.price_min = res.data.price_min;
-                    this.count = res.data.count_product;
-                    this.products = res.data.search_products.data;
-                    this.pagination = res.data.search_products;
-                    this.categories = res.data.categories;
-                    console.log(this.products);
+                    this.price_max = res.data.search_result ? res.data.search_result.price_max : '';
+                    this.price_min = res.data.search_result ? res.data.search_result.price_min : '';
+                    this.count = res.data.search_result ? res.data.search_result.count_product : '';
+                    this.products = res.data.search_result ? res.data.search_result.search_products.data : '';
+                    this.pagination = res.data.search_result ? res.data.search_result.search_products : '';
+                    this.categories = res.data.search_result ? res.data.search_result.categories : '';
+                    this.meta = res.data.meta;
+                    this.statusLoader = false;
                 }).catch(error=>{
                     console.log(error);
                 })
@@ -308,6 +306,7 @@
         watch:{
             search_req:{
                 handler: function(val, oldVal) {
+                    this.statusLoader = true;
                     this.getSearchProducts(1, val); // call it in the context of your component object
                 },
                 deep: true
