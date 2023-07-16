@@ -148,6 +148,10 @@
     import { ScaleLoader } from "vue3-spinner";
     export default {
         name: "index",
+        // meta info
+        metaInfo:{
+            title: 'Кошик'
+        },
         data(){
             return{
                 products: {},

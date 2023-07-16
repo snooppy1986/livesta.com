@@ -5,11 +5,14 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\CategoriesDataTable;
 use App\DataTables\ProductsDataTable;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ProductStoreRequest;
 use App\Imports\ProductsImport;
 use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\CategoryProduct;
+use App\Models\Meta;
 use App\Models\Product;
+use App\Models\ProductMeta;
 use App\Models\RelatedProduct;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -41,32 +44,21 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ProductStoreRequest $request)
     {
-        $request->validate([
-            'title'=>'required|min:2|max:512|string',
-            'about'=>'required|max:4096',
-            'code'=>'required',
-            'price_special'=>'required',
-            'price_through'=>'required',
-            'application'=>'max:2048',
-            'brand'=>'max:2048',
-            'country'=>'max:2048',
-            'composition'=>'max:2048',
-            'weight'=>'max:128'
-        ]);
-        //dd($request->title);
+        $data = $request->all();
+
         /*create product*/
         $product = Product::create([
-            'title'=>$request->title,
-            'content'=>strip_tags($request->about),
-            'category'=>$request->parent_id[0],
-            'code'=>$request->code,
-            'price_balls'=>$request->price_balls,
-            'price_discount'=>$request->price_discount,
-            'price_special' =>$request->price_special,
-            'price_through'=>$request->price_through,
-            'rating'=>$request->rating,
+            'title'=>$data['title'],
+            'content'=>strip_tags($data['about']),
+            'category'=>$data['parent_id'][0],
+            'code'=>$data['code'],
+            'price_balls'=>$data['price_balls'],
+            'price_discount'=>$data['price_discount'],
+            'price_special' =>$data['price_special'],
+            'price_through'=>$data['price_through'],
+            'rating'=>$data['rating'],
         ]);
         /*upload image*/
         if($request->hasFile('productImage')){
@@ -81,17 +73,17 @@ class ProductController extends Controller
         /*create product attribute*/
         Attribute::create([
             'product_id'=>$product->id,
-            'application'=>strip_tags($request->application),
-            'brand'=>$request->brand,
-            'country'=>$request->country,
-            'composition'=>strip_tags($request->composition),
-            'gender'=>$request->gender,
-            'catalog_id'=>$request->catalog_id,
-            'warning'=>strip_tags($request->warning),
-            'weight'=>$request->weight,
+            'application'=>strip_tags($data['application']),
+            'brand'=>$data['brand'],
+            'country'=>$data['country'],
+            'composition'=>strip_tags($data['composition']),
+            'gender'=>$data['gender'],
+            'catalog_id'=>$data['catalog_id'],
+            'warning'=>strip_tags($data['warning']),
+            'weight'=>$data['weight'],
         ]);
 
-        foreach ($request->parent_id as $cat_id){
+        foreach ($data['parent_id'] as $cat_id){
             CategoryProduct::create([
                 'product_id'=>$product->id,
                 'category_id'=>$cat_id,
@@ -99,14 +91,20 @@ class ProductController extends Controller
         }
 
         /*related product*/
-        if($request->related_product){
-            foreach ($request->related_product as $related_id){
+        if(isset($data['related_product'])){
+            foreach ($data['related_product'] as $related_id){
                 RelatedProduct::create([
                     'product_id'=>$product->id,
                     'related_id'=>$related_id,
                 ]);
             }
         }
+
+        ProductMeta::create([
+            'product_id' => $product->id,
+            'description' => $data['description'],
+            'keywords' => $data['keywords']
+        ]);
 
         if($product) return redirect(route('product.index'))->with(['message'=>'Успіх! Дані товара змінено успішно.']);
         else return back(['message'=>'Помилка! Дані товара не збережено.']);
@@ -144,20 +142,9 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(ProductStoreRequest $request, Product $product)
     {
-        $request->validate([
-            'title'=>'required|min:2|max:512|string',
-            'about'=>'required|max:4096',
-            'code'=>'required',
-            'price_special'=>'required',
-            'price_through'=>'required',
-            'application'=>'max:2048',
-            'brand'=>'max:2048',
-            'country'=>'max:2048',
-            'composition'=>'max:2048',
-            'weight'=>'max:128'
-        ]);
+
         /*upload image*/
         if($request->hasFile('productImage')){
             $extension = $request->file('productImage')->getClientOriginalExtension();
@@ -223,6 +210,17 @@ class ProductController extends Controller
             }
         }
 
+
+        $product->meta->updateOrCreate(
+            ['product_id' => intval($product->id)],
+            ['description' => $request->description,
+            'keywords' => $request->keywords]
+        );
+        /*ProductMeta::update([
+            'product_id' => $product->id,
+            'description' => $data['description'],
+            'keywords' => $data['keywords']
+        ]);*/
 
         if($product) return redirect(route('product.index'))->with(['message'=>'Успіх! Дані товара змінено успішно.']);
         else return back(['message'=>'Помилка! Дані товара не збережено.']);

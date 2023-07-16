@@ -46,6 +46,10 @@
 <script>
     export default {
         name: "success_checkout",
+        // meta info
+        metaInfo:{
+            title: 'Замовлення оформлено успішно'
+        },
         mounted() {
             this.$emit('success_checkout', true);
         }

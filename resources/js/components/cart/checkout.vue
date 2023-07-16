@@ -338,6 +338,10 @@
     import api from "../../api";
     export default {
         name: "checkout",
+        // meta info
+        metaInfo:{
+            title: 'Оформлення замовлення'
+        },
         data(){
             return{
                 user: {},
