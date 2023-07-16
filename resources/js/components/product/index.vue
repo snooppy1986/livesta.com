@@ -243,6 +243,7 @@
     import reviews from "../elements/product/reviews.vue";
     import reviews_form from "../elements/product/reviews_form.vue";
     import { ScaleLoader } from "vue3-spinner";
+
     export default {
         name: "index",
         props:['id', 'title', 'addToCart', 'addToWishList'],
@@ -259,7 +260,16 @@
                 attributes: {},
                 reviews:{},
                 avgRating: 0 ,
-                statusLoader: true
+                statusLoader: true,
+                meta: {}
+            }
+        },
+        metaInfo(){
+            const meta = this.meta;
+            return{
+                title: meta.title ? meta.title : '',
+                meta: meta.meta ? meta.meta : [],
+                link: meta.link ? meta.link : []
             }
         },
         components:{
@@ -275,7 +285,6 @@
         mounted() {
             this.id = this.$route.params.id;
             this.category_id = this.$route.query.category;
-            console.log(this.category_id);
             this.getProduct();
             $(document).trigger('change');
         },
@@ -299,6 +308,8 @@
                         this.reviews = res.data.product.reviews;
                         this.avgRating = res.data.rating;
                         this.statusLoader=false;
+                        /*this.createMeta('product page', 'description product page');*/
+                        this.meta = res.data.meta;
                     });
             },
 

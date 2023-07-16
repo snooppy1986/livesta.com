@@ -1,4 +1,7 @@
 <template>
+    <metainfo>
+        <template v-slot:title="{ content }">{{ content ? `${content}` : ''}}</template>
+    </metainfo>
     <!--== Start Header Wrapper ==-->
     <header class="header-area sticky-header">
         <div class="container">
@@ -131,6 +134,8 @@
         @success_checkout = "checkout($event)"
     />
 
+
+
     <!--== Start Footer Area Wrapper ==-->
     <footer_block :access_token="access_token" @logout_status="logoutStatus($event)"></footer_block>
     <!--== End Footer Area Wrapper ==-->
@@ -142,12 +147,12 @@
 
 <script>
     import Api from '../api.js';
-    import axios from "axios";
     import main_menu from "./elements/_main_menu.vue";
     import search_bar from "./elements/search_bar.vue";
     import aside_cart from "./elements/aside_cart.vue";
     import aside_user_login from "./elements/aside_user_login.vue";
     import footer_block from './elements/footer/index.vue';
+
     export default {
         name: "IndexComponent",
         data(){
@@ -159,7 +164,8 @@
                 wish_list_count: 0,
                 access_token: null,
                 search_result: null,
-                search_req: null
+                search_req: null,
+
             }
         },
         components:{
@@ -170,8 +176,6 @@
             footer_block
         },
         mounted() {
-
-
             this.loadCategories();
             this.cartProduct();
             this.wishListCount();
@@ -179,7 +183,6 @@
             $(document).trigger('change');
         },
         methods:{
-
             getUser(){
                 Api.post('/api/auth/get-auth-user').then(response => {
                     this.user = response.data.user;
@@ -337,7 +340,17 @@
                     this.search_req = value;
                     this.search_result = res.data.count_product;
                 })*/
-            }
+            },
+
+            //create meta data on page
+           /* createMeta(title, description, keywords){
+                document.title = title;
+                //add description
+                var meta = document.createElement('meta');
+                meta.setAttribute('name', 'description');
+                meta.setAttribute('content', description);
+                document.getElementsByTagName('head')[0].appendChild(meta);
+            }*/
         },
     }
 </script>

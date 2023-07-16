@@ -19,6 +19,7 @@ import Paginate from 'vuejs-paginate-next';
 import VueformSlider from '@vueform/slider';
 import vue3Spinner from 'vue3-spinner';
 
+import { createMetaManager, defaultConfig, plugin as metaPlugin} from 'vue-meta'
 /**
  * Next, we will create a fresh Vue application instance. You may then begin
  * registering components with the application instance so they are ready
@@ -54,6 +55,13 @@ app.component('Slider', VueformSlider);
  * an "id" attribute of "app". This element is included with the "auth"
  * scaffolding. Otherwise, you will need to add an element yourself.
  */
-app.use(router);
+
+
+const metaManager = createMetaManager(false, {
+    ...defaultConfig,
+    meta: { keyName: 'head', tag: 'meta', nameless: true, refreshOnceOnNavigation: true},
+});
+
+app.use(router).use(metaManager).use(metaPlugin) ;
 /*app.use(axios);*/
 app.mount('#app');

@@ -154,6 +154,10 @@
                 errors_message: null
             }
         },
+        // meta info
+        metaInfo:{
+            title: 'Контакти'
+        },
         methods:{
             sendMessage(){
                 this.errors_message = null;

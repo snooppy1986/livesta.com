@@ -279,6 +279,12 @@
     </main>
     <product_preview :product="preview_product" :addToCart="addToCart"></product_preview>
     <product_wishlist :product = "preview_product"></product_wishlist>
+    <ScaleLoader
+        :loading="statusLoader"
+        color="#ff6565"
+        height="20px"
+        width="5px"
+    />
 </template>
 
 <script>
@@ -286,7 +292,7 @@
     import StarRating from 'vue-star-rating';
     import product_preview from '../elements/product_quick_view.vue';
     import product_wishlist from "../elements/product_wishlist.vue";
-
+    import { ScaleLoader } from "vue3-spinner";
     //import swiper
     import { Navigation, Pagination, Scrollbar, A11y , Autoplay, EffectFade} from 'swiper';
     import {Swiper, SwiperSlide} from 'swiper/vue';
@@ -294,25 +300,42 @@
     import 'swiper/css/pagination';
     import 'swiper/css/navigation';
 
+
+
     export default {
         name: "IndexComponent",
-        props:['addToCart', 'addToWishList'],
-        data: ()=>({
-            products: [],
-            main_categories: [],
-            menu_categories: [],
-            preview_product: [],
-            slides: [],
-        }),
+        metaInfo(){
+            const meta = this.meta;
+            return{
+                title: meta.title ? meta.title : '',
+                meta: meta.meta ? meta.meta : [],
+                link: meta.link ? meta.link : []
+            }
+        },
+        props:['addToCart', 'addToWishList', 'createMeta'],
+        data(){
+            return{
+                products: [],
+                main_categories: [],
+                menu_categories: [],
+                preview_product: [],
+                slides: [],
+                meta: {},
+                statusLoader: true
+            }
+
+        },
         components:{
             StarRating,
             product_preview,
             product_wishlist,
             Swiper,
-            SwiperSlide
+            SwiperSlide,
+            ScaleLoader
         },
 
         setup() {
+
             const onSwiper = (swiper) => {
                 console.log(swiper);
             };
@@ -334,10 +357,14 @@
             loadProduct(){
                 axios.get('/api/start')
                     .then(res=>{
+                        //console.log(res);
                         this.products =  res.data.products;
                         this.main_categories = res.data.main_categories.slice(0, 6);
                         this.menu_categories = res.data.main_categories;
                         this.slides = res.data.main_slides;
+                        this.meta = res.data.meta;
+                        this.statusLoader = false;
+
                     })
             },
             productPreview(product){

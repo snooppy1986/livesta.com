@@ -15,6 +15,7 @@ class OrderController extends Controller
     {
         $order = Order::where('id', $request->order_id)->first();
         $order_product = orderProduct::with('product')->where('order_id', $request->order_id)->get();
+
         return response()->json([
             'order_products'=>$order_product,
             'order'=>$order
@@ -22,7 +23,6 @@ class OrderController extends Controller
     }
     public function store(Request $request)
     {
-
         $data = $request->validate([
             'name'=>'required | min: 3 | max: 255 | string',
             'surname'=>'required | min: 3 | max: 255 | string',

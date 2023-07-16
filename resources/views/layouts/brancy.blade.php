@@ -1,18 +1,19 @@
 <!DOCTYPE html>
-<html class="no-js" lang="zxx">
+<html class="no-js" lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="utf-8">
+
+  {{--  <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <title>Brancy - Cosmetic & Beauty Salon Website Template</title>
     <meta name="robots" content="noindex, follow" />
     <meta name="description" content="Brancy - Cosmetic & Beauty Salon Website Template">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="keywords" content="bootstrap, ecommerce, ecommerce html, beauty, cosmetic shop, beauty products, cosmetic, beauty shop, cosmetic store, shop, beauty store, spa, cosmetic, cosmetics, beauty salon" />
-    <meta name="author" content="codecarnival" />
+    <meta name="author" content="codecarnival" />--}}
 
     <!-- Favicon -->
-    <link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.webp')}}">
+    {{--<link rel="shortcut icon" type="image/x-icon" href="{{asset('assets/images/favicon.webp')}}">--}}
 
     <!-- CSS (Font, Vendor, Icon, Plugins & Style CSS files) -->
 
@@ -31,7 +32,7 @@
     {{--<link rel="stylesheet" href="{{asset('css/plugins/range-slider.css')}}">--}}
     <link rel="stylesheet" href="{{asset('css/plugins/nice-select.css')}}">
     <!-- Style CSS -->
-    <link rel="stylesheet" href="{{asset('css/style.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/style.css')}}">
     @vite(['resources/js/app.js'])
     <script>
         // rename myToken as you like

@@ -92,6 +92,10 @@
     import quick_add_card_product_modal from "../elements/quick_add_card_product_modal.vue";
     export default {
         name: "index",
+        // meta info
+        metaInfo:{
+            title: 'Список бажань'
+        },
         data(){
             return{
                 products: {},

@@ -16,7 +16,11 @@
 
 <script>
     export default {
-        name: "404"
+        name: "404",
+        // meta info
+        metaInfo:{
+            title: 'Сторінка не знайдена'
+        },
     }
 </script>
 

@@ -124,6 +124,10 @@
     import Dropzone from 'dropzone';
     export default {
         name: "auth",
+        // meta info
+        metaInfo:{
+            title: 'Авторизація та реєстрація'
+        },
         data(){
             return{
                 login_email: null,

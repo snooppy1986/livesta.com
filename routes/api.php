@@ -42,7 +42,7 @@ Route::post('/callback/store', [CallbackController::class, 'store'])->name('call
 //search
 Route::post('/search', [SearchController::class, 'index'])->name('search');
 
-
+Route::post('get-auth-user', [UserController::class, 'getAuthUser']);
 Route::group(['middleware'=>'api', 'namespace' => 'App\Http\Controllers', 'prefix'=>'auth'], function ($router){
     Route::post('login', 'AuthController@login');
     Route::post('logout', 'AuthController@logout');
@@ -50,7 +50,6 @@ Route::group(['middleware'=>'api', 'namespace' => 'App\Http\Controllers', 'prefi
     Route::post('me', 'AuthController@me');
     Route::post('get-order', [OrderController::class, 'show'])->name('order.show');
     Route::group(['middleware'=> 'jwt.auth'], function (){
-        Route::post('get-auth-user', [UserController::class, 'getAuthUser']);
         Route::post('add-user-attr', [UserController::class, 'storeAttributes']);
         Route::patch('update-user/{user}', [UserController::class, 'update']);
     });
