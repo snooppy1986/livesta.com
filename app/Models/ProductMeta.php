@@ -9,7 +9,7 @@ class ProductMeta extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $table = 'product_meta';
+    protected $table = 'products_meta';
     protected $fillable=[
         'product_id',
         'description',

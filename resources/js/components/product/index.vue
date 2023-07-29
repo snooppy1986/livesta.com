@@ -41,7 +41,7 @@
                 <div class="row product-details">
                     <div class="col-lg-6">
                         <div class="product-details-thumb">
-                            <img :src="'/storage/images/'+product.image" width="570" height="693" :alt="product.title">
+                            <img :src="product.image" width="570" height="693" :alt="product.title">
                             <span class="flag-new" v-if="product.new">новинка</span>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                             </button>
                         </div>
                         <div class="tab-content" id="product-details-nav-tabContent">
-                            <specification :attributes="attributes"></specification>
+                            <specification :attributes="attributes" :brand="brand"></specification>
 
                             <reviews :reviews="reviews" ></reviews>
                         </div>
@@ -157,7 +157,7 @@
                                     <div class="product-item product-st2-item">
                                         <div class="product-thumb">
                                             <router-link class="d-block" :to="{name:'product.index', params:{id:related_product.id}}">
-                                                <img :src="'/storage/images/'+related_product.image" width="370" height="450" alt="Image-HasTech">
+                                                <img :src="related_product.image" width="370" height="450" alt="Image-HasTech">
                                             </router-link>
                                             <span v-if="related_product.new" class="flag-new">новинка</span>
                                         </div>
@@ -258,6 +258,7 @@
                 related_products: {},
                 modal_product: {},
                 attributes: {},
+                brand: {},
                 reviews:{},
                 avgRating: 0 ,
                 statusLoader: true,
@@ -305,6 +306,7 @@
                         this.product = res.data.product;
                         this.related_products = res.data.related_products;
                         this.attributes = res.data.product.attributes;
+                        this.brand = res.data.product.brand;
                         this.reviews = res.data.product.reviews;
                         this.avgRating = res.data.rating;
                         this.statusLoader=false;

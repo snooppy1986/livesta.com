@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Traits\GetMeta;
 use Butschster\Head\Facades\Meta;
 use Butschster\Head\Hydrator\VueMetaHydrator;
 use Illuminate\Http\Request;
@@ -13,39 +14,35 @@ use function Symfony\Component\String\reverse;
 
 class ProductController extends Controller
 {
-
-    public function index(Request $request, VueMetaHydrator $hydrator)
+    use GetMeta;
+    public function index(Request $request, Category $category, VueMetaHydrator $hydrator)
     {
+        //get request data
         $id = $request->id;
-        $product = Product::with('attributes', 'reviews', 'category', 'meta')->whereId($id)->first();
-
-        $meta =  Meta::setTitle($product->title)
-            ->setFavicon(url('/images/favicon.webp'))
-            ->setKeywords($product->meta ? $product->meta->keywords : '')
-            ->setDescription($product->meta ? $product->meta->description : '');
-        $vue_meta = $hydrator->hydrate($meta);
-
-        //dd($product->category);
         $category_id = $request->category_id ?  $request->category_id : null;
-        if($category_id) {
-            $category = Category::whereId($category_id)->first();
-        }
-        else{
-            $category = Category::whereId($product->category)->first();
-        }
+        //get product
+        $product = Product::query()
+            ->with('attributes', 'brand', 'reviews', 'category', 'meta')
+            ->whereId($id)
+            ->first();
+        /*dd($product->attributes);*/
+        //get meta data
+        $meta = $this->getMeta($hydrator, null , $product);
 
+        $category = $category_id ? $product->category->where('id', $category_id)->first() : $product->category->first();
+        /*dd($category);*/
+        //get category parents
         $categories = array_reverse($category->ancestors()->toArray());
-
-        $relate_products = Product::query()->whereIn('id', $product->related_ids())->orderBy('rating' , 'DESC')->get();
+        //rating product
         $rating = round($product->reviews->avg('rating'), 1);
         return response()->json([
             'id' => $id,
             'product'=> $product,
-            'related_products' => $relate_products,
+            'related_products' => $product->related,
             'rating' => $rating,
             'category'=> $category,
             'categories' => $categories,
-            'meta' => $vue_meta
+            'meta' => $meta
         ]);
     }
 }

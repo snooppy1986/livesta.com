@@ -53,7 +53,7 @@ class User extends Authenticatable implements JWTSubject
     }
 
     public function userAttributes(){
-        return $this->hasOne(UserAttributes::class);
+        return $this->hasOne(UserAttribute::class);
     }
 
     public function isAdmin(){

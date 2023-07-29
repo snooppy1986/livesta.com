@@ -165,8 +165,8 @@
                     this.$router.push({name:'user.wellcome'});
                     this.$emit('statusLogin', true);
                 }).catch(error=>{
-                    console.log(error.response.data.error);
-                    this.login_error = error.response.data.error;
+                    console.log(error.response.data.message);
+                    this.login_error = error.response.data.message;
                 })
             },
             userRegister(){

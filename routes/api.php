@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CallbackController;
@@ -52,5 +53,6 @@ Route::group(['middleware'=>'api', 'namespace' => 'App\Http\Controllers', 'prefi
     Route::group(['middleware'=> 'jwt.auth'], function (){
         Route::post('add-user-attr', [UserController::class, 'storeAttributes']);
         Route::patch('update-user/{user}', [UserController::class, 'update']);
+        Route::post('update-password', [PasswordController::class, 'update']);
     });
 });

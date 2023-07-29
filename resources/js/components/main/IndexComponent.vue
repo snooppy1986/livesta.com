@@ -109,7 +109,7 @@
                     <div v-for="categorie in main_categories" class="col-6 col-lg-4 col-lg-2 col-xl-2">
                         <!--== Start Product Category Item ==-->
                         <a to="/" class="product-category-item">
-                            <img class="icon" src="images/shop/category/1.webp" width="70" height="80" alt="Image-HasTech">
+                            <img class="icon" :src="categorie.thumbnail" width="70" height="80" alt="Image-HasTech">
                             <h3 class="title">{{categorie.title}}</h3>
                             <!--<span class="flag-new">new</span>-->
                         </a>
@@ -178,7 +178,7 @@
                         <div class="product-item">
                             <div class="product-thumb">
                                 <router-link class="d-block" :to="'/product/'+product.id">
-                                    <img :src="'storage/images/'+product.image" width="370" height="450" alt="Image-HasTech">
+                                    <img :src="product.image" width="370" height="450" alt="Image-HasTech">
                                 </router-link>
                                 <span class="flag-new">Новинка</span>
                                 <div class="product-action">

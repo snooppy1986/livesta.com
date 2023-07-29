@@ -5,47 +5,54 @@ namespace App\Models;
 use App\Models\Traits\Filtrable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+
 
 class Product extends Model
 {
     use HasFactory;
     use Filtrable;
+    protected $fillable=[
+        'slug',
+        'title',
+        'brand_id'
+    ];
     protected $guarded=[];
 
-    public function attributes()
+    public function brand(): BelongsTo
+    {
+        return $this->belongsTo(Brand::class);
+    }
+
+    public function attributes(): HasOne
     {
         return $this->hasOne(Attribute::class);
     }
 
-    public function related()
+    public function related(): BelongsToMany
     {
-        return $this->hasMany(RelatedProduct::class);
+        return $this->belongsToMany(Product::class, 'related_products', 'product_id', 'related_id');
     }
 
-    public function category_product()
+    public function category_product(): HasMany
     {
         return $this->hasMany(CategoryProduct::class);
     }
 
-    public function category()
+    public function category(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class, 'category_product');
-    }
-    public function cat_ids()
-    {
-        return $this->category_product()->pluck('category_id');
-    }
-    public function related_ids()
-    {
-        return $this->related()->pluck('related_id');
+         return $this->belongsToMany(Category::class);
     }
 
-    public function reviews()
+    public function reviews(): HasMany
     {
         return $this->hasMany(Review::class)->orderBy('created_at', 'DESC');
     }
 
-    public function meta()
+    public function meta(): HasOne
     {
         return $this->hasOne(ProductMeta::class);
     }
@@ -53,6 +60,9 @@ class Product extends Model
     public static function boot()
     {
         parent::boot();
+        static::creating(function (Product $product){
+            $product->slug = $product->slug ?? str($product->title)->slug();
+        });
         static::deleted(function (Product $product){
 
             $product->attributes()->each(function ($attribute){

@@ -35,6 +35,7 @@
                             <button class="nav-link" id="payment-method-tab" data-bs-toggle="tab" data-bs-target="#payment-method" type="button" role="tab" aria-controls="payment-method" aria-selected="false">Спосіб оплати</button>
                             <button class="nav-link" id="address-edit-tab" data-bs-toggle="tab" data-bs-target="#address-edit" type="button" role="tab" aria-controls="address-edit" aria-selected="false">Адреса</button>
                             <button class="nav-link" id="account-info-tab" data-bs-toggle="tab" data-bs-target="#account-info" type="button" role="tab" aria-controls="account-info" aria-selected="false">Особиста інформація</button>
+                            <button class="nav-link" id="password-edit-tab" data-bs-toggle="tab" data-bs-target="#password-edit" type="button" role="tab" aria-controls="password-edit" aria-selected="false">Пароль</button>
                             <button @click="logout" class="nav-link"  type="button">Вихід</button>
                         </div>
                     </div>
@@ -202,57 +203,7 @@
                                                     <i class="fa fa-plus"></i>
                                                 </div>
                                             </div>
-                                            <fieldset>
-                                                <legend>Змінити пароль</legend>
-                                                <div class="single-input-item">
-                                                    <label for="current-pwd" class="required">Діючий пароль</label>
-                                                    <input
-                                                        v-model="current_password"
-                                                        class="form-control"
-                                                        :class="{'is-invalid': error_password_matches}"
-                                                        type="password"
-                                                        id="current-pwd"
-                                                        placeholder="Діючий пароль"/>
-                                                    <div
-                                                        v-if="error_password_matches"
-                                                        class="alert alert-danger "
-                                                    >
-                                                        {{error_password_matches}}
-                                                    </div>
-                                                </div>
-                                                <div class="row">
-                                                    <div class="col-lg-6">
-                                                        <div class="single-input-item">
-                                                            <label for="new-pwd" class="required">Новий пароль</label>
-                                                            <input
-                                                                v-model="new_password"
-                                                                class="form-control"
-                                                                :class="{'is-invalid': errors_edit_user && errors_edit_user.new_password}"
-                                                                type="password"
-                                                                id="new-pwd"
-                                                                placeholder="Новий пароль"/>
-                                                            <div
-                                                                v-if="(errors_edit_user && errors_edit_user.new_password) || error_same_password"
-                                                                class="alert alert-danger "
-                                                            >
-                                                                {{errors_edit_user && errors_edit_user.new_password ? errors_edit_user.new_password[0] : error_same_password}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6">
-                                                        <div class="single-input-item">
-                                                            <label for="confirm-pwd" class="required">Підтвердити новий пароль</label>
-                                                            <input
-                                                                v-model="new_password_confirmation"
-                                                                class="form-control"
-                                                                :class="{'is-invalid': errors_edit_user && errors_edit_user.new_password}"
-                                                                type="password"
-                                                                id="confirm-pwd"
-                                                                placeholder="Підтвердіть новий пароль"/>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </fieldset>
+
                                             <div class="single-input-item">
                                                 <button @click.prevent="editUserData" class="check-btn sqr-btn">Змінити</button>
                                             </div>
@@ -261,6 +212,70 @@
                                 </div>
                             </div>
 
+                            <div class="tab-pane fade" id="password-edit" role="tabpanel" aria-labelledby="password-edit">
+                                <div class="myaccount-content">
+                                    <h3>Пароль</h3>
+                                    <div v-if="message_edit_password" class="alert alert-success">{{message_edit_password}}</div>
+                                    <div class="account-details-form">
+                                        <form action="#">
+                                            <fieldset>
+                                                <legend>Змінити пароль</legend>
+                                                <div class="single-input-item">
+                                                    <label for="current-pwd" class="required">Діючий пароль</label>
+                                                    <input
+                                                        v-model="current_password"
+                                                        class="form-control"
+                                                        :class="{'is-invalid': errors_edit_password && errors_edit_password.current_password}"
+                                                        type="password"
+                                                        id="current-pwd"
+                                                        placeholder="Діючий пароль"/>
+                                                    <div
+                                                        v-if="errors_edit_password && errors_edit_password.current_password"
+                                                        class="alert alert-danger "
+                                                    >
+                                                        {{errors_edit_password.current_password[0]}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-lg-6">
+                                                        <div class="single-input-item">
+                                                            <label for="new-pwd" class="required">Новий пароль</label>
+                                                            <input
+                                                                v-model="password"
+                                                                class="form-control"
+                                                                :class="{'is-invalid': errors_edit_password && errors_edit_password.password}"
+                                                                type="password"
+                                                                id="new-pwd"
+                                                                placeholder="Новий пароль"/>
+                                                            <div
+                                                                v-if="errors_edit_password && errors_edit_password.password"
+                                                                class="alert alert-danger "
+                                                            >
+                                                                {{errors_edit_password.password[0]}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6">
+                                                        <div class="single-input-item">
+                                                            <label for="confirm-pwd" class="required">Підтвердити новий пароль</label>
+                                                            <input
+                                                                v-model="password_confirmation"
+                                                                class="form-control"
+                                                                :class="{'is-invalid': errors_edit_password && errors_edit_password.password}"
+                                                                type="password"
+                                                                id="confirm-pwd"
+                                                                placeholder="Підтвердіть новий пароль"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </fieldset>
+                                            <div class="single-input-item">
+                                                <button @click.prevent="editPassword" class="check-btn sqr-btn">Змінити пароль</button>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -300,17 +315,19 @@
                 address: {},
                 message: null,
                 message_edit_user: null,
+                message_edit_password: null,
                 errors_edit_user: {},
                 error_password_matches: null,
                 error_same_password: null,
+                errors_edit_password: null,
                 name: null,
                 surname: null,
                 phone: null,
                 email: null,
                 avatar: null,
                 current_password: null,
-                new_password: null,
-                new_password_confirmation: null,
+                password: null,
+                password_confirmation: null,
                 removeImage: false,
                 statusLoader: true
             }
@@ -357,12 +374,25 @@
 
         },
         methods:{
+            editPassword(){
+                this.errors_edit_password = null;
+                Api.post('/api/auth/update-password', {
+                    current_password: this.current_password,
+                    password: this.password,
+                    password_confirmation: this.password_confirmation
+                }).then(response => {
+                    this.message_edit_password = response.data.message;
+                    this.current_password = null;
+                    this.password = null;
+                    this.password_confirmation = null;
+                }).catch(error => {
+                    console.log(error);
+                    this.errors_edit_password = error.response.data.errors;
+                })
+            },
             editUserData(){
                 this.message_edit_user = null;
                 this.errors_edit_user = {};
-                this.error_same_password = null;
-                this.error_password_matches = null;
-                this.error_password_matches=null;
                 //Form data
                 const data = new FormData();
                 const files = this.avatar_dropzone.getAcceptedFiles();
@@ -378,6 +408,7 @@
                 data.append('password_confirmation', this.confirm_password);
                 data.append('remove_image', this.removeImage);
                 data.append('_method', 'PATCH');
+
                 Api.post(`/api/auth/update-user/${this.user.id}`, data)
                     .then(result=>{
                         this.message_edit_user = result.data.message;
@@ -387,8 +418,6 @@
                     })
                     .catch(error=>{
                         this.errors_edit_user = error.response.data.errors;
-                        this.error_password_matches = error.response.data.error_matches;
-                        this.error_same_password = error.response.data.error_same_password;
                         this.$refs.start.scrollIntoView({behavior: 'smooth'})
                     })
             },
@@ -405,7 +434,7 @@
                     this.surname = response.data.user ? response.data.user.surname : null;
                     this.phone = response.data.user ? response.data.user.phone : null;
                     this.email = response.data.user ? response.data.user.email : null;
-                    this.avatar = response.data.user ? response.data.user.avatar : null;
+                    this.avatar = response.data.user ? response.data.user.avatar_url : null;
 
                     //get file to dropzone
                     let file = { name: this.user.avatar, size: response.data.size };

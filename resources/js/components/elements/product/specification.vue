@@ -1,31 +1,31 @@
 <template>
     <div class="tab-pane" id="specification" role="tabpanel" aria-labelledby="specification-tab">
         <ul class="product-details-info-wrap">
-            <li>
+            <li v-if="brand">
                 <span>Бренд</span>
-                <p class="content">{{attributes.brand}}</p>
+                <p class="content">{{brand.title}}</p>
             </li>
-            <li>
+            <li v-if="attributes">
                 <span>Вага</span>
                 <p class="content">{{attributes.weight}}</p>
             </li>
-            <li>
+            <li v-if="attributes">
                 <span>Країна</span>
                 <p class="content">{{attributes.country}}</p>
             </li>
-            <li>
+            <li v-if="attributes">
                 <span>Застосування</span>
                 <p class="content">{{attributes.application}}</p>
             </li>
-            <li>
+            <li v-if="attributes">
                 <span>Застереження</span>
                 <p class="content">{{attributes.warning}}</p>
             </li>
-            <li>
+            <li v-if="attributes">
                 <span>Склад</span>
                 <p class="content">{{attributes.composition}}</p>
             </li>
-            <li>
+            <li v-if="attributes">
                 <span>Стать</span>
                 <p class="content">{{attributes.gender}}</p>
             </li>
@@ -36,7 +36,7 @@
 <script>
     export default {
         name: "specification",
-        props:['attributes']
+        props:['attributes', 'brand']
     }
 </script>
 

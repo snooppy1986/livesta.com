@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DeliveryOptions;
+use App\Models\DeliveryOption;
 use App\Models\Order;
 use App\Models\orderProduct;
 use App\Models\OrderUser;
@@ -53,7 +53,7 @@ class OrderController extends Controller
         }
 
         //delivery options
-        DeliveryOptions::create([
+        DeliveryOption::create([
             'order_id' => $order->id,
             'type' => $request->deliveryMethod,
             'area' => $request->deliveryAddress ? $request->deliveryAddress['area'] : null,

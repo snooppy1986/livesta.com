@@ -78,7 +78,7 @@
                                             class="d-block"
                                             :to="{name:'product.index', params:{id:product.id}, query:{category: category.id}}"
                                         >
-                                            <img :src="'/storage/images/'+product.image" width="370" height="450" :alt="product.title">
+                                            <img :src="product.image" width="370" height="450" :alt="product.title">
                                         </router-link>
                                         <span v-if="product.new" class="flag-new">новинка</span>
                                         <div class="product-action">
