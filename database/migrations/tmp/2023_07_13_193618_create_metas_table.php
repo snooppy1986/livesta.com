@@ -11,13 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('order', function (Blueprint $table) {
+        Schema::create('metas', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255);
-            $table->string('surname', 255);
-            $table->string('phone', 255);
-            $table->string('email', 255)->default(null);
-            $table->timestamps();
+            $table->string('page_name', 128);
+            $table->string('keywords', 1024)->nullable();
+            $table->string('description', 1024)->nullable();
         });
     }
 
@@ -26,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('order');
+        Schema::dropIfExists('metas');
     }
 };

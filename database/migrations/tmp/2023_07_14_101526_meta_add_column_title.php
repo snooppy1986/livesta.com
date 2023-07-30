@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('category_product', function (Blueprint $table) {
-            $table->id();
-            $table->integer('category_id');
-            $table->integer('product_id');
-
+        Schema::table('metas', function (Blueprint $table) {
+            $table->string('title', 128)
+                ->default('LIVESTA')
+                ->after('page_name');
         });
     }
 
@@ -24,6 +23,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('category_product');
+        Schema::table('metas', function (Blueprint $table) {
+            $table->dropColumn('title');
+        });
     }
 };

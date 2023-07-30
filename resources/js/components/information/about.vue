@@ -150,6 +150,10 @@
 
     export default {
         name: "about",
+        //meta info
+        metaInfo:{
+            title: 'Про нас'
+        },
         mounted() {
             $(document).trigger('change');
         },

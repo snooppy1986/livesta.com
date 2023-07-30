@@ -78,7 +78,7 @@
                                             class="d-block"
                                             :to="{name:'product.index', params:{id:product.id}, query:{category: category.id}}"
                                         >
-                                            <img :src="'/storage/images/'+product.image" width="370" height="450" :alt="product.title">
+                                            <img :src="product.image" width="370" height="450" :alt="product.title">
                                         </router-link>
                                         <span v-if="product.new" class="flag-new">новинка</span>
                                         <div class="product-action">
@@ -409,9 +409,17 @@
             ],
             select_default: 'Сортувати по:',
             searchReq: '',
-            statusLoader: true
-
+            statusLoader: true,
+            meta: {}
         }),
+        metaInfo(){
+            const meta = this.meta;
+            return{
+                title: meta.title ? meta.title : '',
+                meta: meta.meta ? meta.meta : [],
+                link: meta.link ? meta.link : []
+            }
+        },
         components:{
             StarRating,
             product_preview,
@@ -453,6 +461,7 @@
                         this.price_min = res.data.price_min;
                         this.count_product = res.data.count_product;
                         this.statusLoader=false;
+                        this.meta = res.data.meta;
                 }).catch(error=>{
                     console.log(error);
                 })

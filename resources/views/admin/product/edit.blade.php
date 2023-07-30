@@ -302,6 +302,38 @@
                                         </select>
                                     </div>
 
+                                    <h5>Мета дані товару</h5>
+
+                                    <div class="form-group">
+                                        <label for="keywords">Ключові слова</label>
+                                        <input
+                                            name="keywords"
+                                            type="text"
+                                            class="form-control @error('keywords') is-invalid @enderror"
+                                            id="keywords"
+                                            placeholder="Ключові слова (додайте ключові слова через кому)"
+                                            value="{{$product->meta->keywords}}"
+                                        >
+                                        @error('keywords')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="description">Опис</label>
+                                        <input
+                                            name="description"
+                                            type="text"
+                                            class="form-control @error('description') is-invalid @enderror"
+                                            id="description"
+                                            placeholder="Короткий опис товару"
+                                            value="{{$product->meta->description}}"
+                                        >
+                                        @error('description')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
+                                    </div>
+
                                 </div>
 
                                 <div class="card-footer">

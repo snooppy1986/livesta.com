@@ -41,7 +41,7 @@
                 <div class="row product-details">
                     <div class="col-lg-6">
                         <div class="product-details-thumb">
-                            <img :src="'/storage/images/'+product.image" width="570" height="693" :alt="product.title">
+                            <img :src="product.image" width="570" height="693" :alt="product.title">
                             <span class="flag-new" v-if="product.new">новинка</span>
                         </div>
                     </div>
@@ -114,7 +114,7 @@
                             </button>
                         </div>
                         <div class="tab-content" id="product-details-nav-tabContent">
-                            <specification :attributes="attributes"></specification>
+                            <specification :attributes="attributes" :brand="brand"></specification>
 
                             <reviews :reviews="reviews" ></reviews>
                         </div>
@@ -157,7 +157,7 @@
                                     <div class="product-item product-st2-item">
                                         <div class="product-thumb">
                                             <router-link class="d-block" :to="{name:'product.index', params:{id:related_product.id}}">
-                                                <img :src="'/storage/images/'+related_product.image" width="370" height="450" alt="Image-HasTech">
+                                                <img :src="related_product.image" width="370" height="450" alt="Image-HasTech">
                                             </router-link>
                                             <span v-if="related_product.new" class="flag-new">новинка</span>
                                         </div>
@@ -243,6 +243,7 @@
     import reviews from "../elements/product/reviews.vue";
     import reviews_form from "../elements/product/reviews_form.vue";
     import { ScaleLoader } from "vue3-spinner";
+
     export default {
         name: "index",
         props:['id', 'title', 'addToCart', 'addToWishList'],
@@ -257,9 +258,19 @@
                 related_products: {},
                 modal_product: {},
                 attributes: {},
+                brand: {},
                 reviews:{},
                 avgRating: 0 ,
-                statusLoader: true
+                statusLoader: true,
+                meta: {}
+            }
+        },
+        metaInfo(){
+            const meta = this.meta;
+            return{
+                title: meta.title ? meta.title : '',
+                meta: meta.meta ? meta.meta : [],
+                link: meta.link ? meta.link : []
             }
         },
         components:{
@@ -275,7 +286,6 @@
         mounted() {
             this.id = this.$route.params.id;
             this.category_id = this.$route.query.category;
-            console.log(this.category_id);
             this.getProduct();
             $(document).trigger('change');
         },
@@ -296,9 +306,12 @@
                         this.product = res.data.product;
                         this.related_products = res.data.related_products;
                         this.attributes = res.data.product.attributes;
+                        this.brand = res.data.product.brand;
                         this.reviews = res.data.product.reviews;
                         this.avgRating = res.data.rating;
                         this.statusLoader=false;
+                        /*this.createMeta('product page', 'description product page');*/
+                        this.meta = res.data.meta;
                     });
             },
 

@@ -65,15 +65,8 @@ class ProductsDataTable extends DataTable
                         'order'=>[
                           0, 'asc'
                         ],
-                    ])
-                    ->buttons([
-                        Button::make('excel'),
-                        Button::make('csv'),
-                        Button::make('pdf'),
-                        Button::make('print'),
-                        Button::make('reset'),
-                        Button::make('reload')
                     ]);
+
     }
 
     /**
@@ -82,11 +75,6 @@ class ProductsDataTable extends DataTable
     public function getColumns(): array
     {
         return [
-            /*Column::computed('action')
-                  ->exportable(false)
-                  ->printable(false)
-                  ->width(60)
-                  ->addClass('text-center'),*/
             Column::make('id'),
             Column::computed('image')
                 ->title('Зображення')

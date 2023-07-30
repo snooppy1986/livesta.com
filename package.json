@@ -27,6 +27,7 @@
         "v-menu-multi-level": "^0.1.8",
         "veeno": "^0.0.4",
         "vform": "^2.1.2",
+        "vue-meta": "^3.0.0-alpha.8",
         "vue-moment": "^4.1.0",
         "vue-range-slider": "^0.6.0",
         "vue-router": "^4.1.6",

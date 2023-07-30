@@ -138,6 +138,25 @@
                             </a>
                         </li>
 
+                        {{--seo info--}}
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="fa fa-tags nav-icon" aria-hidden="true"></i>
+                                <p>
+                                    SEO магазину
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="{{route('seo.page')}}" class="nav-link">
+                                        <i class="fa fa-book-open nav-icon"></i>
+                                        <p>SEO головної сторінки</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li class="nav-item">
                             <a href="#" class="nav-link">
                                 <i class="fas fa-user-plus nav-icon"></i>

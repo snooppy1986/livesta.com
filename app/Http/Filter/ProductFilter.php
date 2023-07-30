@@ -14,7 +14,6 @@ class ProductFilter extends AbstractFilter
     const SEARCH = 'search';
     protected function getCallbacks(): array
     {
-
         return [
             self::PRICES =>[$this, 'prices'],
             self::TAGS => [$this, 'tags'],

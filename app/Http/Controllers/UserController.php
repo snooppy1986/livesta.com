@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Controllers\Auth\PasswordController;
 use App\Models\User;
-use App\Models\UserAttributes;
+use App\Models\UserAttribute;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -18,7 +19,6 @@ class UserController extends Controller
 {
     public function update(Request $request, User $user)
     {
-
         $data = $request->validate([
             'name'=>'min: 3 | max: 255 | string',
             'surname'=>'min: 3 | max: 255 | string',
@@ -29,27 +29,6 @@ class UserController extends Controller
 
         /*$user = User::where('id', $request->user_id)->first();*/
         if($user){
-            //change password
-            if($request->current_password){
-                $data_password = $request->validate([
-                    'current_password'=>'string',
-                    'new_password' => 'required | min: 8 | max: 255 | confirmed | string'
-                ]);
-                //the password matches
-                if(!Hash::check($request->current_password, $user->password)){
-                    return response()->json(['error_matches'=>'Невірний пароль'], 422);
-                    /*throw \Illuminate\Validation\ValidationException::withMessages(['error_matches'=>'Невірний пароль']);*/
-                }
-                //Current password and new password same
-                if(strcmp($data_password['current_password'], $data_password['new_password']) == 0){
-                    return response()->json(['error_same_password'=>'Новий пароль має відрізнятися від попереднього'], 422);
-                }
-                //upadate password
-                $user->update([
-                    'password'=>Hash::make($data_password['new_password'])
-                ]);
-            }
-
             //update user data
             $user->update($data);
             //update user avatar
@@ -85,21 +64,23 @@ class UserController extends Controller
 
         return response()->json(['message'=>'Особисті дані не змінено. Спробуйте пізніше.']);
     }
+
     public function getAuthUser(Request $request)
     {
         /*$token = $request->bearerToken();*/
         $token =JWTAuth::getToken();
         $user = JWTAuth::toUser($token);
         $address = $user->userAttributes;
-        $size = Storage::disk('public')->size('images/'.$user->avatar);
+        /*$size = Storage::disk('public')->size('images/'.$user->avatar);*/
 
         return response()->json([
             'user'=>$user,
             'orders' => $user->orders,
             'address' => $address,
-            'size' => $size
+            'size' => 300
         ]);
     }
+
     public function storeAttributes(Request $request)
     {
         $data= $request->validate([
@@ -111,9 +92,10 @@ class UserController extends Controller
             'postcode'=>'integer'
         ]);
         /*dd($data);*/
-        $address = UserAttributes::where('user_id', $data['user_id'])->first();
-        if($address) $address->update($data);
-        else UserAttributes:: create($data);
+        $address = UserAttribute::where('user_id', $data['user_id'])->first();
+        if($address)
+            $address->update($data);
+        else UserAttribute:: create($data);
         /*UserAttributes::updateOrCreate(
             ['user_id'=>$data['user_id']],
             ['area'=>$data['area']],

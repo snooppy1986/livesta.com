@@ -18,6 +18,12 @@ return [
     'name' => env('APP_NAME', 'Laravel'),
 
     /*
+   |--------------------------------------------------------------------------
+   | Pagination limit
+   |--------------------------------------------------------------------------
+   */
+    'limit'=> 24,
+    /*
     |--------------------------------------------------------------------------
     | Application Environment
     |--------------------------------------------------------------------------
@@ -183,6 +189,7 @@ return [
         Illuminate\View\ViewServiceProvider::class,
         Yajra\DataTables\DataTablesServiceProvider::class,
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
+        App\Providers\MetaTagsServiceProvider::class,
         /*
          * Package Service Providers...
          */

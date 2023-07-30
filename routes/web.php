@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\MainSliderController;
 use App\Http\Controllers\Admin\ProductController;
+use App\Http\Controllers\Admin\SeoPageController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -48,6 +49,9 @@ Route::group(['middleware'=>['web', 'admin.role:Admin,Manager'],'prefix'=>'admin
     Route::post('main-slider/update/{slide}', [MainSliderController::class, 'update'])->name('main-slider.update');
     Route::post('main-slider/update-status/{slide}', [MainSliderController::class, 'updateStatus'])->name('main-slider.update_status');
     Route::post('main-slider/destroy/{slide}', [MainSliderController::class, 'destroy'])->name('main-slider.destroy');
+    //seo info
+    Route::get('seo/page', [SeoPageController::class, 'index'])->name('seo.page');
+    Route::post('seo/update/{meta}', [SeoPageController::class, 'update'])->name('seo.update');
 
     Route::get('/admin-logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
