@@ -30,38 +30,6 @@
         <!--== Start Shopping Checkout Area Wrapper ==-->
         <section class="shopping-checkout-wrap section-space">
             <div class="container">
-                <div class="checkout-page-coupon-wrap">
-                    <!--== Start Checkout Coupon Accordion ==-->
-                    <!--<div class="coupon-accordion" id="CouponAccordion">
-                        <div class="card">
-                            <h3>
-                                <i class="fa fa-info-circle"></i>
-                                Have a Coupon?
-                                <a href="#/" data-bs-toggle="collapse" data-bs-target="#couponaccordion">Click here to enter your code</a>
-                            </h3>
-                            <div id="couponaccordion" class="collapse" data-bs-parent="#CouponAccordion">
-                                <div class="card-body">
-                                    <div class="apply-coupon-wrap">
-                                        <p>If you have a coupon code, please apply it below.</p>
-                                        <form action="#" method="post">
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group">
-                                                        <input class="form-control" type="text" placeholder="Coupon code">
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <button type="button" class="btn-coupon">Apply coupon</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>-->
-                    <!--== End Checkout Coupon Accordion ==-->
-                </div>
                 <div class="row">
                     <div class="col-lg-6">
                         <!--== Start Billing Accordion ==-->
@@ -73,7 +41,11 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="f_name">Ім'я <abbr class="required" title="required">*</abbr></label>
-                                                <input  v-model="name" :class="{'is-invalid': errors ? errors.name : ''}" id="f_name" type="text" class="form-control">
+                                                <input  v-model="name"
+                                                        :class="{'is-invalid': errors ? errors.name : ''}"
+                                                        id="f_name"
+                                                        type="text"
+                                                        class="form-control">
                                                 <div v-if="errors && errors.name" class="alert alert-danger">
                                                     {{errors.name[0]}}
                                                 </div>
@@ -106,7 +78,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-md-12">
                                             <div class="form-group mb-0">
                                                 <div id="DeliveryMethodAccordion">
@@ -155,7 +126,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="col-md-12">
                                             <div class="form-group mb-0">
                                                 <label for="order-notes">Примітки до замовлення (не обов'язково)</label>
@@ -328,14 +298,19 @@
 
     </main>
     <term_of_use_modal></term_of_use_modal>
+    <ScaleLoader
+        :loading="statusLoader"
+        color="#ff6565"
+        height="20px"
+        width="5px"
+    />
 </template>
 
 <script>
     import Api from '../../api.js';
-    import axios from 'axios';
     import NewMail from "../../components/elements/delivery/new_mail.vue";
     import term_of_use_modal from "../elements/term_of_use_modal.vue";
-    import api from "../../api";
+    import { ScaleLoader } from "vue3-spinner";
     export default {
         name: "checkout",
         // meta info
@@ -346,6 +321,7 @@
             return{
                 user: {},
                 products: {},
+                products_ids: [],
                 totalPrice:0,
                 name: null,
                 surname: null,
@@ -356,12 +332,14 @@
                 deliveryAddress: {},
                 paymentMethod: null,
                 errors: {},
-                status_privace: false
+                status_privace: false,
+                statusLoader: true
             }
         },
         components:{
             NewMail,
-            term_of_use_modal
+            term_of_use_modal,
+            ScaleLoader
         },
         mounted() {
             this.getProducts();
@@ -380,8 +358,9 @@
                       deliveryMethod: this.deliveryMethod,
                       deliveryAddress: this.deliveryAddress,
                       paymentMethod: this.paymentMethod,
-                      totalPrice: this.totalPrice,
+                      total_price: this.totalPrice,
                       products: this.products,
+                      products_ids: this.products_ids,
                       user_id: this.user.id,
                   }).then(result=>{
                       console.log(result.data.status);
@@ -396,6 +375,9 @@
             },
             getProducts(){
                 this.products = JSON.parse(localStorage.getItem('cart'));
+                this.products.forEach((value)=>{
+                    this.products_ids.push(value.product.id)
+                })
             },
             getTotalPrice(){
                 this.totalPrice = JSON.parse(localStorage.getItem('cart_total'));
@@ -408,11 +390,19 @@
                 this.deliveryAddress = value
             },
             getUser(){
-                api.post('/api/auth/get-auth-user').then(
-                    res=>{
+                this.statusLoader=true;
+                Api.post('/api/get-auth-user').then(
+                    res => {
+                        this.name = res.data.user.name;
+                        this.surname = res.data.user.surname;
+                        this.phone = res.data.user.phone;
+                        this.email = res.data.user.email;
                         this.user = res.data.user;
+                        this.statusLoader=false;
                     }
-                )
+                ).catch(error => {
+                    this.statusLoader = false;
+                })
             },
         }
     }

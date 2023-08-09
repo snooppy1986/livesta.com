@@ -27,6 +27,11 @@ class Product extends Model
         return $this->belongsTo(Brand::class);
     }
 
+    public function order(): BelongsToMany
+    {
+        return $this->belongsToMany(Order::class, 'order_product');
+    }
+
     public function attributes(): HasOne
     {
         return $this->hasOne(Attribute::class);
@@ -62,20 +67,6 @@ class Product extends Model
         parent::boot();
         static::creating(function (Product $product){
             $product->slug = $product->slug ?? str($product->title)->slug();
-        });
-        static::deleted(function (Product $product){
-
-            $product->attributes()->each(function ($attribute){
-                $attribute->delete();
-            });
-
-            $product->related()->each(function ($related){
-                $related->delete();
-            });
-
-            $product->category_product()->each(function ($category_product){
-                $category_product->delete();
-            });
         });
     }
 }

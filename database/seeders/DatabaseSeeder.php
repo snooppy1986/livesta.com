@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use App\Models\Attribute;
 use App\Models\Brand;
 use App\Models\Callback;
+use App\Models\CartItem;
 use App\Models\Category;
 use App\Models\DeliveryOption;
 use App\Models\MainSlider;
@@ -17,6 +18,7 @@ use App\Models\RelatedProduct;
 use App\Models\Review;
 use App\Models\User;
 use App\Models\UserAttribute;
+use Database\Factories\CartItemFactory;
 use Illuminate\Database\Seeder;
 use function Symfony\Component\Uid\Factory\create;
 
@@ -51,11 +53,11 @@ class DatabaseSeeder extends Seeder
         $products = Product::query()->get();
         $user = User::factory(20)->create();
 
-        Order::factory(20)->create()
-            ->each(function ($order) use ($products, $user){
-                $order->order_product()->attach($products->random(2));
-                $order->order_user()->attach($user->random(1));
-            });
+        Order::factory(20)
+            ->has(User::factory(1))
+            ->has(Product::factory(2))
+            ->create();
+        CartItem::factory(40)->create();
         DeliveryOption::factory(Order::query()->count())->create();
         UserAttribute::factory($user->count())->create();
         Callback::factory(10)->create();

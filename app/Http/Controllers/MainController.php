@@ -11,12 +11,6 @@ use function Symfony\Component\Console\Command\setDescription;
 
 class MainController extends Controller
 {
-    /*protected $meta;
-    public function __construct(MetaInterface $meta)
-    {
-        $this->meta = $meta;
-    }*/
-
     public function index()
     {
         return view('main.index');

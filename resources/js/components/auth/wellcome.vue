@@ -69,7 +69,7 @@
                                                 <tr v-for="(order, key) in orders">
                                                     <td>{{key+1}}</td>
                                                     <td>{{formatDate(order.created_at)}}</td>
-                                                    <td>{{order.status === 1 ? 'Новий' : order.status ===2 ? 'Виконується' : 'Виконаний'}}</td>
+                                                    <td>{{order.status === 0 ? 'Новий' : order.status ===1 ? 'Виконується' : 'Виконаний'}}</td>
                                                     <td>{{order.total_price}}</td>
                                                     <td>
                                                         <button
@@ -294,7 +294,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
     import Api from '../../api.js';
     import Dropzone from 'dropzone';
     import show_order_modal from "../elements/show_order_modal.vue";
@@ -340,7 +339,6 @@
         mounted() {
             this.getUser();
             const dropzone = document.querySelector('.dropzone-box');
-            console.log(dropzone);
             this.avatar_dropzone = new Dropzone(this.$refs.avatarDropzone,{
                 url: '/login',
                 autoProcessQueue: false,
@@ -428,8 +426,8 @@
             getUser(){
                 Api.post('/api/get-auth-user').then(response => {
                     this.user = response.data.user;
-                    this.orders = response.data.orders;
-                    this.address = response.data.address;
+                    this.orders = response.data.user.orders;
+                    this.address = response.data.user.address;
                     this.name = response.data.user ? response.data.user.name : null;
                     this.surname = response.data.user ? response.data.user.surname : null;
                     this.phone = response.data.user ? response.data.user.phone : null;
@@ -439,7 +437,7 @@
                     //get file to dropzone
                     let file = { name: this.user.avatar, size: response.data.size };
                     this.avatar_dropzone.displayExistingFile(file, this.user.avatar_url);
-
+                    //loader off
                     this.statusLoader = false;
                 })
             },
@@ -447,8 +445,9 @@
                 Api.post('/api/auth/get-order', {
                     order_id: id
                 }).then(result => {
+                    console.log(result.data.order.products);
                     this.order = result.data.order;
-                    this.order_products = result.data.order_products
+                    this.order_products = result.data.order.products
                 })
             },
             formatDate(dateSting){

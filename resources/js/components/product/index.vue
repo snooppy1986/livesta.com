@@ -20,10 +20,14 @@
                                     </router-link>
                                 </li>
 
-                                <li class="breadcrumb-item">
+                                <li v-if="categories_count>1"  class="breadcrumb-item">
                                     <router-link class="text-dark" :to="'/category/'+category.id">
                                         {{category.title}}
                                     </router-link>
+                                </li>
+
+                                <li  class="breadcrumb-item">
+                                    {{product.title}}
                                 </li>
 
                             </ol>
@@ -254,6 +258,7 @@
                 category_id: 0,
                 category:{},
                 categrories:{},
+                categories_count: 0,
                 product: {},
                 related_products: {},
                 modal_product: {},
@@ -301,17 +306,19 @@
                     params:{category_id: this.category_id}
                 })
                     .then(res=>{
-                        this.category = res.data.category;
+                        console.log(res.data);
+                        this.category = res.data.product.category;
                         this.categories = res.data.categories;
                         this.product = res.data.product;
-                        this.related_products = res.data.related_products;
+                        this.related_products = res.data.product.related_products;
                         this.attributes = res.data.product.attributes;
                         this.brand = res.data.product.brand;
                         this.reviews = res.data.product.reviews;
-                        this.avgRating = res.data.rating;
+                        this.avgRating = res.data.product.rating;
                         this.statusLoader=false;
                         /*this.createMeta('product page', 'description product page');*/
                         this.meta = res.data.meta;
+                        this.categories_count = res.data.categories.length;
                     });
             },
 

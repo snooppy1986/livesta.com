@@ -86,6 +86,7 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import StarRating from 'vue-star-rating';
 
     export default {

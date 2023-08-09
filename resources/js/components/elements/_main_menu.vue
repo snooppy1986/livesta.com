@@ -1,6 +1,6 @@
 <template>
     <ul class="main-nav justify-content-start">
-        <li class="has-submenu" v-for="category in categories.data">
+        <li class="has-submenu" v-for="category in categories">
             <router-link :to="'/category/'+category.id">{{category.title}}</router-link>
             <div>
                 <child_main_menu :children="category.children"></child_main_menu>
@@ -24,13 +24,13 @@
         },
         mounted() {
             this.loadCategories();
-            /*$(document).trigger('change')*/
+            $(document).trigger('change')
         },
         methods:{
             loadCategories(){
                 axios.get('/api/menu')
                     .then(res=>{
-                        this.categories =  res.data;
+                        this.categories =  res.data.data;
                     })
             },
         }

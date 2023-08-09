@@ -50,7 +50,7 @@
         },
         methods:{
             getUser(){
-                Api.post('/api/auth/get-auth-user').then(response => {
+                Api.post('/api/get-auth-user').then(response => {
                     this.user = response.data.user;
                 })
             },

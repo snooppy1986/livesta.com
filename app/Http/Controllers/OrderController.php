@@ -2,65 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Order\OrderStoreRequest;
+use App\Http\Resources\Order\OrderResource;
+use App\Models\CartItem;
 use App\Models\DeliveryOption;
 use App\Models\Order;
 use App\Models\orderProduct;
 use App\Models\OrderUser;
+use App\Models\Product;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
 class OrderController extends Controller
 {
+
     public function show(Request $request)
     {
-        $order = Order::where('id', $request->order_id)->first();
-        $order_product = orderProduct::with('product')->where('order_id', $request->order_id)->get();
+        //get order id
+        $id = $request->order_id;
+        //get order
+        $order = Order::where('id', $id)->first();
+
 
         return response()->json([
-            'order_products'=>$order_product,
-            'order'=>$order
+            'order'=> new OrderResource($order)
         ]);
     }
-    public function store(Request $request)
+    public function store(OrderStoreRequest $request)
     {
-        $data = $request->validate([
-            'name'=>'required | min: 3 | max: 255 | string',
-            'surname'=>'required | min: 3 | max: 255 | string',
-            'phone'=>'required | numeric | digits:10',
-            'email'=>'max: 255 | string',
-            'notes'=>'max: 1024',
-            'products'=> 'array'
-        ]);
+        $data = $request->validated();
 
         //create order
         $order = Order::create($data);
 
-        //create order products
-        foreach ($data['products'] as $product){
-            orderProduct::create([
-                'order_id'=> $order->id,
-                'product_id'=> $product['product']['id'],
-                'qty' => $product['qty']
-            ]);
-        }
+        //create product info
+        $order->product()
+            ->attach($data['products_ids']);
 
         //create user info
-        if($request->user_id){
-             OrderUser::create([
-                'order_id' => $order->id,
-                'user_id' => $request->user_id
-            ]);
-        }
+        if($data['user_id'])
+             $order->users()->attach($data['user_id']);
 
         //delivery options
-        DeliveryOption::create([
+        $order->create_delivery_method($data);
+        /*DeliveryOption::create([
             'order_id' => $order->id,
-            'type' => $request->deliveryMethod,
-            'area' => $request->deliveryAddress ? $request->deliveryAddress['area'] : null,
-            'city' => $request->deliveryAddress ? $request->deliveryAddress['city'] : null,
-            'warehouse' => $request->deliveryAddress ? $request->deliveryAddress['warehouses'] : null,
-            'payment_type' => $request->paymentMethod
-        ]);
+            'type' => $data['deliveryMethod'] ? $data['deliveryMethod'] : null,
+            'area' => $data['deliveryAddress'] ? $data['deliveryAddress']['area'] : null,
+            'city' => $data['deliveryAddress'] ? $data['deliveryAddress']['city'] : null,
+            'warehouse' => $data['deliveryAddress'] ? $data['deliveryAddress']['warehouses'] : null,
+            'payment_type' => $data['paymentMethod'] ? $data['paymentMethod'] : null
+        ]);*/
+
+        //cart_item
+        $order->create_item($data['products']);
 
         return response()->json(['status'=>true]);
     }

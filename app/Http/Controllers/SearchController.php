@@ -3,65 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Http\Filter\ProductFilter;
+use App\Http\Requests\Search\SearchRequest;
+use App\Http\Resources\Product\ProductCollection;
+use App\Http\Resources\Product\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Traits\GetMeta;
 use Butschster\Head\Facades\Meta;
 use Butschster\Head\Hydrator\VueMetaHydrator;
-use Illuminate\Http\Request;
+
 
 class SearchController extends Controller
 {
-    public function index(Request $request, VueMetaHydrator $hydrator)
+    use GetMeta;
+    public function index(SearchRequest $request, VueMetaHydrator $hydrator)
     {
+        $data=$request->validated();
 
-        $data=$request->all();
         //get meta
-        $meta =  Meta::setTitle('Пошук ('.$data['search'].')')
-            ->setFavicon(url('/images/favicon.webp'));
+        $meta = $this->getMeta($hydrator, 'search');
 
-        $vue_meta = $hydrator->hydrate($meta);
         if($data['search']){
             $filter = app()->make(ProductFilter::class, ['queryParams'=>array_filter($data)]);
-            $products = Product::filter($filter)->get();
-            $search_product = Product::filter($filter)->paginate(3, ['*'], 'page', $data['page']);
+            $products = Product::filter($filter)->paginate(\config('app.limit'), ['*'], 'page', $data['page']);
 
-            if(!count($search_product)){
-                $price_max = 0;
-                $price_min = 0;
-                $count_product = 0;
-            }else{
-
-                $price_max = $products->sortBy([
-                    ['price_special', 'desc']
-                ])->first()->price_special;
-
-                $price_min = $products->sortBy([
-                    ['price_special', 'asc']
-                ])->first()->price_special;
-
-                $count_product = Product::filter($filter)->count();
-            }
-
-
-            $categories = Category::where('parent_id')->get();
-            $search_result = [
-                'search_products' => $search_product,
-                'price_max' => $price_max,
-                'price_min' => $price_min,
-                'count_product' => $count_product,
-                'categories' => $categories
-            ];
-
-            return response()->json([
-                'search_result' => $search_result,
-                'meta' => $vue_meta
-
-            ]);
+            $count_product = count($products)
+                ? $count_product = $products->total()
+                : 0;
+            return (new ProductCollection($products))
+                ->additional([
+                    'count_product' => $count_product
+                ]);
         }else{
             return response()->json([
-                'search_result' => null,
-                'meta' => $vue_meta
-
+                'products' => null,
+                'meta' => $meta
             ]);
         }
 

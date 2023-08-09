@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Filter\ProductFilter;
 use App\Http\Requests\CategoryShowRequest;
 use App\Http\Resources\CategoryCollection;
-use App\Http\Resources\CategoryResource;
+use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Product;
@@ -21,38 +21,29 @@ class CategoryController extends Controller
 {
     use GetMeta;
 
-
     public function show( CategoryShowRequest $request, VueMetaHydrator $hydrator)
     {
-        $data = $request->all();
+        $data = $request->validated();
+
         $id = $data['id'];
 
-        $category = Category::with('children')->whereId($id)->first();
+        $category = Category::whereId($id)->first();
+
         /*get Products */
         $filter = app()->make(ProductFilter::class, ['queryParams'=>array_filter($data)]);
         $products = Product::whereIn('id', $category->ids())
             ->filter($filter)
             ->paginate(\config('app.limit'),
-                ['*'],
-                'page',
-                $data['page']);
+                ['*'], 'page', $data['page']);
         //get other info
         if(count($products)){
             $pr = Product::whereIn('id', $category->ids())
                 ->get();
             $price_max = $pr->sortByDesc('price_special')->first();
             $price_min = $pr->sortBy('price_special')->first();
-            $categories = $category;
+            /*$categories = $category;*/
             $parents = array_reverse($category->ancestors()->toArray());
             $count_product = $pr->count();
-            /*dd($price_max, $price_min, $pr);*/
-            /*$price_max = Product::query()->whereIn('id', $products_ids)->orderByDesc('price_special')->first()->price_special;
-            $price_min = Product::query()->whereIn('id', $products_ids)->orderBy('price_special')->first()->price_special;
-            $categories = Category::with('children')->where('id', $id)->first();
-            $parents = array_reverse($category->ancestors()->toArray());
-            $count_product = Product::whereIn('id', $products_ids)
-                ->filter($filter)
-                ->count();*/
         }
 
         //get meta
@@ -61,8 +52,7 @@ class CategoryController extends Controller
         return response()->json(
             [
                 'parents' => isset($parents) ? $parents : null,
-                'category' => $category,
-                'categories' => isset($categories) ? $categories->children : null,
+                'category' => new CategoryResource($category),
                 'products' => $products,
                 'price_max' => isset($price_max) ? $price_max->price_special : null,
                 'price_min' => isset($price_min) ? $price_min->price_special : null,

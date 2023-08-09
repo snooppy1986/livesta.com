@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('phone');
             $table->string('email')->nullable();
             $table->text('notes')->nullable();
-            $table->integer('status')->default(1);
+            $table->integer('status')->default(0);
             $table->integer('total_price')->nullable();
             $table->timestamps();
         });
@@ -54,6 +54,8 @@ return new class extends Migration
     {
         if(app()->isLocal()){
             Schema::dropIfExists('orders');
+            Schema::dropIfExists('order_product');
+            Schema::dropIfExists('order_user');
         }
     }
 };

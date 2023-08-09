@@ -4,7 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Order extends Model
 {
@@ -15,28 +18,48 @@ class Order extends Model
         'surname',
         'phone',
         'email',
-        'notes'
+        'notes',
+        'total_price'
     ];
 
-    public function order_product(): BelongsToMany
+    public function product(): BelongsToMany
     {
         return $this->belongsToMany(Product::class, 'order_product');
     }
 
-    public function order_user(): BelongsToMany
+    public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'order_user');
     }
 
-    public static function boot()
+    public function cart_item(): HasMany
     {
-        parent::boot();
-        static::deleted(function (Order $order){
+        return $this->hasMany(CartItem::class);
+    }
+    public function with_product()
+    {
+        return $this->cart_item()->with('product');
+    }
 
-            $order->orderProduct()->each(function ($orderProduct){
-                $orderProduct->delete();
-            });
+    public function create_item($data){
+        foreach ($data as $item){
+            CartItem::create([
+                'order_id' => $this->id,
+                'product_id' => $item['product']['id'],
+                'qty' => $item['qty']
+            ]);
+        }
+    }
 
-        });
+    public function create_delivery_method($data)
+    {
+        DeliveryOption::create([
+            'order_id' => $this->id,
+            'type' => $data['deliveryMethod'] ? $data['deliveryMethod'] : null,
+            'area' => $data['deliveryAddress'] ? $data['deliveryAddress']['area'] : null,
+            'city' => $data['deliveryAddress'] ? $data['deliveryAddress']['city'] : null,
+            'warehouse' => $data['deliveryAddress'] ? $data['deliveryAddress']['warehouses'] : null,
+            'payment_type' => $data['paymentMethod'] ? $data['paymentMethod'] : null
+        ]);
     }
 }

@@ -2,24 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\Review\ReviewRequest;
 use App\Models\Review;
 use Illuminate\Database\QueryException;
-use Illuminate\Http\Request;
+
 
 class ReviewController extends Controller
 {
-    public function store(Request $request)
+    public function store(ReviewRequest $request)
     {
-        $data = $request->validate([
-            'product_id'=>'integer',
-            'advantage'=>'string|max:1024|min:2|nullable',
-            'flaws'=>'string|max:1024|min:2|nullable',
-            'message'=>'string|max:2048|min:2|nullable',
-            'name_surname'=>'required|string|max:1024|min:2|nullable',
-            'email'=>'required|email|max:255|nullable',
-            'rating'=>'integer',
-        ]);
-
+        $data = $request->validated();
         try{
             Review::create($data);
             $response = [
