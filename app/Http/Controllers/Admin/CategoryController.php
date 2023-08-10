@@ -8,8 +8,6 @@ use App\Models\Category;
 use Illuminate\Http\Request;
 
 use Maatwebsite\Excel\Facades\Excel;
-use function PHPUnit\Framework\name;
-use function PHPUnit\Runner\validate;
 
 class CategoryController extends Controller
 {
@@ -19,7 +17,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with('children')->where('parent_id', 0)->get();
-        /*dd($categories);*/
+
         return view('/admin/category/index')->with([
             'categories'=> $categories
         ]);

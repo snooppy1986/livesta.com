@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\MainSlider;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SeoPageUpdateRequest extends FormRequest
+class MainSliderUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,9 +22,10 @@ class SeoPageUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'=>'nullable|string|max:128',
-            'keywords'=>'nullable|string|max:1024',
-            'description'=>'nullable|string|max:1024'
+            'image'=>'file|mimes:jpg,jpeg,png',
+            'title'=>'required | min: 4 | max: 19 | string',
+            'content'=>'nullable | string | max: 512',
+            'product_link' => 'required'
         ];
     }
 }

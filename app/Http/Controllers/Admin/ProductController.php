@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\DataTables\CategoriesDataTable;
 use App\DataTables\ProductsDataTable;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\Product\ProductStoreRequest;
 use App\Imports\ProductsImport;
 use App\Models\Attribute;
 use App\Models\Category;
 use App\Models\CategoryProduct;
-use App\Models\Meta;
 use App\Models\Product;
 use App\Models\ProductMeta;
 use App\Models\RelatedProduct;
