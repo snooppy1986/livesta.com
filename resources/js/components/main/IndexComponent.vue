@@ -254,7 +254,8 @@
             loadProduct(){
                 axios.get('/api/start')
                     .then(res=>{
-                        this.products =  res.data.products;
+                        console.log(res);
+                        this.products =  res.data.products.data;
                         this.main_categories = res.data.main_categories.slice(0, 6);
                         this.menu_categories = res.data.main_categories;
                         this.slides = res.data.main_slides;

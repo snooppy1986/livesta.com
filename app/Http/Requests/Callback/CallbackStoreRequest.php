@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Callback;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MainSliderStoreRequest extends FormRequest
+class CallbackStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -21,12 +21,11 @@ class MainSliderStoreRequest extends FormRequest
      */
     public function rules(): array
     {
-
         return [
-            'image'=>'required|file|mimes:jpg,jpeg,png',
-            'title'=>'required | min: 4 | max: 19 | string',
-            'content'=>'nullable | string | max: 512',
-            'product_link' => 'required'
+            'name'=> 'required|string|min:2|max:64',
+            'surname'=> 'nullable|string|max:64',
+            'email'=> 'required|email|max:128',
+            'message'=> 'required|min:10|max:3000|string'
         ];
     }
 }

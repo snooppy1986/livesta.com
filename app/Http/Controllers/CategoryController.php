@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Filter\ProductFilter;
-use App\Http\Requests\CategoryShowRequest;
+use App\Http\Requests\Category\CategoryShowRequest;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\Category\CategoryResource;
 use App\Models\Category;

@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SeoPageUpdateRequest;
+use App\Http\Requests\Seo\SeoPageUpdateRequest;
 use App\Models\Meta;
-use Illuminate\Http\Request;
 
 class SeoPageController extends Controller
 {

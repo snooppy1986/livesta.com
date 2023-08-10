@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Seo;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class CallbackStoreRequest extends FormRequest
+class SeoPageUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,9 @@ class CallbackStoreRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'=> 'required|string|min:2|max:64',
-            'surname'=> 'nullable|string|max:64',
-            'email'=> 'required|email|max:128',
-            'message'=> 'required|min:10|max:3000|string'
+            'title'=>'nullable|string|max:128',
+            'keywords'=>'nullable|string|max:1024',
+            'description'=>'nullable|string|max:1024'
         ];
     }
 }
