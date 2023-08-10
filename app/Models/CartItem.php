@@ -4,14 +4,20 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class OrderUser extends Model
+class CartItem extends Model
 {
     use HasFactory;
     public $timestamps = false;
-    protected $table = 'order_user';
     protected $fillable = [
         'order_id',
-        'user_id'
+        'product_id',
+        'qty'
     ];
+
+    public function product(): HasOne
+    {
+        return $this->hasOne(Product::class, 'id', 'product_id');
+    }
 }

@@ -44,7 +44,7 @@
                                     <td class="product-thumbnail">
                                         <div class="thumb">
                                             <router-link :to="'/product/'+cart_product.product.id" href="single-product.html">
-                                                <img :src="'/storage/images/'+cart_product.product.image" width="68" height="84" alt="Image-HasTech">
+                                                <img :src="cart_product.product.image" width="68" height="84" alt="Image-HasTech">
                                             </router-link>
                                         </div>
                                     </td>
@@ -55,14 +55,6 @@
                                         <span class="price">{{cart_product.product.price_special}} &#x20b4</span>
                                     </td>
                                     <td class="product-quantity">
-                                        <!--<div @click="getTotalPrice(cart_product.product.price_special, index)" class="pro-qty">
-                                            <input
-                                                @input="totalPrice=$event.currentTarget.value"
-                                                type="text"
-                                                class="quantity"
-                                                title="Quantity"
-                                                :value="cart_product.qty">
-                                        </div>-->
                                         <div class="quantity-toggle">
                                             <button @click.prevent="decrement(index)" class="dec qty-btn">-</button>
                                             <input type="text" :value="cart_product.qty" readonly>
@@ -78,14 +70,6 @@
                     </form>
                 </div>
                 <div class="row">
-                    <!--<div class="col-12 col-lg-6">
-                        <div class="coupon-wrap">
-                            <h4 class="title">Coupon</h4>
-                            <p class="desc">Enter your coupon code if you have one.</p>
-                            <input type="text" class="form-control" placeholder="Coupon code">
-                            <button type="button" class="btn-coupon">Apply coupon</button>
-                        </div>
-                    </div>-->
                     <div class="col-12 col-lg-6">
                         <div class="cart-totals-wrap">
                             <h2 class="title">Сума замовлення</h2>
@@ -97,33 +81,6 @@
                                         <span class="amount">{{totalPrice}}</span>
                                     </td>
                                 </tr>
-                                <!--<tr class="shipping-totals">
-                                    <th>Shipping</th>
-                                    <td>
-                                        <ul class="shipping-list">
-                                            <li class="radio">
-                                                <input type="radio" name="shipping" id="radio1" checked>
-                                                <label for="radio1">Flat rate: <span>$3.00</span></label>
-                                            </li>
-                                            <li class="radio">
-                                                <input type="radio" name="shipping" id="radio2">
-                                                <label for="radio2">Free shipping</label>
-                                            </li>
-                                            <li class="radio">
-                                                <input type="radio" name="shipping" id="radio3">
-                                                <label for="radio3">Local pickup</label>
-                                            </li>
-                                        </ul>
-                                        <p class="destination">Shipping to <strong>USA</strong>.</p>
-                                        <a href="javascript:void(0)" class="btn-shipping-address">Change address</a>
-                                    </td>
-                                </tr>
-                                <tr class="order-total">
-                                    <th>Total</th>
-                                    <td>
-                                        <span class="amount">$504.00</span>
-                                    </td>
-                                </tr>-->
                                 </tbody>
                             </table>
                             <div class="text-end">

@@ -114,7 +114,6 @@ router.beforeEach((to, from, next)=>{
             name: 'user.login'
         })
     }
-
     next()
 })
 export default router;

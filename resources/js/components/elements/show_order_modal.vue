@@ -28,7 +28,7 @@
                                                     <td class="product-thumbnail">
                                                         <div class="thumb">
                                                             <router-link :to="{name:'product.index', params:{id:order_product.product.id}}">
-                                                                <img :src="'/storage/images/'+order_product.product.image" width="68" height="84" alt="Image-HasTech">
+                                                                <img :src="order_product.product.image"  alt="Image-HasTech">
                                                             </router-link>
                                                         </div>
                                                     </td>
@@ -65,7 +65,7 @@
                                     <tr class="order-total">
                                         <th>Статус</th>
                                         <td>
-                                            <span class="amount">{{order.status === 1 ? 'Новий' : order.status ===2 ? 'Виконується' : 'Виконаний'}}</span>
+                                            <span class="amount">{{order.status === 0 ? 'Новий' : order.status ===1 ? 'Виконується' : 'Виконаний'}}</span>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -86,6 +86,7 @@
     export default {
         name: "show_order_modal",
         props: ['order', 'order_products'],
+
     }
 </script>
 
@@ -96,5 +97,11 @@
     }
     .cart-totals-wrap table tbody .amount{
         color: #FF6565;
+    }
+    .product-action-modal
+    .product-action-view-content
+    .modal-action-product
+    .thumb img{
+        width: 50px;
     }
 </style>

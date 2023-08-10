@@ -36,12 +36,18 @@
             </model-list-select>
         </div>
     </div>
+    <ScaleLoader
+        :loading="statusLoader"
+        color="#ff6565"
+        height="20px"
+        width="5px"
+    />
 </template>
 
 <script>
     import axios from 'axios';
     import {ModelListSelect} from 'vue-search-select';
-    import moment from 'moment';
+    import { ScaleLoader } from "vue3-spinner";
     export default {
         name: "new_mail",
         data(){
@@ -54,11 +60,13 @@
                 itemWarehouses: {},
                 showCity: false,
                 showWarehouses: false,
-                deliveryAddress: {}
+                deliveryAddress: {},
+                statusLoader: true
             }
         },
         components:{
-            ModelListSelect
+            ModelListSelect,
+            ScaleLoader
         },
         mounted() {
             this.getAreas();
@@ -78,6 +86,7 @@
         },
         methods:{
             getAreas(){
+                this.statusLoader=true;
                 axios.post('https://api.novaposhta.ua/v2.0/json/', {
                     apiKey: 'd00d8c26062adbddc853fc29ff519a16',
                     modelName: "Address",
@@ -86,10 +95,11 @@
                 }).then(response=>{
                     console.log(response.data.data);
                     this.areas = response.data.data;
+                    this.statusLoader=false;
                 });
             },
             getCities(value){
-                console.log( value.Ref);
+                this.statusLoader=true;
                 axios.post('https://api.novaposhta.ua/v2.0/json/', {
                     apiKey: 'd00d8c26062adbddc853fc29ff519a16',
                     modelName: 'Address',
@@ -106,10 +116,11 @@
                             this.searchCities.push(cities);
                         }
                     })
+                    this.statusLoader = false;
                 });
             },
             getWarehouses(value){
-                console.log(value);
+                this.statusLoader=true;
                 axios.post('https://api.novaposhta.ua/v2.0/json/', {
                     apiKey: 'd00d8c26062adbddc853fc29ff519a16',
                     modelName: 'Address',
@@ -121,6 +132,7 @@
                     }
                 }).then(response=>{
                     this.searchWarehouses = response.data.data;
+                    this.statusLoader=false;
                 });
             },
             getFullAddress(area, city, warehouses){

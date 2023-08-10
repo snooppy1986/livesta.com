@@ -157,15 +157,13 @@
         name: "IndexComponent",
         data(){
             return {
-                category: [],
                 cart_products: [],
                 totalPrice: 0,
                 cart_products_count: 0,
                 wish_list_count: 0,
                 access_token: null,
                 search_result: null,
-                search_req: null,
-
+                search_req: null
             }
         },
         components:{
@@ -176,7 +174,6 @@
             footer_block
         },
         mounted() {
-            this.loadCategories();
             this.cartProduct();
             this.wishListCount();
             this.getAccessToken();
@@ -184,7 +181,7 @@
         },
         methods:{
             getUser(){
-                Api.post('/api/auth/get-auth-user').then(response => {
+                Api.post('/api/get-auth-user').then(response => {
                     this.user = response.data.user;
                     this.orders = response.data.orders;
                     this.address = response.data.address;
@@ -201,12 +198,6 @@
             },
             getAccessToken(){
                 this.access_token = localStorage.getItem('access_token')
-            },
-            loadCategories(){
-                Api.get('/api/menu')
-                    .then(res=>{
-                        this.category =  res.data;
-                    })
             },
             /*cart product*/
             addToCart(product, isSingle, isModal){
@@ -331,26 +322,7 @@
             //get search request
             getSearchReq(value, page=1){
                 this.search_req = value;
-                /*console.log(value);
-                axios.post('/api/search', {
-                    'page': page,
-                    'search': value
-                }).then(res=>{
-                    console.log(res.data.count_product);
-                    this.search_req = value;
-                    this.search_result = res.data.count_product;
-                })*/
-            },
-
-            //create meta data on page
-           /* createMeta(title, description, keywords){
-                document.title = title;
-                //add description
-                var meta = document.createElement('meta');
-                meta.setAttribute('name', 'description');
-                meta.setAttribute('content', description);
-                document.getElementsByTagName('head')[0].appendChild(meta);
-            }*/
+            }
         },
     }
 </script>

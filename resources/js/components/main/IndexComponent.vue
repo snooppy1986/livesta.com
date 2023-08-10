@@ -45,60 +45,6 @@
                 </swiper-slide>
                 <div class="hero-slider-pagination"></div>
             </swiper>
-
-            <!--<div class="swiper hero-slider-container">
-                <div class="swiper-wrapper">
-                    <div class="swiper-slide hero-slide-item">
-                        <div class="container">
-                            <div class="row align-items-center position-relative">
-                                <div class="col-12 col-md-6">
-                                    <div class="hero-slide-content">
-                                        <div class="hero-slide-text-img"><img src="/images/slider/text-theme.webp" width="427" height="232" alt="Image"></div>
-                                        <h2 class="hero-slide-title">CLEAN FRESH</h2>
-                                        <p class="hero-slide-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis.</p>
-                                        <a class="btn btn-border-dark" href="product.html">BUY NOW</a>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="hero-slide-thumb">
-                                        <img src="/images/slider/slider1.webp" width="841" height="832" alt="Image">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hero-slide-text-shape"><img src="/images/slider/text1.webp" width="70" height="955" alt="Image"></div>
-                        <div class="hero-slide-social-shape"></div>
-                    </div>
-                    &lt;!&ndash;<div class="swiper-slide hero-slide-item">
-                        <div class="container">
-                            <div class="row align-items-center position-relative">
-                                <div class="col-12 col-md-6">
-                                    <div class="hero-slide-content">
-                                        <div class="hero-slide-text-img"><img src="/images/slider/text-theme.webp" width="427" height="232" alt="Image"></div>
-                                        <h2 class="hero-slide-title">Facial Cream</h2>
-                                        <p class="hero-slide-desc">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam, purus sit amet luctus venenatis.</p>
-                                        <a class="btn btn-border-dark" href="product.html">BUY NOW</a>
-                                    </div>
-                                </div>
-                                <div class="col-12 col-md-6">
-                                    <div class="hero-slide-thumb">
-                                        <img src="/images/slider/slider2.webp" width="841" height="832" alt="Image">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hero-slide-text-shape"><img src="/images/slider/text1.webp" width="70" height="955" alt="Image"></div>
-                        <div class="hero-slide-social-shape"></div>
-                    </div>&ndash;&gt;
-                </div>
-                &lt;!&ndash;== Add Pagination ==&ndash;&gt;
-                <div class="hero-slider-pagination"></div>
-            </div>-->
-            <!--<div class="hero-slide-social-media">
-                <a href="https://www.pinterest.com/" target="_blank" rel="noopener"><i class="fa fa-pinterest-p"></i></a>
-                <a href="https://twitter.com/" target="_blank" rel="noopener"><i class="fa fa-twitter"></i></a>
-                <a href="https://www.facebook.com/" target="_blank" rel="noopener"><i class="fa fa-facebook"></i></a>
-            </div>-->
         </section>
         <!--== End Hero Area Wrapper ==-->
 
@@ -115,47 +61,6 @@
                         </a>
                         <!--== End Product Category Item ==-->
                     </div>
-                    <!--<div class="col-6 col-lg-4 col-lg-2 col-xl-2">
-                        &lt;!&ndash;== Start Product Category Item ==&ndash;&gt;
-                        <a href="product.html" class="product-category-item" data-bg-color="#FFEDB4">
-                            <img class="icon" src="assets/images/shop/category/2.webp" width="80" height="80" alt="Image-HasTech">
-                            <h3 class="title">Skin care</h3>
-                        </a>
-                        &lt;!&ndash;== End Product Category Item ==&ndash;&gt;
-                    </div>
-                    <div class="col-6 col-lg-4 col-lg-2 col-xl-2 mt-lg-0 mt-sm-6 mt-4">
-                        &lt;!&ndash;== Start Product Category Item ==&ndash;&gt;
-                        <a href="product.html" class="product-category-item" data-bg-color="#DFE4FF">
-                            <img class="icon" src="assets/images/shop/category/3.webp" width="80" height="80" alt="Image-HasTech">
-                            <h3 class="title">Lip stick</h3>
-                        </a>
-                        &lt;!&ndash;== End Product Category Item ==&ndash;&gt;
-                    </div>
-                    <div class="col-6 col-lg-4 col-lg-2 col-xl-2 mt-xl-0 mt-sm-6 mt-4">
-                        &lt;!&ndash;== Start Product Category Item ==&ndash;&gt;
-                        <a href="product.html" class="product-category-item" data-bg-color="#FFEACC">
-                            <img class="icon" src="assets/images/shop/category/4.webp" width="80" height="80" alt="Image-HasTech">
-                            <h3 class="title">Face skin</h3>
-                            <span data-bg-color="#835BF4" class="flag-new">sale</span>
-                        </a>
-                        &lt;!&ndash;== End Product Category Item ==&ndash;&gt;
-                    </div>
-                    <div class="col-6 col-lg-4 col-lg-2 col-xl-2 mt-xl-0 mt-sm-6 mt-4">
-                        &lt;!&ndash;== Start Product Category Item ==&ndash;&gt;
-                        <a href="product.html" class="product-category-item" data-bg-color="#FFDAE0">
-                            <img class="icon" src="assets/images/shop/category/5.webp" width="80" height="80" alt="Image-HasTech">
-                            <h3 class="title">Blusher</h3>
-                        </a>
-                        &lt;!&ndash;== End Product Category Item ==&ndash;&gt;
-                    </div>
-                    <div class="col-6 col-lg-4 col-lg-2 col-xl-2 mt-xl-0 mt-sm-6 mt-4">
-                        &lt;!&ndash;== Start Product Category Item ==&ndash;&gt;
-                        <a href="product.html" class="product-category-item" data-bg-color="#FFF3DA">
-                            <img class="icon" src="assets/images/shop/category/6.webp" width="80" height="80" alt="Image-HasTech">
-                            <h3 class="title">Natural</h3>
-                        </a>
-                        &lt;!&ndash;== End Product Category Item ==&ndash;&gt;
-                    </div>-->
                 </div>
             </div>
         </section>
@@ -293,15 +198,10 @@
     import product_preview from '../elements/product_quick_view.vue';
     import product_wishlist from "../elements/product_wishlist.vue";
     import { ScaleLoader } from "vue3-spinner";
-    //import swiper
     import { Navigation, Pagination, Scrollbar, A11y , Autoplay, EffectFade} from 'swiper';
     import {Swiper, SwiperSlide} from 'swiper/vue';
-
     import 'swiper/css/pagination';
     import 'swiper/css/navigation';
-
-
-
     export default {
         name: "IndexComponent",
         metaInfo(){
@@ -323,7 +223,6 @@
                 meta: {},
                 statusLoader: true
             }
-
         },
         components:{
             StarRating,
@@ -335,7 +234,6 @@
         },
 
         setup() {
-
             const onSwiper = (swiper) => {
                 console.log(swiper);
             };
@@ -348,7 +246,6 @@
                 modules: [Pagination, Navigation, Autoplay, EffectFade],
             };
         },
-
         mounted() {
             this.loadProduct();
             $(document).trigger('change');
@@ -357,14 +254,12 @@
             loadProduct(){
                 axios.get('/api/start')
                     .then(res=>{
-                        //console.log(res);
                         this.products =  res.data.products;
                         this.main_categories = res.data.main_categories.slice(0, 6);
                         this.menu_categories = res.data.main_categories;
                         this.slides = res.data.main_slides;
                         this.meta = res.data.meta;
                         this.statusLoader = false;
-
                     })
             },
             productPreview(product){
