@@ -4,6 +4,7 @@
     id="selectCategory"
     {{$data_type ? 'multiple' : ''}}
 >
+
     <option value="0">Выберите категорию</option>
     @foreach($categories as $cat)
         <option

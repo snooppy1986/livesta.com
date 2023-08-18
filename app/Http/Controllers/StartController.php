@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Resources\Category\CategoryCollection;
+use App\Http\Resources\MainSlider\MainSliderCollection;
 use App\Http\Resources\Product\ProductCollection;
 use App\Models\Category;
 use App\Models\MainSlider;
@@ -24,7 +25,7 @@ class StartController extends Controller
              ->where('parent_id', 0)
              ->get());
 
-         $main_slides = MainSlider::where('status', 1)->get();
+         $main_slides = new MainSliderCollection(MainSlider::where('status', 1)->get());
 
          $meta = $this->getMeta($hydrator, 'main');
 

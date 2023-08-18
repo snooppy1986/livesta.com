@@ -78,7 +78,7 @@
                                             class="d-block"
                                             :to="{name:'product.index', params:{id:product.id}, query:{category: category.id}}"
                                         >
-                                            <img :src="product.image" width="370" height="450" :alt="product.title">
+                                            <img :src="product.image_url" width="370" height="450" :alt="product.title">
                                         </router-link>
                                         <span v-if="product.new" class="flag-new">новинка</span>
                                         <div class="product-action">
@@ -309,10 +309,10 @@
                     'sort_type': this.sort_type,
                     'search': this.searchReq
                 }).then(res=>{
-                        console.log(res.data);
-                        this.products = res.data.products.data;
+                        /*console.log(res.data);*/
+                        this.products = res.data.data;
                         this.category = res.data.category;
-                        this.pagination = res.data.products;
+                        this.pagination = res.data.meta;
                         this.categories = res.data.category.children;
                         this.parents = res.data.parents;
                         this.price_max = res.data.price_max;
@@ -320,6 +320,7 @@
                         this.count_product = res.data.count_product;
                         this.statusLoader=false;
                         this.meta = res.data.meta;
+                    console.log(this.pagination);
                 }).catch(error=>{
                     console.log(error);
                 })

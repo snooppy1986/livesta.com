@@ -45,14 +45,6 @@ class OrderController extends Controller
 
         //delivery options
         $order->create_delivery_method($data);
-        /*DeliveryOption::create([
-            'order_id' => $order->id,
-            'type' => $data['deliveryMethod'] ? $data['deliveryMethod'] : null,
-            'area' => $data['deliveryAddress'] ? $data['deliveryAddress']['area'] : null,
-            'city' => $data['deliveryAddress'] ? $data['deliveryAddress']['city'] : null,
-            'warehouse' => $data['deliveryAddress'] ? $data['deliveryAddress']['warehouses'] : null,
-            'payment_type' => $data['paymentMethod'] ? $data['paymentMethod'] : null
-        ]);*/
 
         //cart_item
         $order->create_item($data['products']);

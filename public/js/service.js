@@ -159,8 +159,6 @@ function showProduct(id) {
 }
 
 /*delete product*/
-
-
 function deleteProduct(id) {
     var Toast = Swal.mixin({
         toast: true,
@@ -169,10 +167,9 @@ function deleteProduct(id) {
         timer: 3000
     });
     element=$(this).closest('td');
-    console.log(element);
     $.ajax({
-        url: 'product/delete',
-        data:{'id': id},
+        url: 'product/delete/'+id,
+        data:{'product': id},
         method: 'delete',
         dataType:'json',
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
@@ -219,7 +216,6 @@ $('.slide-destroy').on('click', function (event) {
     let id = $(this).data('id');
     let el = $(this).parents('tr');
 
-    console.log(event);
     $.ajax({
         url: "/admin/main-slider/destroy/"+id,
         type: 'post',

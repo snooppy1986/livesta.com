@@ -11,7 +11,7 @@ class MainController extends Controller
     public function index()
     {
         $user = Auth::guard('web')->user();
-        return view('admin/main/index')->with([
+        return view('admin/main/index', [
             'user'=>$user
         ]);
     }

@@ -28,7 +28,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">Импорт</h3>
                             </div>
-                            <form id="importForm" method="POST" action="{{route('category.import.action')}}" enctype="multipart/form-data">
+                            <form id="importForm" method="POST" action="{{route('import.category.store')}}" enctype="multipart/form-data">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">

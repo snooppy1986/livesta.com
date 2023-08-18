@@ -25,7 +25,7 @@
                             <li v-for="product in products">
                                 <div class="row">
                                     <div class="col-md-1 image">
-                                        <img :src="product.image" :alt="product.title" width="70" height="70">
+                                        <img :src="product.image_url" :alt="product.title" width="70" height="70">
                                     </div>
                                     <div class="col-md-9 title">
                                         <div class="row mb-2 ">

@@ -17,7 +17,7 @@
                 <li v-for="cart_product in products" class="aside-product-list-item">
                     <a @click.prevent="removeProduct(cart_product.product.id)" href="#/" class="remove">×</a>
                     <router-link :to="'/product/'+cart_product.product.id">
-                        <img :src="cart_product.product.image" width="68" height="84" alt="Image">
+                        <img :src="cart_product.product.image_url" width="68" height="84" alt="Image">
                         <span class="product-title">{{cart_product.product.title.length<52 ? cart_product.product.title : cart_product.product.title.slice(0, 52)+'...'}}</span>
                     </router-link>
                     <span class="product-price">{{cart_product.qty}} × {{cart_product.product.price_special}}</span>

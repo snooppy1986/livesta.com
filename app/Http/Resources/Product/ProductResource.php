@@ -5,6 +5,7 @@ namespace App\Http\Resources\Product;
 use App\Http\Resources\Attribute\AttributeResource;
 use App\Http\Resources\Brand\BrandResource;
 use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Meta\MetaProductResource;
 use App\Http\Resources\Review\ReviewResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -18,6 +19,7 @@ class ProductResource extends JsonResource
             'slug' => $this->slug,
             'title' => $this->title,
             'image' => $this->image,
+            'image_url' => url('storage/images/'.$this->image),
             'content' => $this->content,
             'code' => $this->code,
             'price_balls' => $this->price_balls,
@@ -30,7 +32,8 @@ class ProductResource extends JsonResource
             'brand' => new BrandResource($this->brand),
             'reviews' => ReviewResource::collection($this->reviews),
             'attributes' => new AttributeResource($this->attributes),
-            'category' => CategoryResource::collection($this->category)->first(),
+            'category' => CategoryResource::collection($this->category),
+            'meta' => new MetaProductResource($this->meta)
         ];
     }
 }

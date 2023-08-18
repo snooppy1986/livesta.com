@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\MainSlider;
+namespace App\Http\Requests\Category;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class MainSliderUpdateRequest extends FormRequest
+class CategoryStoreRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,10 +22,9 @@ class MainSliderUpdateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'image'=>'file|mimes:jpg,jpeg,png',
-            'title'=>'required | min: 4 | max: 19 | string',
-            'content'=>'nullable | string | max: 512',
-            'product_id' => 'nullable'
+            'title' => 'required|min:3|max:255',
+            'parent_id' => 'int',
+            'thumbnail' => 'nullable|image'
         ];
     }
 }

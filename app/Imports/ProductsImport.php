@@ -3,6 +3,7 @@
 namespace App\Imports;
 
 use App\Models\Attribute;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Product;
@@ -13,48 +14,33 @@ use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class ProductsImport implements ToCollection, WithHeadingRow
 {
-    /**
-    * @param array $row
-    *
-    * @return \Illuminate\Database\Eloquent\Model|null
-    */
-    public function model(array $row)
-    {
-        return new Product([
-
-        ]);
-    }
-
-    /**
-     * @inheritDoc
-     */
     public function collection(Collection $collection)
     {
         foreach ($collection as $row)
         {
-            $category = Category::where('custom_id', $row['category_id'])->first('id');
+
+            $cat_id = Category::query()
+                ->where('custom_id', $row['category_id'])
+                ->first();
+            $brand = Brand::query()->where('title', $row['brand'])->value('id');
+            /*dd($row, $brand, $cat_id);*/
             $product = Product::create([
                 'title'=>trim($row['title']),
-                'image'=>$row['image'],
+                'image'=>$row['image'] ?? '',
                 'content'=>trim($row['about']),
-                'category'=> $category ? $category->id : 0,
                 'code'=> $row['code'],
                 'price_balls'=> $row['price_balls'],
-                'price_discount' => $row['price_discount'],
-                'price_special' => $row['price_special'],
-                'price_through' => $row['price_through'],
+                'price_discount' => str_replace(' ', '', $row['price_discount']),
+                'price_special' => str_replace(' ', '', $row['price_special']),
+                'price_through' => str_replace(' ', '', $row['price_through']),
                 'rating' => $row['rating'],
+                'brand_id' =>  $brand
             ]);
 
-            CategoryProduct::create([
-                'category_id' => $category ? $category->id : 0,
-                'product_id' => $product->id
-            ]);
+            $product->category()->attach($cat_id);
 
-            Attribute::create([
-                'product_id' => $product->id,
+            $product->attributes()->create([
                 'application'=> $row['aplication'],
-                'brand' => $row['brand'],
                 'country' => $row['country'],
                 'composition' => $row['composition'],
                 'gender' => $row['gender'],

@@ -5,37 +5,39 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\ProductsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductStoreRequest;
+use App\Http\Resources\Product\ProductResource;
 use App\Imports\ProductsImport;
 use App\Models\Attribute;
+use App\Models\Brand;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Product;
 use App\Models\ProductMeta;
 use App\Models\RelatedProduct;
+use App\Models\Traits\UploadFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
 
 class ProductController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
+    use UploadFile;
     public function index(ProductsDataTable $dataTable)
     {
         return $dataTable->render('admin/product/index');
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         $products = Product::all();
         $categories = Category::with('children')->where('parent_id', 0)->get();
+        $brands = Brand::all(['id', 'title']);
+
         return view('admin/product/create', [
-            'products'=>$products,
-            'categories'=>$categories,
+            'products' => $products,
+            'categories' => $categories,
+            'brands' => $brands
         ]);
     }
 
@@ -44,35 +46,36 @@ class ProductController extends Controller
      */
     public function store(ProductStoreRequest $request)
     {
-        $data = $request->all();
-
+        $data = $request->validated();
+        /*dd($data);*/
         /*create product*/
         $product = Product::create([
             'title'=>$data['title'],
             'content'=>strip_tags($data['about']),
-            'category'=>$data['parent_id'][0],
             'code'=>$data['code'],
             'price_balls'=>$data['price_balls'],
             'price_discount'=>$data['price_discount'],
             'price_special' =>$data['price_special'],
             'price_through'=>$data['price_through'],
             'rating'=>$data['rating'],
+            'brand_id' => $data['brand_id']
         ]);
+        //add relation category
+        $product->category()->attach($data['parent_id']);
+
         /*upload image*/
-        if($request->hasFile('productImage')){
-            $extension = $request->file('productImage')->getClientOriginalExtension();
-            $name = md5($request->file('productImage')->getClientOriginalName().date('h-m-s')).'.'.$extension;
-            $request->productImage->move(storage_path('app/public/images'), $name);
+        if(isset($data['productImage'])){
+            $filename = $this->UploadFile($data['productImage'], 370, 450, 'public/images/');
+
             $product->update([
-                'image'=>$name
+                'image'=>$filename
             ]);
 
         }
+
         /*create product attribute*/
-        Attribute::create([
-            'product_id'=>$product->id,
+        $product->attributes()->create([
             'application'=>strip_tags($data['application']),
-            'brand'=>$data['brand'],
             'country'=>$data['country'],
             'composition'=>strip_tags($data['composition']),
             'gender'=>$data['gender'],
@@ -81,37 +84,22 @@ class ProductController extends Controller
             'weight'=>$data['weight'],
         ]);
 
-        foreach ($data['parent_id'] as $cat_id){
-            CategoryProduct::create([
-                'product_id'=>$product->id,
-                'category_id'=>$cat_id,
-            ]);
-        }
-
         /*related product*/
-        if(isset($data['related_product'])){
-            foreach ($data['related_product'] as $related_id){
-                RelatedProduct::create([
-                    'product_id'=>$product->id,
-                    'related_id'=>$related_id,
-                ]);
-            }
-        }
+        if(isset($data['related_product']))
+            $product->related()->attach($data['related_product']);
 
-        ProductMeta::create([
-            'product_id' => $product->id,
+        $product->meta()->create([
             'description' => $data['description'],
             'keywords' => $data['keywords']
         ]);
 
-        if($product) return redirect(route('product.index'))->with(['message'=>'Успіх! Дані товара змінено успішно.']);
-        else return back(['message'=>'Помилка! Дані товара не збережено.']);
+        if($product)
+            return redirect(route('product.index'))->with(['message'=>'Успіх! Дані товара змінено успішно.']);
+        else
+            return back(['message'=>'Помилка! Дані товара не збережено.']);
 
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Request $request)
     {
         $product = Product::with('attributes')->where('id', $request->id)->first();
@@ -122,115 +110,98 @@ class ProductController extends Controller
 
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Product $product)
     {
         $categories = Category::with('children')->where('parent_id', 0)->get();
         $products = Product::all();
-        //dd($product->cat_ids()->toArray());
-        return view('admin/product/edit', [
-            'product'=>$product,
-            'categories'=>$categories,
-            'products'=>$products
-        ]);
+        $cat_ids = $product->category->pluck('id')->toArray();
+        $related_ids = $product->related()->pluck('related_id')->toArray();
+        $brands = Brand::all(['id', 'title']);
+
+        return view('admin/product/edit')
+            ->with([
+                'product' => (new ProductResource($product))->resolve(),
+                'categories' => $categories,
+                'products' => $products,
+                'cat_ids' => $cat_ids,
+                'brands' => $brands,
+                'related_ids' => $related_ids
+            ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(ProductStoreRequest $request, Product $product)
     {
-
-        /*upload image*/
-        if($request->hasFile('productImage')){
-            $extension = $request->file('productImage')->getClientOriginalExtension();
-            $name = md5($request->file('productImage')->getClientOriginalName().date('h-m-s')).'.'.$extension;
-            $request->productImage->move(storage_path('app/public/images'), $name);
-            $product->update([
-                'image'=>$name
-            ]);
-
-        }
-
+        $data = $request->validated();
+        /*update product*/
         $product->update([
-            'title'=>$request->title,
-            'content'=>$request->about,
-            'category'=>$request->parent_id ? $request->parent_id[0] : 0,
-            'code'=>$request->code,
-            'price_balls'=>$request->price_balls,
-            'price_discount'=>$request->price_discount,
-            'price_special' =>$request->price_special,
-            'price_through'=>$request->price_through,
-            'rating'=>$request->rating,
+            'title'=>$data['title'],
+            'content'=>strip_tags($data['about']),
+            'code'=>$data['code'],
+            'price_balls'=>$data['price_balls'],
+            'price_discount'=>$data['price_discount'],
+            'price_special' =>$data['price_special'],
+            'price_through'=>$data['price_through'],
+            'rating'=>$data['rating'],
+            'brand_id' => $data['brand_id'],
             'updated_at'=>date('Y-m-d H:i:s'),
         ]);
+        /*upload image*/
+        if(isset($data['productImage'])){
+            //delete old file
+            $remove_file_name = $product['image'];
+            Storage::delete('public/images/'.$remove_file_name);
 
-        Attribute::where('product_id', $product->id)->update([
-            'application'=>$request->application,
-            'brand'=>$request->brand,
-            'country'=>$request->country,
-            'composition'=>$request->composition,
-            'gender'=>$request->gender ? $request->gender : 'Унісекс',
-            'catalog_id'=>$request->catalog_id,
-            'warning'=>$request->warning,
-            'weight'=>$request->weight,
-            'updated_at'=>date('Y-m-d H:i:s'),
-        ]);
-
-        CategoryProduct::query()->where('product_id', $product->id)->delete();
-        if($request->parent_id){
-            foreach ($request->parent_id as $cat_id){
-                CategoryProduct::create([
-                    'product_id'=>$product->id,
-                    'category_id'=>$cat_id,
-                ]);
-            }
-        }else{
-            CategoryProduct::create([
-                'product_id'=>$product->id,
-                'category_id'=>0,
+            $filename = $this->UploadFile($data['productImage'], 370, 450, 'public/images/');
+            /*update image*/
+            $product->update([
+                'image' => $filename
             ]);
         }
 
+        /*update product attribute*/
+        $product->attributes()->updateOrCreate(
+            [
+                'product_id' => $product->id
+            ],
+            [
+                'application'=>strip_tags($data['application']),
+                'country'=>$data['country'],
+                'composition'=>strip_tags($data['composition']),
+                'gender'=>$data['gender'],
+                'catalog_id'=>$data['catalog_id'],
+                'warning'=>strip_tags($data['warning']),
+                'weight'=>$data['weight'],
+             ]
+        );
+        /*update category product*/
+        if(isset($data['parent_id']))
+            $product->category()->sync($data['parent_id']);
 
         /*related product*/
-        if($request->related_product){
-            RelatedProduct::where('product_id', $product->id)->delete();
-            foreach ($request->related_product as $related_id){
-                if(!RelatedProduct::query()->where('product_id', $product->id)->where('related_id', $related_id)->first()){
-                    RelatedProduct::create([
-                        'product_id'=>$product->id,
-                        'related_id'=>$related_id,
-                    ]);
-                }
-            }
-        }
+        if(isset($data['related_product']))
+            $product->related()->sync($data['related_product']);
 
 
-        $product->meta->updateOrCreate(
+        $product->meta()->updateOrCreate(
             ['product_id' => intval($product->id)],
-            ['description' => $request->description,
-            'keywords' => $request->keywords]
+            [
+                'description' => $data['description'],
+                'keywords' => $data['keywords']
+            ]
         );
-        /*ProductMeta::update([
-            'product_id' => $product->id,
-            'description' => $data['description'],
-            'keywords' => $data['keywords']
-        ]);*/
 
-        if($product) return redirect(route('product.index'))->with(['message'=>'Успіх! Дані товара змінено успішно.']);
-        else return back(['message'=>'Помилка! Дані товара не збережено.']);
+        if($product)
+            return redirect(route('product.index'))->with(['message'=>'Успіх! Дані товара змінено успішно.']);
+        else
+            return back(['message'=>'Помилка! Дані товара не збережено.']);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Request $request)
+    public function destroy(Product $product)
     {
-        $product = Product::whereId($request->id)->first();
         if($product){
+            /*delete product image*/
+            Storage::delete('public/images/'.$product['image']);
+            /*delete product*/
             $product->delete();
             return response()->json([
                 'status'=>1,
@@ -241,18 +212,5 @@ class ProductController extends Controller
                 'status'=>0,
             ]);
         }
-    }
-
-    public function import()
-    {
-        return view('admin/product/import');
-    }
-
-    public function import_action(Request $request)
-    {
-        if($request->hasFile('importFile')){
-            Excel::import(new ProductsImport, $request->file('importFile'));
-        }
-        return redirect(route('product.index'))->with(['message'=>'Импорт категорий прошел успешно.']);
     }
 }

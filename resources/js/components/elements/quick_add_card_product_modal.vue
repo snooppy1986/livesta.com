@@ -13,7 +13,7 @@
                         </div>
                         <div class="modal-action-product">
                             <div class="thumb">
-                                <img :src="product.image" alt="{{product.title}}" width="466" height="320">
+                                <img :src="product.image_url" alt="{{product.title}}" width="466" height="320">
                             </div>
                             <h4 class="product-name"><router-link :to="'product/'+product.id">{{product.title}}</router-link></h4>
                         </div>

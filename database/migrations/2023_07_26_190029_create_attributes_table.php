@@ -11,10 +11,9 @@ return new class extends Migration
     {
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
-            $table->string('application')->nullable();
-            $table->string('brand')->nullable();
+            $table->text('application')->nullable();
             $table->string('country')->nullable();
-            $table->string('composition')->nullable();
+            $table->text('composition')->nullable();
             $table->string('gender')->nullable();
             $table->integer('catalog_id')->nullable();
             $table->text('warning')->nullable();

@@ -38,47 +38,35 @@
                         <div class="card">
                             <div class="card-body p-0">
                                 <table class="table table-striped">
-                                    {{--<thead>
-                                    <tr>
-                                        <th style="width: 10px">№</th>
-                                        <th>Зображення</th>
-                                        <th>Опис</th>
-                                        <th ></th>
-                                    </tr>
-                                    </thead>--}}
                                     <tbody>
                                         <?php $count = 1?>
                                         @foreach($slides as $slide)
+
                                             <tr>
                                                 <td>{{$count}}.</td>
-                                                <td>{{$slide->title}}</td>
+                                                <td>{{$slide['title']}}</td>
                                                 <td>
-                                                    <img src="{{$slide->image_link}}" alt="{{$slide->title}}" width="100" height="100">
+                                                    <img src="{{$slide['image_link']}}" alt="{{$slide['title']}}" width="100" height="100">
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    {{--@if($slide->status)
-                                                        <div class="btn btn-success">Вкл.</div>
-                                                    @else
-                                                        <div class="btn btn-danger">Викл.</div>
-                                                    @endif--}}
                                                     <input
                                                         type="checkbox"
                                                         name="my-checkbox"
                                                         class="status_slide"
-                                                        data-id = {{$slide->id}}
-                                                        {{$slide->status ? 'checked' : ''}}
+                                                        data-id = {{$slide['id']}}
+                                                        {{$slide['status'] ? 'checked' : ''}}
                                                         data-bootstrap-switch
                                                         data-off-color="danger"
                                                         data-on-color="success"
                                                     >
                                                 </td>
                                                 <td class="project-actions text-right align-middle">
-                                            <a class="btn btn-info btn-sm" href="{{route('main-slider.edit', ['slide'=>$slide->id])}}">
+                                            <a class="btn btn-info btn-sm" href="{{route('main-slider.edit', ['slide'=>$slide['id']])}}">
                                                 <i class="fas fa-pencil-alt">
                                                 </i>
                                                 Редагувати
                                             </a>
-                                            <a class="btn btn-danger btn-sm slide-destroy" href="#" data-id="{{$slide->id}}">
+                                            <a class="btn btn-danger btn-sm slide-destroy" href="#" data-id="{{$slide['id']}}">
                                                 <i class="fas fa-trash">
                                                 </i>
                                                 Видалити

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\Product\ProductCollection;
 use App\Http\Resources\Product\ProductResource;
 use App\Models\Category;
 use App\Models\Product;
@@ -26,6 +27,8 @@ class ProductController extends Controller
             ->with('meta')
             ->whereId($id)
             ->first();
+        //get related product
+        $related_products = $product->related;
 
         //get meta data
         $meta = $this->getMeta($hydrator, null , $product);
@@ -37,6 +40,7 @@ class ProductController extends Controller
 
         return response()->json([
             'product'=> new ProductResource($product),
+            'related_products' => new ProductCollection($related_products),
             'categories' => $categories,
             'meta' => $meta
         ]);

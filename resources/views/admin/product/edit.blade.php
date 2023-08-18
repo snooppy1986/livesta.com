@@ -37,7 +37,7 @@
                             </div>
 
 
-                            <form action="{{route('product.edit.action', ['product'=>$product])}}" method="post" enctype="multipart/form-data">
+                            <form action="{{route('product.edit.action', ['product'=>$product['id']])}}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
@@ -45,7 +45,7 @@
                                             <div class="col-md-12 mb-3">
                                                 <img
                                                     id="prevImage"
-                                                    src="{{asset("storage/images/$product->image")}}"
+                                                    src="{{asset("storage/images/".$product['image'])}}"
                                                     alt=""
                                                     width="180"
                                                 >
@@ -71,7 +71,7 @@
                                             class="form-control @error('title') is-invalid @enderror"
                                             id="title"
                                             placeholder="Назва продукту"
-                                            value="{{$product->title}}"
+                                            value="{{$product['title']}}"
                                         >
                                         @error('title')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -86,7 +86,7 @@
                                             rows="3"
                                             placeholder="Про товар ..."
                                             value=""
-                                        >{{$product->content}}</textarea>
+                                        >{{$product['content']}}</textarea>
                                         @error('content')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -94,7 +94,10 @@
 
                                     <div class="form-group">
                                         <label>Категорія товару</label>
-                                        @include('admin/elements/_categorySelect', ['category_id'=>$product->category, 'data_type'=>true, 'ids'=>$product->cat_ids()->toArray()])
+                                        @include('admin/elements/_categorySelect', [
+                                           /* 'category_id'=>$product['category'],*/
+                                            'data_type'=>true,
+                                            'ids'=>$cat_ids ])
                                     </div>
 
                                     <div class="form-group">
@@ -105,7 +108,7 @@
                                             class="form-control @error('code') is-invalid @enderror"
                                             id="code"
                                             placeholder="Код продукту"
-                                            value="{{$product->code}}"
+                                            value="{{$product['code']}}"
                                         >
                                         @error('code')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -120,7 +123,7 @@
                                             class="form-control"
                                             id="price_balls"
                                             placeholder="Кількість балів за продукт"
-                                            value="{{$product->price_balls}}"
+                                            value="{{$product['price_balls']}}"
                                         >
                                     </div>
 
@@ -132,7 +135,7 @@
                                             class="form-control"
                                             id="price_discount"
                                             placeholder="Ціна при реєстрації"
-                                            value="{{$product->price_discount}}"
+                                            value="{{$product['price_discount']}}"
                                         >
                                     </div>
 
@@ -144,7 +147,7 @@
                                             class="form-control @error('price_special') is-invalid @enderror"
                                             id="price_special"
                                             placeholder="Діюча ціна"
-                                            value="{{$product->price_special}}"
+                                            value="{{$product['price_special']}}"
                                         >
                                         @error('price_special')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -159,7 +162,7 @@
                                             class="form-control @error('price_through') is-invalid @enderror"
                                             id="price_through"
                                             placeholder="Стара ціна"
-                                            value="{{$product->price_through}}"
+                                            value="{{$product['price_through']}}"
                                         >
                                         @error('price_through')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -169,11 +172,11 @@
                                     <div class="form-group">
                                         <label>Рейтинг</label>
                                         <select name="rating" class="form-control">
-                                            <option value="1" {{$product->rating==1 ? 'selected' : ''}}>1 зірка</option>
-                                            <option value="2" {{$product->rating==2 ? 'selected' : ''}}>2 зірки</option>
-                                            <option value="3" {{$product->rating==3 ? 'selected' : ''}}>3 зірки</option>
-                                            <option value="4" {{$product->rating==4 ? 'selected' : ''}}>4 зірки</option>
-                                            <option value="5" {{$product->rating==5 ? 'selected' : ''}}>5 зірок</option>
+                                            <option value="1" {{$product['rating']==1 ? 'selected' : ''}}>1 зірка</option>
+                                            <option value="2" {{$product['rating']==2 ? 'selected' : ''}}>2 зірки</option>
+                                            <option value="3" {{$product['rating']==3 ? 'selected' : ''}}>3 зірки</option>
+                                            <option value="4" {{$product['rating']==4 ? 'selected' : ''}}>4 зірки</option>
+                                            <option value="5" {{$product['rating']==5 ? 'selected' : ''}}>5 зірок</option>
                                         </select>
                                     </div>
 
@@ -185,24 +188,26 @@
                                             rows="3"
                                             placeholder="Застосування ..."
                                             value=""
-                                        >{{$product->attributes->application}}</textarea>
+                                        >{{$product['attributes']->application ?? ''}}</textarea>
                                         @error('aplication')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="brand">Бренд</label>
-                                        <input
-                                            name="brand"
-                                            type="text"
-                                            class="form-control @error('brand') is-invalid @enderror"
-                                            id="brand"
-                                            placeholder="Бренд"
-                                            value="{{$product->attributes->brand}}"
-                                        >
-                                        @error('brand')
-                                            <div class="alert alert-danger">{{ $message }}</div>
+                                        <label for="brand_id">Бренд</label>
+                                        <select name="brand_id" class="form-control" id="brand_id">
+                                            <option value="">--Оберіть бренд--</option>
+                                            @foreach($brands as $brand)
+                                                @if($brand->id == $product['brand']->id)
+                                                    <option value="{{$brand->id}}" selected>{{$brand->title}}</option>
+                                                @else
+                                                    <option value="{{$brand->id}}">{{$brand->title}}</option>
+                                                @endif
+                                            @endforeach
+                                        </select>
+                                        @error('brand_id')
+                                        <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 
@@ -214,7 +219,7 @@
                                             class="form-control @error('country') is-invalid @enderror"
                                             id="country"
                                             placeholder="Країна виробництва"
-                                            value="{{$product->attributes->country}}"
+                                            value="{{$product['attributes']->country ?? ''}}"
                                         >
                                         @error('country')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -229,7 +234,7 @@
                                             rows="3"
                                             placeholder="Склад продукту ..."
                                             value=""
-                                        >{{$product->attributes->composition}}</textarea>
+                                        >{{$product['attributes']->composition ?? ''}}</textarea>
                                         @error('composition')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -251,7 +256,7 @@
                                             class="form-control"
                                             id="catalog_id"
                                             placeholder="Номер в каталозі"
-                                            value="{{$product->attributes->catalog_id}}"
+                                            value="{{$product['attributes']->catalog_id ?? ''}}"
                                         >
                                     </div>
 
@@ -263,7 +268,7 @@
                                             rows="3"
                                             placeholder="Застереження до продукту ..."
                                             value=""
-                                        >{{$product->attributes->warning}}</textarea>
+                                        >{{$product['attributes']->warning ?? ''}}</textarea>
                                     </div>
 
                                     <div class="form-group">
@@ -274,7 +279,7 @@
                                             class="form-control @error('weight') is-invalid @enderror"
                                             id="weight"
                                             placeholder="Вага продукту"
-                                            value="{{$product->attributes->weight}}"
+                                            value="{{$product['attributes']->weight ?? ''}}"
                                         >
                                         @error('weight')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -283,7 +288,6 @@
 
                                     <div class="form-group">
                                         <label>Пов'язані товари</label>
-                                        <?php $related_ids =$product->related_ids()->toArray() ?>
                                         <select
                                             name="related_product[]"
                                             id="related_product"
@@ -312,10 +316,10 @@
                                             class="form-control @error('keywords') is-invalid @enderror"
                                             id="keywords"
                                             placeholder="Ключові слова (додайте ключові слова через кому)"
-                                            value="{{$product->meta->keywords}}"
+                                            value="{{$product['meta'] ? $product['meta']->keywords : ''}}"
                                         >
                                         @error('keywords')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 
@@ -327,10 +331,10 @@
                                             class="form-control @error('description') is-invalid @enderror"
                                             id="description"
                                             placeholder="Короткий опис товару"
-                                            value="{{$product->meta->description}}"
+                                            value="{{$product['meta'] ? $product['meta']->description : ''}}"
                                         >
                                         @error('description')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 

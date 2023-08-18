@@ -36,9 +36,8 @@ class CategoriesImport implements ToCollection, WithHeadingRow
 
             Category::create([
                 'title'=> $row['title'],
-                'translit'=> str_slug($row['title'], '-'),
                 'parent_id'=>  isset($parent_id) ? $parent_id->id : 0,
-                'custom_id'=>intval($row['id'])
+                'custom_id'=>$row['id']
             ]);
         }
     }
