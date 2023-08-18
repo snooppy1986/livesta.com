@@ -29,7 +29,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">Імпорт</h3>
                             </div>
-                            <form id="importForm" method="POST" action="{{route('product.import.action')}}" enctype="multipart/form-data">
+                            <form id="importForm" method="POST" action="{{route('import.product.store')}}" enctype="multipart/form-data">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
@@ -43,6 +43,9 @@
                                                 <span class="input-group-text">Імпорт</span>
                                             </div>
                                         </div>
+                                        @error('importFile')
+                                        <div class="alert alert-danger">{{ $message }}</div>
+                                        @enderror
                                     </div>
                                 </div>
 

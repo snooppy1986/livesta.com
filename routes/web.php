@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ImportCategoryConroller;
+use App\Http\Controllers\Admin\ImportProductController;
 use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\MainSliderController;
 use App\Http\Controllers\Admin\ProductController;
@@ -25,22 +27,27 @@ Route::group(['middleware'=>['web', 'admin.role:Admin,Manager'],'prefix'=>'admin
     Route::get('/', [MainController::class, 'index'])->name('admin.main')/*->middleware('admin.role:Admin,Manager')*/;
     Route::get('/products', [ProductController::class, 'index'])->name('product.index');
     Route::get('/category', [CategoryController::class, 'index'])->name('category.index');
-    Route::get('/category/import', [CategoryController::class, 'import'])->name('category.import');
-    Route::post('category/import/action', [CategoryController::class, 'import_action'])->name('category.import.action');
+
+    Route::get('/category/import', [ImportCategoryConroller::class, 'index'])->name('category.import');
+    Route::post('category/import/action', [ImportCategoryConroller::class, 'store'])->name('import.category.store');
+
     Route::get('category/edit/{category}', [CategoryController::class, 'edit'])->name('category.edit');
-    Route::post('category/edit/action', [CategoryController::class, 'update'])->name('category.update');
+    Route::post('category/update/{category}', [CategoryController::class, 'update'])->name('category.update');
     Route::get('category/create', [CategoryController::class, 'create'])->name('category.create');
     Route::post('category/create/action', [CategoryController::class, 'store'])->name('category.store');
     Route::delete('/category/delete', [CategoryController::class, 'destroy'])->name('category.destroy');
+
     Route::get('/product', [ProductController::class, 'index'])->name('product.index');
-    Route::get('/product/import', [ProductController::class, 'import'])->name('product.import');
-    Route::post('product/import/action', [ProductController::class, 'import_action'])->name('product.import.action');
+
+    Route::get('/product/import', [ImportProductController::class, 'index'])->name('product.import');
+    Route::post('product/import/store', [ImportProductController::class, 'store'])->name('import.product.store');
+
     Route::get('product/edit/{product}', [ProductController::class, 'edit'])->name('product.edit');
     Route::post('product/edit/action/{product}', [ProductController::class, 'update'])->name('product.edit.action');
     Route::get('/product/show/', [ProductController::class, 'show'])->name('product.show');
     Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
     Route::post('product/store', [ProductController::class, 'store'])->name('product.store');
-    Route::delete('/product/delete', [ProductController::class, 'destroy'])->name('product.destroy');
+    Route::delete('/product/delete/{product}', [ProductController::class, 'destroy'])->name('product.destroy');
 
     Route::get('options/main-slider', [MainSliderController::class, 'index'])->name('option.main-slider');
     Route::get('options/main-slider/create', [MainSliderController::class, 'create'])->name('main-slider.create');

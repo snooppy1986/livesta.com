@@ -44,7 +44,7 @@
                                 <td class="product-thumbnail">
                                     <div class="thumb">
                                         <router-link :to="'/product/'+wish_product.product.id">
-                                            <img :src="'storage/images/'+wish_product.product.image" width="68" height="84" alt="Image-HasTech">
+                                            <img :src="wish_product.product.image_url" width="68" height="84" alt="Image-HasTech">
                                         </router-link>
                                     </div>
                                 </td>

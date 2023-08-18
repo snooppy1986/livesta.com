@@ -27,7 +27,7 @@
                             <div class="card-header">
                                 <h3 class="card-title">Создать</h3>
                             </div>
-                            <form  method="post" action="{{route('category.store')}}">
+                            <form  method="post" action="{{route('category.store')}}" enctype="multipart/form-data">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
@@ -41,6 +41,30 @@
                                     <div class="form-group">
                                         <label>Родительская категория</label>
                                         @include('admin/elements/_categorySelect', ['data_type'=>false])
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="custom-file">
+                                        <div class="col-md-12 mb-3">
+                                            <img
+                                                id="prevImage"
+                                                src=""
+                                                alt=""
+                                                width="180"
+                                            >
+                                        </div>
+                                        <div class="col-md-12">
+                                            <input
+                                                name="thumbnail"
+                                                type="file"
+                                                class="custom-file-input"
+                                                id="thumbnail"
+                                                onchange="document.getElementById('prevImage').src = window.URL.createObjectURL(this.files[0])"
+                                                value=""
+                                            >
+                                            <label class="custom-file-label" for="thumbnail">Оберіть зображення</label>
+                                        </div>
                                     </div>
                                 </div>
 

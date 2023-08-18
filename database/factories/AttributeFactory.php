@@ -20,7 +20,6 @@ class AttributeFactory extends Factory
     {
         return [
             'application' => $this->faker->text(255),
-            'brand' => Brand::query()->inRandomOrder()->value('title'),
             'country' => $this->faker->country(),
             'composition' => $this->faker->text(255),
             'gender' => $this->faker->randomElement(['male', 'female', 'child']),

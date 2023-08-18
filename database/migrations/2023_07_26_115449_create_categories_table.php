@@ -16,6 +16,8 @@ return new class extends Migration
                 ->nullable();
             $table->integer('parent_id')
                 ->nullable();
+            $table->integer('custom_id')
+                ->nullable();
             $table->timestamps();
         });
     }

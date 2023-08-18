@@ -97,7 +97,7 @@
                                     <div class="form-group">
                                         <label>Обрати товар для слайду</label>
                                         <select
-                                            name="product_link"
+                                            name="product_id"
                                             id="slider_product"
                                             class="form-control"
 

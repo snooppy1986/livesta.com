@@ -6,6 +6,7 @@ use App\Http\Filter\ProductFilter;
 use App\Http\Requests\Category\CategoryShowRequest;
 use App\Http\Resources\CategoryCollection;
 use App\Http\Resources\Category\CategoryResource;
+use App\Http\Resources\Product\ProductCollection;
 use App\Models\Category;
 use App\Models\CategoryProduct;
 use App\Models\Product;
@@ -49,17 +50,27 @@ class CategoryController extends Controller
         //get meta
         $meta = $this->getMeta($hydrator, null,  $category);
 
-        return response()->json(
+
+        return (new ProductCollection($products))
+            ->additional([
+                'parents' => isset($parents) ? $parents : null,
+                'category' => new CategoryResource($category),
+                'price_max' => isset($price_max) ? $price_max->price_special : null,
+                'price_min' => isset($price_min) ? $price_min->price_special : null,
+                'count_product' => isset($count_product) ? $count_product : null,
+                'meta' => $meta
+            ]);
+        /*return response()->json(
             [
                 'parents' => isset($parents) ? $parents : null,
                 'category' => new CategoryResource($category),
-                'products' => $products,
+                'products' => new ProductCollection($products),
                 'price_max' => isset($price_max) ? $price_max->price_special : null,
                 'price_min' => isset($price_min) ? $price_min->price_special : null,
                 'count_product' => isset($count_product) ? $count_product : null,
                 'meta' => $meta
             ]
-        );
+        );*/
     }
 
     public function filterList(Request $request)

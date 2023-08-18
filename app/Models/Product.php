@@ -18,6 +18,15 @@ class Product extends Model
     protected $fillable=[
         'slug',
         'title',
+        'image',
+        'content',
+        'code',
+        'price_balls',
+        'price_discount',
+        'price_special',
+        'price_through',
+        'rating',
+        'new',
         'brand_id'
     ];
     protected $guarded=[];
@@ -42,10 +51,6 @@ class Product extends Model
         return $this->belongsToMany(Product::class, 'related_products', 'product_id', 'related_id');
     }
 
-    public function category_product(): HasMany
-    {
-        return $this->hasMany(CategoryProduct::class);
-    }
 
     public function category(): BelongsToMany
     {

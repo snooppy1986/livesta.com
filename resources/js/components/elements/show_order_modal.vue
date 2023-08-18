@@ -28,7 +28,7 @@
                                                     <td class="product-thumbnail">
                                                         <div class="thumb">
                                                             <router-link :to="{name:'product.index', params:{id:order_product.product.id}}">
-                                                                <img :src="order_product.product.image"  alt="Image-HasTech">
+                                                                <img :src="order_product.product.image_url"  alt="Image-HasTech">
                                                             </router-link>
                                                         </div>
                                                     </td>

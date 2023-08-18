@@ -27,6 +27,9 @@
 
         <!-- Main content -->
         <section class="content">
+            <a href="{{route('product.create')}}" class="btn btn-success mb-3 ml-2">
+                <i class="fa fa-plus mr-2"></i> Новий продукт
+            </a>
             <div class="container-fluid">
                 {{ $dataTable->table() }}
             </div>

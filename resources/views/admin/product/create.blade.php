@@ -195,16 +195,14 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="brand">Бренд</label>
-                                        <input
-                                            name="brand"
-                                            type="text"
-                                            class="form-control @error('brand') is-invalid @enderror"
-                                            id="brand"
-                                            placeholder="Бренд"
-                                            value="{{old('brand')}}"
-                                        >
-                                        @error('brand')
+                                        <label for="brand_id">Бренд</label>
+                                        <select name="brand_id" class="form-control" id="brand_id">
+                                            <option value="">--Оберіть бренд--</option>
+                                            @foreach($brands as $brand)
+                                                <option value="{{$brand->id}}">{{$brand->title}}</option>
+                                            @endforeach
+                                        </select>
+                                        @error('brand_id')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>

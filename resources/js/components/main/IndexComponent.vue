@@ -30,7 +30,7 @@
                                     <div class="hero-slide-text-img"><img src="/images/slider/text-theme.webp" width="427" height="232" alt="Image"></div>
                                     <h2 class="hero-slide-title">{{slide.title}}</h2>
                                     <p class="hero-slide-desc">{{slide.content}}</p>
-                                    <router-link class="btn btn-border-dark" :to="'product/'+slide.product_link">Придбати</router-link>
+                                    <router-link class="btn btn-border-dark" :to="'/product/'+slide.product_id">Придбати</router-link>
                                 </div>
                             </div>
                             <div class="col-12 col-md-6">
@@ -83,7 +83,7 @@
                         <div class="product-item">
                             <div class="product-thumb">
                                 <router-link class="d-block" :to="'/product/'+product.id">
-                                    <img :src="product.image" width="370" height="450" alt="Image-HasTech">
+                                    <img :src="product.image_url" width="370" height="450" alt="Image-HasTech">
                                 </router-link>
                                 <span class="flag-new">Новинка</span>
                                 <div class="product-action">

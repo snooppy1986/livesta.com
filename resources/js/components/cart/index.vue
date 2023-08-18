@@ -44,7 +44,7 @@
                                     <td class="product-thumbnail">
                                         <div class="thumb">
                                             <router-link :to="'/product/'+cart_product.product.id" href="single-product.html">
-                                                <img :src="cart_product.product.image" width="68" height="84" alt="Image-HasTech">
+                                                <img :src="cart_product.product.image_url" width="68" height="84" alt="Image-HasTech">
                                             </router-link>
                                         </div>
                                     </td>

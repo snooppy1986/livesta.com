@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Http\Resources\Category;
+namespace App\Http\Resources\MainSlider;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class CategoryResource extends JsonResource
+class MainSliderResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,12 +16,11 @@ class CategoryResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'slug' => $this->slug,
+            'image_link' => $this->image_link,
+            'product_id' => $this->product_id,
             'title' => $this->title,
-            'thumbnail' => $this->thumbnail,
-            'parent_id' => $this->parent_id,
-            'children' => $this->children,
-            'parents' => $this->parents
+            'content' => $this->content,
+            'status' => $this->status
         ];
     }
 }

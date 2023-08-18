@@ -9,7 +9,6 @@ class CartController extends Controller
 {
     public function getOrderProduct(Request $request)
     {
-
         return response()->json($request->data);
     }
 }

@@ -13,7 +13,7 @@
                                 <div class="col-lg-6">
                                     <!--== Start Product Thumbnail Area ==-->
                                     <div class="product-single-thumb">
-                                        <img :src="product.image" width="544" height="560" alt="Image-HasTech">
+                                        <img :src="product.image_url" width="544" height="560" alt="Image-HasTech">
                                     </div>
                                     <!--== End Product Thumbnail Area ==-->
                                 </div>

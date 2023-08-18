@@ -14,11 +14,6 @@ use Yajra\DataTables\Services\DataTable;
 
 class ProductsDataTable extends DataTable
 {
-    /**
-     * Build the DataTable class.
-     *
-     * @param QueryBuilder $query Results from query() method.
-     */
     public function dataTable(QueryBuilder $query): EloquentDataTable
     {
         return (new EloquentDataTable($query))
@@ -38,17 +33,11 @@ class ProductsDataTable extends DataTable
             ->setRowId('id');
     }
 
-    /**
-     * Get the query source of dataTable.
-     */
     public function query(Product $model): QueryBuilder
     {
         return $model->newQuery();
     }
 
-    /**
-     * Optional method if you want to use the html builder.
-     */
     public function html(): HtmlBuilder
     {
         return $this->builder()
@@ -69,9 +58,6 @@ class ProductsDataTable extends DataTable
 
     }
 
-    /**
-     * Get the dataTable columns definition.
-     */
     public function getColumns(): array
     {
         return [
@@ -93,33 +79,21 @@ class ProductsDataTable extends DataTable
         ];
     }
 
-    /**
-     * Get the filename for export.
-     */
     protected function filename(): string
     {
         return 'Products_' . date('YmdHis');
     }
 
-    /**
-     * @inheritDoc
-     */
     public function excel()
     {
         // TODO: Implement excel() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function csv()
     {
         // TODO: Implement csv() method.
     }
 
-    /**
-     * @inheritDoc
-     */
     public function pdf()
     {
         // TODO: Implement pdf() method.

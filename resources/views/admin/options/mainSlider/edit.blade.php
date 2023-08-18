@@ -35,15 +35,16 @@
                             <div class="card-header">
                                 <h3 class="card-title">Редагувати слайд</h3>
                             </div>
-                            <form action="{{route('main-slider.update', ['slide'=>$slide])}}" method="post" enctype="multipart/form-data">
+                            <form action="{{route('main-slider.update', ['slide'=>$slide['id']])}}" method="post" enctype="multipart/form-data">
                                 @csrf
                                 <div class="card-body">
                                     <div class="form-group">
                                         <div class="custom-file">
+
                                             <div class="col-md-12 mb-3">
                                                 <img
                                                     id="prevImage"
-                                                    src="{{$slide->image_link}}"
+                                                    src="{{$slide['image_link']}}"
                                                     alt=""
                                                     width="180"
                                                 >
@@ -73,7 +74,7 @@
                                             class="form-control @error('title') is-invalid @enderror"
                                             id="title"
                                             placeholder="Назва слайду"
-                                            value="{{$slide->title}}"
+                                            value="{{$slide['title']}}"
                                         >
                                         @error('title')
                                             <div class="alert alert-danger">{{ $message }}</div>
@@ -88,7 +89,7 @@
                                             rows="3"
                                             placeholder="Про слайд ..."
                                             value=""
-                                        >{{$slide->content}}</textarea>
+                                        >{{$slide['content']}}</textarea>
                                         @error('content')
                                             <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
@@ -97,14 +98,15 @@
                                     <div class="form-group">
                                         <label>Обрати товар для слайду</label>
                                         <select
-                                            name="product_link"
+                                            name="product_id"
                                             id="slider_product"
                                             class="form-control"
 
                                         >
 
                                             @foreach($products as $prod)
-                                                @if($prod->id == $slide->product_link)
+
+                                                @if($prod->id == $slide['product_id'])
                                                     <option class="btn btn-primary" value="{{$prod->id}}"  selected>{{$prod->title}}</option>
                                                 @else
                                                     <option class="btn btn-primary" value="{{$prod->id}}">{{$prod->title}}</option>
@@ -114,7 +116,7 @@
 
                                         </select>
                                         @error('slider_product')
-                                        <div class="alert alert-danger">{{ $message }}</div>
+                                            <div class="alert alert-danger">{{ $message }}</div>
                                         @enderror
                                     </div>
 

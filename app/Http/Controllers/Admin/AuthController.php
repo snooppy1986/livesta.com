@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -18,12 +19,8 @@ class AuthController extends Controller
         }
         return view('admin/layouts/adminEntry');
     }
-    public function login(Request $request){
-        $request->validate([
-            'email' => 'required | email',
-            'password' => 'required'
-        ]);
-
+    public function login(LoginRequest $request){
+        $request->validated();
         $credentials = $request->only('email', 'password');
         if(Auth::guard('web')->attempt($credentials)){
             $user = Auth::guard('web')->user();
@@ -33,7 +30,6 @@ class AuthController extends Controller
                 return redirect()->back()->with('error', 'Доступ заборонено');
             }
         }
-
         return redirect()->back()->with('error', 'Помилка авторизації');
     }
 

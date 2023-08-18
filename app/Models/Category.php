@@ -12,7 +12,6 @@ use Illuminate\Support\Collection;
 use RecursiveRelationships\Traits\HasRecursiveRelationships;
 
 class Category extends Model
-
 {
     use HasFactory;
     use HasRecursiveRelationships;
@@ -20,7 +19,8 @@ class Category extends Model
         'slug',
         'title',
         'parent_id',
-        'thumbnail'
+        'thumbnail',
+        'custom_id'
     ];
 
     public function children(): HasMany
