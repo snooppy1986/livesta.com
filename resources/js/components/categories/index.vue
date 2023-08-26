@@ -231,7 +231,10 @@
     import { ScaleLoader } from "vue3-spinner";
     export default {
         name: "index",
-        props:['addToCart', 'addToWishList'],
+        props:[
+            'addToCart',
+            'addToWishList'
+        ],
         data: ()=>({
             id: 0 ,
             products: [],
@@ -306,9 +309,9 @@
                     this.price_max = res.data.price_max;
                     this.price_min = res.data.price_min;
                     this.count_product = res.data.count_product;
-                    this.statusLoader=false;
-                    window.scrollTo({ top: 0, left: 0});
                     this.meta = res.data.meta;
+                    window.scrollTo({ top: 0, left: 0});
+                    this.statusLoader=false;
                 }).catch(error=>{
                     console.log(error);
                 })
