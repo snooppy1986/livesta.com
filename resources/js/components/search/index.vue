@@ -157,6 +157,8 @@
         height="20px"
         width="5px"
     />
+    <product_preview :product="preview_product" :addToCart="addToCart"></product_preview>
+    <product_wishlist :product = "preview_product"></product_wishlist>
 </template>
 
 <script>
@@ -172,7 +174,12 @@
 
     export default {
         name: "index",
-        props: ['search_result', 'search_req'],
+        props: [
+            'search_result',
+            'search_req',
+            'addToCart',
+            'addToWishList'
+        ],
         data: function(){
             return{
                 count: 0,
@@ -187,7 +194,8 @@
                 ],
                 select_default: 'Сортувати по:',
                 statusLoader: true,
-                meta: {}
+                meta: {},
+                preview_product: {}
             }
         },
        //meta info
@@ -204,7 +212,6 @@
             product_preview,
             Paginate,
             Bootstrap5Pagination,
-            Paginate,
             product_wishlist,
             v_select,
             ScaleLoader
@@ -214,6 +221,7 @@
         },
         methods:{
             getSearchProducts(page=1){
+                this.statusLoader = true;
                 axios.post('/api/search', {
                     'page': page,
                     'sort_type': this.sort_type,
@@ -224,7 +232,8 @@
                     this.count = res.data.count_product ? res.data.count_product : 0;
                     this.products = res.data.data ? res.data.data : '';
                     this.pagination = res.data ? res.data.meta : '';
-                    this.statusLoader = false;
+                    window.scrollTo({ top: 0, left: 0});
+                    this.statusLoader=false;
                 }).catch(error=>{
                     console.log(error);
                 })
@@ -244,7 +253,11 @@
                 this.prices = prices;
                 this.getSearchProducts();
 
-            }
+            },
+
+            productPreview(product){
+                this.preview_product = product;
+            },
 
         },
         watch:{
