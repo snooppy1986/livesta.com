@@ -25,7 +25,7 @@
                             <h4 class="page-header-title">Продукти категорії <span class="text-primary">{{category.title}}</span></h4>
                         </div>
                     </div>
-                    <div class="col-md-7">
+                    <div class="col-md-7" >
                         <h5 class="showing-pagination-results mt-5 mt-md-9 text-center text-md-end">
                             {{count_product  ? count_product : 0}} товарів в категорії
                         </h5>
@@ -36,7 +36,7 @@
         <!--== End Page Header Area Wrapper ==-->
 
         <!--== Start Shop Top Bar Area Wrapper ==-->
-        <div v-if="products.length" class="shop-top-bar-area">
+        <div v-if="products.length" class="shop-top-bar-area" >
             <div class="container">
                 <div class="shop-top-bar">
                     <v_select
@@ -186,18 +186,6 @@
                                     </li>
                                 </ul>
                             </div>
-                            <!--<div class="product-widget mb-0">
-                                <h4 class="product-widget-title">Popular Tags</h4>
-                                <ul class="product-widget-tags">
-                                    <li><a href="blog.html">Beauty</a></li>
-                                    <li><a href="blog.html">MakeupArtist</a></li>
-                                    <li><a href="blog.html">Makeup</a></li>
-                                    <li><a href="blog.html">Hair</a></li>
-                                    <li><a href="blog.html">Nails</a></li>
-                                    <li><a href="blog.html">Hairstyle</a></li>
-                                    <li><a href="blog.html">Skincare</a></li>
-                                </ul>
-                            </div>-->
                         </div>
                     </div>
                 </div>
@@ -302,6 +290,7 @@
         },
         methods:{
             loadCategory(page=1){
+                this.statusLoader=true;
                 axios.post('/api/category', {
                     'id': this.id,
                     'page': page,
@@ -309,18 +298,17 @@
                     'sort_type': this.sort_type,
                     'search': this.searchReq
                 }).then(res=>{
-                        /*console.log(res.data);*/
-                        this.products = res.data.data;
-                        this.category = res.data.category;
-                        this.pagination = res.data.meta;
-                        this.categories = res.data.category.children;
-                        this.parents = res.data.parents;
-                        this.price_max = res.data.price_max;
-                        this.price_min = res.data.price_min;
-                        this.count_product = res.data.count_product;
-                        this.statusLoader=false;
-                        this.meta = res.data.meta;
-                    console.log(this.pagination);
+                    this.products = res.data.data;
+                    this.category = res.data.category;
+                    this.pagination = res.data.meta;
+                    this.categories = res.data.category.children;
+                    this.parents = res.data.parents;
+                    this.price_max = res.data.price_max;
+                    this.price_min = res.data.price_min;
+                    this.count_product = res.data.count_product;
+                    this.statusLoader=false;
+                    window.scrollTo({ top: 0, left: 0});
+                    this.meta = res.data.meta;
                 }).catch(error=>{
                     console.log(error);
                 })
