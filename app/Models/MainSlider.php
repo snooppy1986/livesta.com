@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class MainSlider extends Model
 {
     use HasFactory;
+    protected $observables = [
+        'updatedStatus'
+    ];
     protected $fillable = [
         'image_link',
         'product_id',
@@ -15,4 +18,9 @@ class MainSlider extends Model
         'content',
         'status'
     ];
+
+    public function updatedStatus()
+    {
+        $this->fireModelEvent('updated', false);
+    }
 }

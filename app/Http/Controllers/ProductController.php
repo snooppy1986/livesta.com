@@ -10,6 +10,7 @@ use App\Models\Traits\GetMeta;
 use Butschster\Head\Facades\Meta;
 use Butschster\Head\Hydrator\VueMetaHydrator;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use function Pest\json;
 use function Symfony\Component\String\reverse;
 
@@ -23,10 +24,12 @@ class ProductController extends Controller
         $id = $request->id;
 
         //get product
-        $product = Product::query()
-            ->with('meta')
-            ->whereId($id)
-            ->first();
+        $product = Cache::rememberForever('products:'.$id, function () use ($id){
+            return new ProductResource(Product::query()
+                ->whereId($id)
+                ->first());
+        });
+
         //get related product
         $related_products = $product->related;
 
@@ -37,6 +40,8 @@ class ProductController extends Controller
         $categories = $product->category->first()->parent_id ?
             array_reverse($product->category->first()->ancestors()->toArray()) :
             [$product->category->first()];
+
+        array_push($categories, $product->category->first());
 
         return response()->json([
             'product'=> new ProductResource($product),

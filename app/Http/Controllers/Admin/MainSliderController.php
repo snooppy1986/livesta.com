@@ -11,6 +11,7 @@ use App\Models\MainSlider;
 use App\Models\Product;
 use App\Models\Traits\UploadFile;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 
@@ -21,7 +22,9 @@ class MainSliderController extends Controller
 
     public function index()
     {
-        $slides = MainSlider::all()->sortByDesc('status');
+        $slides = Cache::rememberForever('main_sliders:all', function (){
+            return MainSlider::all()->sortByDesc('status');
+        });
 
         return view('admin.options.mainSlider.main_slider')
             ->with(['slides'=>(new MainSliderCollection($slides))->resolve()]);
@@ -29,7 +32,10 @@ class MainSliderController extends Controller
 
     public function create()
     {
-        $products = Product::get(['id', 'title']);
+        $products = Cache::rememberForever('products:all', function (){
+            return Product::get(['id', 'title']);
+        });
+
 
         return view('admin.options.mainSlider.create', [
             'products' => $products
@@ -41,8 +47,7 @@ class MainSliderController extends Controller
         $data = $request->validated();
 
         //upload image
-        $data['image_link'] = url(
-            '/storage/images/main_slider/'.$this->UploadFile($data['image'], 841, 842, 'public/images/main_slider/'));
+        $data['image_link'] = url('/storage/images/main_slider/'.$this->UploadFile($data['image'], 841, 842, 'public/images/main_slider/'));
 
         //store slider
         MainSlider::create($data);
@@ -50,13 +55,18 @@ class MainSliderController extends Controller
         return redirect()->route('option.main-slider')->with('message', 'Слайд створено успішно');
     }
 
-    public function edit(MainSlider $slide)
+    public function edit($id)
     {
-        $products = Product::get();
+        $products = Cache::rememberForever('products:all', function (){
+            return Product::get();
+        });
+        $slide = Cache::rememberForever('main_sliders:'.$id, function () use ($id){
+            return new MainSliderResource(MainSlider::query()->where('id', $id)->first());
+        });
         return view('admin.options.mainSlider.edit')
             ->with([
                 'products'=>$products,
-                'slide'=> (new MainSliderResource($slide))->resolve()
+                'slide'=> $slide
             ]);
     }
 
@@ -83,7 +93,8 @@ class MainSliderController extends Controller
             ->with(['message'=>'Слайд відредагований']);
     }
 
-    public function updateStatus(MainSlider $slide, Request $request){
+    public function updateStatus(MainSlider $slide, Request $request)
+    {
         $status = $request->status;
         $message = $status=='true' ? 'Слайд активовано' : 'Слайд деактивовано';
         if($status=='true'){
@@ -96,7 +107,7 @@ class MainSliderController extends Controller
                 'status' => 0
             ]);
         }
-
+        $slide->updatedStatus();
         return response()->json($message);
     }
 

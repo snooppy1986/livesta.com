@@ -19,7 +19,7 @@ class ProductsDataTable extends DataTable
         return (new EloquentDataTable($query))
             ->addColumn('edit', function ($product){
                 $btn = '<a href="javascript:showProduct('.$product->id.')" class="product-show btn btn-info btn-sm mr-1""><i class="fa fa-eye" aria-hidden="true"></i></a>';
-                $btn = $btn.'<a href="'.route('product.edit', $product).'" class="product-edit btn btn-primary btn-sm mr-1"><i class="fas fa-edit"></i></a>';
+                $btn = $btn.'<a href="'.route('product.edit', $product->id).'" class="product-edit btn btn-primary btn-sm mr-1"><i class="fas fa-edit"></i></a>';
                 $btn = $btn.'<a  href="javascript:deleteProduct('.$product->id.')" class="product-remove btn btn-danger btn-sm" data-id="'.$product->id.'"><i class="fa fa-trash" aria-hidden="true"></i></a>';
 
                 return $btn;
