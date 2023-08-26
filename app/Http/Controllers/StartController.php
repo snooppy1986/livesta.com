@@ -10,22 +10,33 @@ use App\Models\MainSlider;
 use App\Models\Product;
 use App\Models\Traits\GetMeta;
 use Butschster\Head\Hydrator\VueMetaHydrator;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Cache;
 
 class StartController extends Controller
 {
      use GetMeta;
      public function index(VueMetaHydrator $hydrator)
      {
-         $products = new ProductCollection(Product::query()
+         $products = Cache::rememberForever('products:main_page', function (){
+             return new ProductCollection(Product::query()
+                 ->where('new', 1)
+                 ->limit(12)
+                 ->get());
+         });
+         /*$products = new ProductCollection(Product::query()
              ->where('new', 1)
              ->limit(12)
-             ->get());
+             ->get());*/
 
-         $main_categories = new CategoryCollection(Category::query()
-             ->where('parent_id', 0)
-             ->get());
+         $main_categories = Cache::rememberForever('categories:all', function (){
+             return new CategoryCollection(Category::where('parent_id', 0)->get());
+         });
 
-         $main_slides = new MainSliderCollection(MainSlider::where('status', 1)->get());
+         $main_slides = Cache::rememberForever('main_sliders:all', function (){
+             return new MainSliderCollection(MainSlider::where('status', 1)->get());
+         });
+
 
          $meta = $this->getMeta($hydrator, 'main');
 
@@ -39,6 +50,10 @@ class StartController extends Controller
 
      public function menu()
      {
-         return new CategoryCollection(Category::with('children')->where('parent_id', 0)->get());
+         $categories = Cache::rememberForever('categories:all', function (){
+             return new CategoryCollection(Category::where('parent_id', 0)->get());
+         });
+         /*dd($categories->pluck('title'));*/
+         return $categories;
      }
 }

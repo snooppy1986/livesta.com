@@ -14,6 +14,8 @@ use App\Models\Traits\GetMeta;
 use Butschster\Head\Facades\Meta;
 use Butschster\Head\Hydrator\VueMetaHydrator;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Config;
 use function Pest\json;
 use function Symfony\Component\String\reverse;
@@ -28,7 +30,9 @@ class CategoryController extends Controller
 
         $id = $data['id'];
 
-        $category = Category::whereId($id)->first();
+        $category = Cache::rememberForever('categories:'.$id, function () use ($id){
+            return new CategoryResource(Category::whereId($id)->first());
+        });
 
         /*get Products */
         $filter = app()->make(ProductFilter::class, ['queryParams'=>array_filter($data)]);
@@ -42,7 +46,6 @@ class CategoryController extends Controller
                 ->get();
             $price_max = $pr->sortByDesc('price_special')->first();
             $price_min = $pr->sortBy('price_special')->first();
-            /*$categories = $category;*/
             $parents = array_reverse($category->ancestors()->toArray());
             $count_product = $pr->count();
         }
@@ -60,17 +63,7 @@ class CategoryController extends Controller
                 'count_product' => isset($count_product) ? $count_product : null,
                 'meta' => $meta
             ]);
-        /*return response()->json(
-            [
-                'parents' => isset($parents) ? $parents : null,
-                'category' => new CategoryResource($category),
-                'products' => new ProductCollection($products),
-                'price_max' => isset($price_max) ? $price_max->price_special : null,
-                'price_min' => isset($price_min) ? $price_min->price_special : null,
-                'count_product' => isset($count_product) ? $count_product : null,
-                'meta' => $meta
-            ]
-        );*/
+
     }
 
     public function filterList(Request $request)
@@ -78,10 +71,12 @@ class CategoryController extends Controller
         $data = $request->validate([
            'prices' => "array"
         ]);
-
-        $category = Category::whereId($request->id)->first();
+        $id = $request->id;
+        $category = Cache::rememberForever('categories:'.$id, function () use ($id){
+            return new CategoryResource(Category::whereId($id)->first());
+        });
         $filter = app()->make(ProductFilter::class, ['queryParams'=>array_filter($data)]);
-        /*dd($filter);*/
+
         if(count($category->children)){
             $cat_ids = Category::find($category->id)->descendents()->pluck('id');
             $cat_ids[]=$category->id;

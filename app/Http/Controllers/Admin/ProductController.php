@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\DataTables\ProductsDataTable;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Product\ProductStoreRequest;
+use App\Http\Resources\Category\CategoryCollection;
+use App\Http\Resources\Product\ProductCollection;
 use App\Http\Resources\Product\ProductResource;
 use App\Imports\ProductsImport;
 use App\Models\Attribute;
@@ -16,6 +18,8 @@ use App\Models\ProductMeta;
 use App\Models\RelatedProduct;
 use App\Models\Traits\UploadFile;
 use Illuminate\Http\Request;
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -30,9 +34,16 @@ class ProductController extends Controller
 
     public function create()
     {
-        $products = Product::all();
-        $categories = Category::with('children')->where('parent_id', 0)->get();
-        $brands = Brand::all(['id', 'title']);
+        $products = Cache::rememberForever('products:all', function (){
+            return new ProductCollection(Product::all());
+        });
+        $categories = Cache::rememberForever('categories:all', function (){
+            return new CategoryCollection(Category::where('parent_id', 0)->get());
+        });
+
+        $brands = Cache::rememberForever('brands:all', function (){
+            return Brand::all();
+        });
 
         return view('admin/product/create', [
             'products' => $products,
@@ -41,13 +52,10 @@ class ProductController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(ProductStoreRequest $request)
     {
         $data = $request->validated();
-        /*dd($data);*/
+
         /*create product*/
         $product = Product::create([
             'title'=>$data['title'],
@@ -100,27 +108,42 @@ class ProductController extends Controller
 
     }
 
-    public function show(Request $request)
+    public function show($id)
     {
-        $product = Product::with('attributes')->where('id', $request->id)->first();
-        $attributes = Attribute::where('product_id', $product->id)->first();
+        $product = Cache::rememberForever('products:'.$id, function () use($id){
+            return new ProductResource(Product::where('id', $id)->first());
+        });
+
         $view = view('admin/elements/_modal_show_product', ['product'=>$product])->render();
-        //dd($view);
+
         return response()->json(['view'=>$view]);
 
     }
 
-    public function edit(Product $product)
+    public function edit($id)
     {
-        $categories = Category::with('children')->where('parent_id', 0)->get();
-        $products = Product::all();
+        $product = Cache::rememberForever('products:'.$id, function () use ($id){
+            return new ProductResource(Product::where('id', $id)->first());
+        });
+        $products = Cache::rememberForever('products:all', function (){
+            return new ProductCollection(Product::all());
+        });
+
+        $categories = Cache::rememberForever('categories:all', function (){
+            return new CategoryCollection(Category::where('parent_id', 0)->get());
+        });
+
         $cat_ids = $product->category->pluck('id')->toArray();
+
         $related_ids = $product->related()->pluck('related_id')->toArray();
-        $brands = Brand::all(['id', 'title']);
+
+        $brands = Cache::rememberForever('brands:all', function (){
+            return Brand::all();
+        });
 
         return view('admin/product/edit')
             ->with([
-                'product' => (new ProductResource($product))->resolve(),
+                'product' => $product,
                 'categories' => $categories,
                 'products' => $products,
                 'cat_ids' => $cat_ids,
@@ -129,22 +152,14 @@ class ProductController extends Controller
             ]);
     }
 
-    public function update(ProductStoreRequest $request, Product $product)
+    public function update(ProductStoreRequest $request, $id)
     {
         $data = $request->validated();
         /*update product*/
-        $product->update([
-            'title'=>$data['title'],
-            'content'=>strip_tags($data['about']),
-            'code'=>$data['code'],
-            'price_balls'=>$data['price_balls'],
-            'price_discount'=>$data['price_discount'],
-            'price_special' =>$data['price_special'],
-            'price_through'=>$data['price_through'],
-            'rating'=>$data['rating'],
-            'brand_id' => $data['brand_id'],
-            'updated_at'=>date('Y-m-d H:i:s'),
-        ]);
+        $product = Cache::rememberForever('products:'.$id, function () use ($id){
+            return new ProductResource(Product::where('id', $id)->first());
+        });
+
         /*upload image*/
         if(isset($data['productImage'])){
             //delete old file
@@ -152,11 +167,11 @@ class ProductController extends Controller
             Storage::delete('public/images/'.$remove_file_name);
 
             $filename = $this->UploadFile($data['productImage'], 370, 450, 'public/images/');
-            /*update image*/
-            $product->update([
-                'image' => $filename
-            ]);
+            /*add data image*/
+            $data['image'] = $filename;
+
         }
+        $product->update($data);
 
         /*update product attribute*/
         $product->attributes()->updateOrCreate(

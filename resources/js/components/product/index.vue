@@ -20,12 +20,6 @@
                                     </router-link>
                                 </li>
 
-                                <li v-if="categories_count>1"  class="breadcrumb-item">
-                                    <router-link class="text-dark" :to="'/category/'+category.id">
-                                        {{category.title}}
-                                    </router-link>
-                                </li>
-
                                 <li  class="breadcrumb-item">
                                     {{product.title}}
                                 </li>
@@ -306,7 +300,7 @@
                     params:{category_id: this.category_id}
                 })
                     .then(res=>{
-                        this.category = res.data.product.category;
+                        this.category = res.data.product.category[0];
                         this.categories = res.data.categories;
                         this.product = res.data.product;
                         this.related_products = res.data.related_products.data;
@@ -317,6 +311,7 @@
                         this.statusLoader=false;
                         this.meta = res.data.meta;
                         this.categories_count = res.data.categories.length;
+                        console.log(this.category[0].title);
                     });
             },
 
@@ -330,10 +325,13 @@
     }
 </script>
 
-<style scoped>
+<style>
     .product-item .product-info .title{
         height: 75px;
         overflow: hidden;
+    }
+    .breadcrumb-item>a:hover{
+        color: #FF6565 !important;
     }
 
 </style>

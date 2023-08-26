@@ -54,11 +54,11 @@
                 <div class="row g-3 g-sm-6">
                     <div v-for="categorie in main_categories" class="col-6 col-lg-4 col-lg-2 col-xl-2">
                         <!--== Start Product Category Item ==-->
-                        <a to="/" class="product-category-item">
+                        <router-link :to="'/category/'+categorie.id" class="product-category-item">
                             <img class="icon" :src="categorie.thumbnail" width="70" height="80" alt="Image-HasTech">
                             <h3 class="title">{{categorie.title}}</h3>
                             <!--<span class="flag-new">new</span>-->
-                        </a>
+                        </router-link>
                         <!--== End Product Category Item ==-->
                     </div>
                 </div>

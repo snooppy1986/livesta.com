@@ -61,7 +61,7 @@
                                                     >
                                                 </td>
                                                 <td class="project-actions text-right align-middle">
-                                            <a class="btn btn-info btn-sm" href="{{route('main-slider.edit', ['slide'=>$slide['id']])}}">
+                                            <a class="btn btn-info btn-sm" href="{{route('main-slider.edit', ['id'=>$slide['id']])}}">
                                                 <i class="fas fa-pencil-alt">
                                                 </i>
                                                 Редагувати

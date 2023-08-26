@@ -11,6 +11,8 @@ use App\Models\Category;
 use App\Models\Traits\UploadFile;
 use Illuminate\Http\Request;
 
+use Illuminate\Http\Resources\Json\ResourceCollection;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Storage;
 use Intervention\Image\Facades\Image;
 use Maatwebsite\Excel\Facades\Excel;
@@ -20,30 +22,32 @@ class CategoryController extends Controller
     use UploadFile;
     public function index()
     {
-        $categories = new CategoryCollection(Category::where('parent_id', 0)->get());
+        $categories = Cache::rememberForever('categories:all', function (){
+            return new CategoryCollection(Category::where('parent_id', 0)->get());
+        });
 
         return view('/admin/category/index', ['categories'=> $categories]);
     }
 
     public function create()
     {
-        $categories = new CategoryCollection(Category::where('parent_id', 0)->get());
+        $categories = Cache::rememberForever('categories:all', function (){
+            return new CategoryCollection(Category::where('parent_id', 0)->get());
+        });
+
         return view('admin/category/create', ['categories'=>$categories]);
     }
 
     public function store(CategoryStoreRequest $request)
     {
         $data = $request->validated();
-
-        $category = Category::create($data);
-
-        if($data['thumbnail']){
+        if(isset($data['thumbnail'])){
             $file_name = $this->UploadFile($data['thumbnail'], 70, 80, 'public/images/categories/');
 
-            $category->update([
-                'thumbnail' => url('storage/images/categories/'.$file_name)
-            ]);
+            $data['thumbnail'] = url('storage/images/categories/'.$file_name);
         }
+
+        Category::create($data);
 
         return redirect(route('category.index'))
             ->with('message', 'Категория добавлена успешно.');
@@ -51,8 +55,9 @@ class CategoryController extends Controller
 
     public function edit(Category $category)
     {
-        $categories = new CategoryCollection(Category::where('parent_id', 0)
-            ->get());
+        $categories = Cache::rememberForever('categories:all', function (){
+            return new CategoryCollection(Category::where('parent_id', 0)->get());
+        });
 
         return view('admin/category/edit', [
             'category'=>$category,
@@ -62,34 +67,35 @@ class CategoryController extends Controller
 
     public function update(CategoryStoreRequest $request, Category $category)
     {
-
         $data = $request->validated();
 
-        if($data['thumbnail']){
+        if(isset($data['thumbnail'])){
             //delete old file
-            Storage::delete('public/images/main_slider/'.$category->thumbnail);
+            Storage::delete('public/images/categories/'.$category->thumbnail);
 
             $file_name = $this->UploadFile($data['thumbnail'], 70, 80, 'public/images/categories/');
+            $data['thumbnail'] = url('storage/images/categories/'.$file_name);
         }
 
-        $category->update([
-            'title' => $data['title'],
-            'parent_id' => $data['parent_id'],
-            'thumbnail' => url('storage/images/categories/'.$file_name),
-            'updated_at' => date('Y-m-d G:i:s')
-        ]);
+        $category->update($data);
 
         return redirect(route('category.index'))
             ->with('message', 'Категория изменена успешно.');
     }
 
-    public function destroy(Request $request)
+    public function destroy(Category $category)
     {
-        $category = Category::with('children')->where('id', $request->id)->first();
+        if(count($category->children)<1){
+            //delete thumbnail
+            Storage::delete('public/images/categories/'.$category->thumbnail);
 
-        if(count($category->children)<1)
+            //delete category
+            $category->delete();
+
             return response()->json(['status'=>1, 'title'=>$category->title]);
-        else
+        }else{
             return response()->json(['status'=>0, 'title'=>$category->title]);
+        }
+
     }
 }

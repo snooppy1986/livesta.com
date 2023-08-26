@@ -2,6 +2,12 @@
 
 namespace App\Providers;
 
+use App\Models\Category;
+use App\Models\MainSlider;
+use App\Models\Product;
+use App\Observers\CategoryObserver;
+use App\Observers\MainSliderObserver;
+use App\Observers\ProductObserver;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -25,14 +31,8 @@ class EventServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
-    }
-
-    /**
-     * Determine if events and listeners should be automatically discovered.
-     */
-    public function shouldDiscoverEvents(): bool
-    {
-        return false;
+        Category::observe(new CategoryObserver());
+        MainSlider::observe(new MainSliderObserver());
+        Product::observe(new ProductObserver());
     }
 }

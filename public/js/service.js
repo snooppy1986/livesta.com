@@ -2,11 +2,6 @@
 
 
 $(function () {
-    /*$.validator.setDefaults({
-        submitHandler: function () {
-            alert( "Form successful submitted!" );
-        }
-    });*/
 
     $('#importForm').validate({
         rules: {
@@ -102,9 +97,9 @@ $('.remove-category').on('click', function () {
         timer: 3000
     });
     $.ajax({
-        url: 'category/delete',
+        url: 'category/delete/'+id,
         method: 'delete',
-        data:{'id': id},
+        data:{'category': id},
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
         success: function (res) {
             if (res.status){
@@ -137,8 +132,7 @@ function showProduct(id) {
         timer: 3000
     });
     $.ajax({
-        url: 'product/show',
-        data:{'id': id},
+        url: 'product/show/'+id,
         method: 'get',
         dataType:'json',
         headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
