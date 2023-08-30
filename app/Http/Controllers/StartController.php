@@ -20,14 +20,10 @@ class StartController extends Controller
      {
          $products = Cache::rememberForever('products:main_page', function (){
              return new ProductCollection(Product::query()
-                 ->where('new', 1)
+                 ->orderBy('rating', 'desc')
                  ->limit(12)
                  ->get());
          });
-         /*$products = new ProductCollection(Product::query()
-             ->where('new', 1)
-             ->limit(12)
-             ->get());*/
 
          $main_categories = Cache::rememberForever('categories:all', function (){
              return new CategoryCollection(Category::where('parent_id', 0)->get());

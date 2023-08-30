@@ -26,7 +26,7 @@ class ProductResource extends JsonResource
             'price_discount' => $this->price_discount,
             'price_special' => $this->price_special,
             'price_through' => $this->price_through,
-            'rating' => round($this->reviews->avg('rating'), 1),
+            'rating' => $this->rating,
             'new' => $this->new,
             'related_products' => $this->related,
             'brand' => new BrandResource($this->brand),

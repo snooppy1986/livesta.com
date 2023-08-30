@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CallbackController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\NewsLetterController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ReviewController;
@@ -40,6 +41,8 @@ Route::post('/order/store', [OrderController::class, 'store'])->name('order.stor
 
 Route::post('/callback/store', [CallbackController::class, 'store'])->name('callback.store');
 
+//news letter
+Route::post('/news-letter/store', [NewsLetterController::class, 'store'])->name('news_letter.store');
 //search
 Route::post('/search', [SearchController::class, 'index'])->name('search');
 

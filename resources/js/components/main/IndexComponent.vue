@@ -85,7 +85,7 @@
                                 <router-link class="d-block" :to="'/product/'+product.id">
                                     <img :src="product.image_url" width="370" height="450" alt="Image-HasTech">
                                 </router-link>
-                                <span class="flag-new">Новинка</span>
+                                <span class="flag-new">Хіт</span>
                                 <div class="product-action">
                                     <button
                                         @click="productPreview(product)"
@@ -131,7 +131,7 @@
                                             v-model:rating="product.rating"
                                         ></StarRating>
                                     </div>
-                                    <div class="reviews">Відгуків {{product.rating}}</div>
+                                    <div class="reviews">Відгуків {{product.reviews.length}}</div>
                                 </div>
                                 <h4 class="title">
                                     <router-link :to="'/product/'+product.id">{{product.title}}</router-link>
@@ -171,11 +171,12 @@
                         </div>
                     </div>
                     <div class="newsletter-form">
-                        <form>
-                            <input type="email" class="form-control" placeholder="Введіть ваш email">
-                            <button class="btn-submit" type="submit"><i class="fa fa-paper-plane"></i></button>
-                        </form>
+                        <input v-model="newsletter" type="email" class="form-control" placeholder="Введіть ваш email">
+                        <button @click.prevent="storeNewsletter" class="btn-submit" type="button"><i class="fa fa-paper-plane"></i></button>
                     </div>
+                </div>
+                <div v-if="newsletterError || newsletterResponse" class="alert alert-warning rounded-2 text-dark">
+                    {{newsletterResponse ?? ''}} {{newsletterError ?? ''}}
                 </div>
             </div>
         </section>
@@ -221,6 +222,9 @@
                 preview_product: [],
                 slides: [],
                 meta: {},
+                newsletter: '',
+                newsletterResponse: '',
+                newsletterError: '',
                 statusLoader: true
             }
         },
@@ -263,8 +267,28 @@
                         this.statusLoader = false;
                     })
             },
+
             productPreview(product){
                 this.preview_product= product;
+            },
+
+            //store news letter method
+            storeNewsletter(){
+
+                axios.post('/api/news-letter/store', {
+                    email: this.newsletter
+                }).then(result => {
+                    this.newsletterResponse = result.data.message;
+                }).catch(error => {
+                    console.log(error);
+                    this.newsletterError = error.response.data.message;
+                })
+
+                this.newsletter = null;
+                setTimeout(() => {
+                    this.newsletterResponse = null;
+                    this.newsletterError = null;
+                }, 5000)
             }
         }
     }
