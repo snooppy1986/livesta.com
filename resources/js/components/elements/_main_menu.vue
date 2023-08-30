@@ -3,7 +3,9 @@
         <li class="has-submenu" v-for="category in categories">
             <router-link :to="'/category/'+category.id">{{category.title}}</router-link>
             <div>
-                <child_main_menu :children="category.children"></child_main_menu>
+                <child_main_menu
+                    :children="category.children"
+                ></child_main_menu>
             </div>
         </li>
     </ul>
@@ -16,7 +18,8 @@
         name: "_main_menu",
         data(){
             return {
-                categories: []
+                categories: [],
+                child_reb: 0
             }
         },
         components:{
@@ -30,9 +33,9 @@
             loadCategories(){
                 axios.get('/api/menu')
                     .then(res=>{
-                        this.categories =  res.data.data;
+                        this.categories = res.data.data;
                     })
-            },
+            }
         }
     }
 </script>
