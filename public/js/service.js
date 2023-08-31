@@ -225,4 +225,71 @@ $('.slide-destroy').on('click', function (event) {
     })
 })
 
+//update status news-letter
+function status() {
+    $('.newsletter-status').bootstrapSwitch({
+        size: 'small',
+        onSwitchChange: function (event, state) {
+            console.log($(this).data('id'))
+            let id = $(this).data('id');
+            $.ajax({
+                url: "/admin/news-letter/update/" + id,
+                type: "POST",
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                data: {
+                    status: state,
+                },
+                success: function (result) {
+                    toastr.info(result);
+                }
+            });
+        }
+    });
+}
+//store newsletter
+$('#store_newsletter').on('click', function (){
+    let email = $('.email_newsletter').val();
+    console.log(email);
+    $.ajax({
+        url: "/api/news-letter/store",
+        type: "POST",
+        data:{
+            email: email
+        },
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (result) {
+
+            if(result.status){
+                toastr.success(result.message);
+                $('.email_newsletter').val("");
+                $('#newsletter-table').DataTable().ajax.reload();
+            }else{
+                toastr.error('Помилка! Email не видалений.');
+            }
+        }
+    });
+})
+//delete newsletter
+function deleteNewsLetter(id){
+    $.ajax({
+        url: "/admin/news-letter/delete/" + id,
+        type: "DELETE",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        success: function (result) {
+            console.log(result);
+            if(result.status){
+                toastr.error('Email "'+result.email+'" видалений.');
+                $('#newsletter-table').DataTable().ajax.reload();
+            }else{
+                toastr.error('Помилка! Email не видалений.');
+            }
+        }
+    });
+}
 
