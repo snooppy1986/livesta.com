@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\MainController;
 use App\Http\Controllers\Admin\MainSliderController;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\SeoPageController;
+use App\Http\Controllers\NewsLetterController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -60,6 +61,10 @@ Route::group(['middleware'=>['web', 'admin.role:Admin,Manager'],'prefix'=>'admin
     Route::get('seo/page', [SeoPageController::class, 'index'])->name('seo.page');
     Route::post('seo/update/{meta}', [SeoPageController::class, 'update'])->name('seo.update');
 
+    //newsletter
+    Route::get('news-letter', [NewsLetterController::class, 'index'])->name('news_letter.index');
+    Route::post('news-letter/update/{newsLetter}', [NewsLetterController::class, 'update'])->name('news_letter.update');
+    Route::delete('news-letter/delete/{newsLetter}', [NewsLetterController::class, 'destroy'])->name('news_letter.destroy');
     Route::get('/admin-logout', [AuthController::class, 'logout'])->name('admin.logout');
 });
 

@@ -18,18 +18,6 @@
             </div>
         </div>
 
-        <!-- SidebarSearch Form -->
-        {{--<div class="form-inline">
-            <div class="input-group" data-widget="sidebar-search">
-                <input class="form-control form-control-sidebar" type="search" placeholder="Search" aria-label="Search">
-                <div class="input-group-append">
-                    <button class="btn btn-sidebar">
-                        <i class="fas fa-search fa-fw"></i>
-                    </button>
-                </div>
-            </div>
-        </div>--}}
-
         <!-- Sidebar Menu -->
         <nav class="mt-2">
             <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
@@ -156,14 +144,24 @@
                                 </li>
                             </ul>
                         </li>
+                    </ul>
+                </li>
 
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa fa-cogs nav-icon" aria-hidden="true"></i>
+                        <p>
+                            Новини
+                            <i class="right fas fa-angle-left"></i>
+                        </p>
+                    </a>
+                    <ul class="nav nav-treeview">
                         <li class="nav-item">
-                            <a href="#" class="nav-link">
-                                <i class="fas fa-user-plus nav-icon"></i>
-                                <p>Добавить пользователя</p>
+                            <a href="{{route('news_letter.index')}}" class="nav-link">
+                                <i class="far fa-list-alt nav-icon"></i>
+                                <p>Список адрес</p>
                             </a>
                         </li>
-
                     </ul>
                 </li>
             </ul>

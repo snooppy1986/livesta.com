@@ -41,7 +41,6 @@
                                     <tbody>
                                         <?php $count = 1?>
                                         @foreach($slides as $slide)
-
                                             <tr>
                                                 <td>{{$count}}.</td>
                                                 <td>{{$slide['title']}}</td>
@@ -61,17 +60,16 @@
                                                     >
                                                 </td>
                                                 <td class="project-actions text-right align-middle">
-                                            <a class="btn btn-info btn-sm" href="{{route('main-slider.edit', ['id'=>$slide['id']])}}">
-                                                <i class="fas fa-pencil-alt">
-                                                </i>
-                                                Редагувати
-                                            </a>
-                                            <a class="btn btn-danger btn-sm slide-destroy" href="#" data-id="{{$slide['id']}}">
-                                                <i class="fas fa-trash">
-                                                </i>
-                                                Видалити
-                                            </a>
-                                        </td>
+                                                    <a class="btn btn-info btn-sm" href="{{route('main-slider.edit', ['id'=>$slide['id']])}}">
+                                                        <i class="fas fa-pencil-alt"></i>
+                                                        Редагувати
+                                                    </a>
+                                                    <a class="btn btn-danger btn-sm slide-destroy" href="#" data-id="{{$slide['id']}}">
+                                                        <i class="fas fa-trash">
+                                                        </i>
+                                                        Видалити
+                                                    </a>
+                                                </td>
                                             </tr>
                                             <?php $count++?>
                                         @endforeach
