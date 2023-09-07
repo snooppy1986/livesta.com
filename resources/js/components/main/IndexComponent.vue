@@ -274,7 +274,6 @@
 
             //store news letter method
             storeNewsletter(){
-
                 axios.post('/api/news-letter/store', {
                     email: this.newsletter
                 }).then(result => {

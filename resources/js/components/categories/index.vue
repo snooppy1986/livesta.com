@@ -337,7 +337,6 @@
 
             getSearchReq(search){
                 this.statusLoader=true;
-                console.log(search);
                 this.searchReq = search;
                 this.loadCategory();
             }

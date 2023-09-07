@@ -61,14 +61,7 @@
     export default {
         name: "asideCart",
         props:['products', 'totalPrice'],
-        data(){
-            return {
 
-            }
-        },
-        mounted() {
-
-        },
         methods: {
             removeProduct(id){
                 this.$emit('removeId', id);
