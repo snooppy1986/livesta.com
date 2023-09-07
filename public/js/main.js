@@ -11,7 +11,6 @@
       });
 
       const Bgcolorcl = $("[data-bg-color]");
-      console.log(Bgcolorcl);
       Bgcolorcl.each(function (index, elem) {
           let element = $(elem),
               Bgcolor = element.data('bg-color');
@@ -35,8 +34,8 @@
               $(".header-navigation li a[href='"+curpage+"']").parents("li").addClass("active");
       }
 
-      // Offcanvas Nav Js
-      var $offcanvasNav = $("#offcanvasNav a");
+              // Offcanvas Nav Js
+    /*  var $offcanvasNav = $("#offcanvasNav a");
       $offcanvasNav.on("click", function () {
           var link = $(this);
           var closestUl = link.closest("ul");
@@ -44,7 +43,7 @@
           var closestLi = link.closest("li");
           var linkStatus = closestLi.hasClass("active");
           var count = 0;
-
+          console.log(closestUl.length);
           closestUl.find("ul").slideUp(function () {
               if (++count == closestUl.find("ul").length)
                   activeLinks.removeClass("active");
@@ -54,37 +53,6 @@
               closestLi.children("ul").slideDown();
               closestLi.addClass("active");
           }
-      });
-
-      // Swiper Default Slider JS
-     /* var mainlSlider = new Swiper('.hero-slider-container', {
-          slidesPerView : 1,
-          slidesPerGroup: 1,
-          loop: true,
-          grabCursor: true,
-          speed: 700,
-          spaceBetween: 0,
-          effect: 'fade',
-          autoHeight: true, //enable auto height
-          fadeEffect: {
-              crossFade: true,
-          },
-          pagination: {
-              el: '.hero-slider-pagination',
-              type: 'fraction',
-              formatFractionCurrent: function (number) {
-                  return '0' + number;
-              },
-              formatFractionTotal: function (number) {
-                  return '0' + number;
-              }
-          },
-          paginationClickable: true,
-          autoplay: {
-              delay: 15000,
-
-          },
-
       });*/
 
       // Swiper Default Slider JS
@@ -248,6 +216,7 @@
           var $scrollUp = $('#scroll-to-top'),
               $lastScrollTop = 0,
               $window = $(window);
+          console.log($scrollUp);
           $window.on('scroll', function () {
               var st = $(this).scrollTop();
               if (st > $lastScrollTop) {
@@ -319,12 +288,13 @@
         }
 
         // Offcanvas Nav Js
-        var $offcanvasNav = $("#offcanvasNav a");
+       /* var $offcanvasNav = $("#offcanvasNav a");
         $offcanvasNav.on("click", function () {
             var link = $(this);
             var closestUl = link.closest("ul");
             var activeLinks = closestUl.find(".active");
             var closestLi = link.closest("li");
+            console.log(closestUl.length);
             var linkStatus = closestLi.hasClass("active");
             var count = 0;
 
@@ -337,37 +307,6 @@
                 closestLi.children("ul").slideDown();
                 closestLi.addClass("active");
             }
-        });
-
-        // Swiper Default Slider JS
-        /*var mainlSlider = new Swiper('.hero-slider-container', {
-            slidesPerView : 1,
-            slidesPerGroup: 1,
-            loop: true,
-            grabCursor: true,
-            speed: 700,
-            spaceBetween: 0,
-            effect: 'fade',
-            autoHeight: true, //enable auto height
-            fadeEffect: {
-                crossFade: true,
-            },
-            pagination: {
-                el: '.hero-slider-pagination',
-                type: 'fraction',
-                formatFractionCurrent: function (number) {
-                    return '0' + number;
-                },
-                formatFractionTotal: function (number) {
-                    return '0' + number;
-                }
-            },
-            paginationClickable: true,
-            autoplay: {
-                delay: 15000,
-
-            },
-
         });*/
 
         // Swiper Default Slider JS
@@ -526,43 +465,6 @@
             });
         });
 
-        // scrollToTop Js
-        function scrollToTop() {
-            var $scrollUp = $('#scroll-to-top'),
-                $lastScrollTop = 0,
-                $window = $(window);
-            $window.on('scroll', function () {
-                var st = $(this).scrollTop();
-                if (st > $lastScrollTop) {
-                    $scrollUp.removeClass('show');
-                    $('.sticky-header').removeClass('sticky-show');
-                } else {
-                    if ($window.scrollTop() > 250) {
-                        $scrollUp.addClass('show');
-                        $('.sticky-header').addClass('sticky-show');
-                    } else {
-                        $scrollUp.removeClass('show');
-                        $('.sticky-header').removeClass('sticky-show');
-                    }
-                }
-                $lastScrollTop = st;
-            });
-            $scrollUp.on('click', function (evt) {
-                $('html, body').animate({scrollTop: 0}, 50);
-                evt.preventDefault();
-            });
-        }
-        scrollToTop();
-        varWindow.on('scroll', function(){
-            if($('.sticky-header').length){
-                var windowpos = $(this).scrollTop();
-                if (windowpos >= 250) {
-                    $('.sticky-header').addClass('sticky');
-                } else {
-                    $('.sticky-header').removeClass('sticky');
-                }
-            }
-        });
     })
 
 

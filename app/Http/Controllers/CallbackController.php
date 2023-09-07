@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\CallbackStoreRequest;
+use App\Http\Requests\Callback\CallbackStoreRequest;
 use App\Models\Callback;
 use Illuminate\Http\Request;
 

@@ -104,7 +104,6 @@
                             this.error_message = error.response.data.message;
                         });
                     }
-
                 },
                 deep: true
             }

@@ -110,7 +110,15 @@
                                 <img src="/images/auth-user.png" width="28" alt="">
                             </span>
                         </button>
-                        <button class="header-menu-btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#AsideOffcanvasMenu" aria-controls="AsideOffcanvasMenu">
+                        <button
+                            class="header-menu-btn"
+                            type="button"
+                            data-bs-toggle="offcanvas"
+                            data-bs-target="#AsideOffcanvasMenu"
+                            aria-controls="AsideOffcanvasMenu"
+                            @click="forceRender"
+
+                        >
                             <span></span>
                             <span></span>
                             <span></span>
@@ -143,11 +151,13 @@
     <search_bar  @search_req="getSearchReq($event)"></search_bar>
     <aside_user_login v-if="access_token" @logout_status="logoutStatus($event)"></aside_user_login>
     <aside_cart :products="cart_products" :totalPrice="totalPrice" @removeId="removeCartProduct($event)"></aside_cart>
+    <mobile_menu :keys="componentKey" ></mobile_menu>
 </template>
 
 <script>
     import Api from '../api.js';
     import main_menu from "./elements/_main_menu.vue";
+    import mobile_menu from "./elements/menu/mobile_menu/index.vue";
     import search_bar from "./elements/search_bar.vue";
     import aside_cart from "./elements/aside_cart.vue";
     import aside_user_login from "./elements/aside_user_login.vue";
@@ -158,16 +168,19 @@
         data(){
             return {
                 cart_products: [],
+                categories: [],
                 totalPrice: 0,
                 cart_products_count: 0,
                 wish_list_count: 0,
                 access_token: null,
                 search_result: null,
-                search_req: null
+                search_req: null,
+                componentKey: 0
             }
         },
         components:{
             main_menu,
+            mobile_menu,
             search_bar,
             aside_cart,
             aside_user_login,
@@ -180,6 +193,10 @@
             $(document).trigger('change');
         },
         methods:{
+            forceRender(){
+                this.componentKey += 1;
+            },
+
             getUser(){
                 Api.post('/api/get-auth-user').then(response => {
                     this.user = response.data.user;
@@ -196,6 +213,7 @@
                     this.avatar_dropzone.displayExistingFile(file, this.user.avatar_url);
                 })
             },
+
             getAccessToken(){
                 this.access_token = localStorage.getItem('access_token')
             },
@@ -226,7 +244,6 @@
                         if(productInCart.product.id === product.id){
                             productInCart.qty = Number(productInCart.qty)+Number(qty);
                             newProduct = null;
-
                         }
                     });
                     Array.prototype.push.apply(cart, newProduct);

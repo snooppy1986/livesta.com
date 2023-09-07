@@ -311,12 +311,10 @@
                         this.statusLoader=false;
                         this.meta = res.data.meta;
                         this.categories_count = res.data.categories.length;
-                        console.log(this.category[0].title);
                     });
             },
 
             statusForm(status){
-                console.log(status);
                 this.statusLoader = true;
                 if(status) this.getProduct();
             }
