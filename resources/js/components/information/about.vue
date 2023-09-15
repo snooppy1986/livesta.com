@@ -1,22 +1,8 @@
 <template>
     <main class="main-content">
         <!--== Start Page Header Area Wrapper ==-->
-        <nav aria-label="breadcrumb" class="breadcrumb-style1">
-            <div class="container">
-                <ol class="breadcrumb justify-content-center justify-content-md-start">
-                    <li class="breadcrumb-item">
-                        <router-link class="text-dark" to="/">
-                            <i class="fa fa-home"></i>
-                        </router-link>
-                    </li>
+        <breadcrumbs :pageTitle="pageTitle"></breadcrumbs>
 
-                    <li class="breadcrumb-item">
-                        Про нас
-                    </li>
-
-                </ol>
-            </div>
-        </nav>
         <!--== End Page Header Area Wrapper ==-->
         <!--== Start Page Header Area Wrapper ==-->
         <section class="page-header-area">
@@ -146,13 +132,20 @@
 </template>
 
 <script>
-    import axios from "axios";
-
+    import breadcrumbs from '../elements/breadcrumb/_breadcrumbs.vue';
     export default {
         name: "about",
         //meta info
         metaInfo:{
             title: 'Про нас'
+        },
+        data(){
+            return{
+                pageTitle: 'Про нас'
+            }
+        },
+        components:{
+            breadcrumbs
         },
         mounted() {
             $(document).trigger('change');

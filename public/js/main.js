@@ -34,27 +34,6 @@
               $(".header-navigation li a[href='"+curpage+"']").parents("li").addClass("active");
       }
 
-              // Offcanvas Nav Js
-    /*  var $offcanvasNav = $("#offcanvasNav a");
-      $offcanvasNav.on("click", function () {
-          var link = $(this);
-          var closestUl = link.closest("ul");
-          var activeLinks = closestUl.find(".active");
-          var closestLi = link.closest("li");
-          var linkStatus = closestLi.hasClass("active");
-          var count = 0;
-          console.log(closestUl.length);
-          closestUl.find("ul").slideUp(function () {
-              if (++count == closestUl.find("ul").length)
-                  activeLinks.removeClass("active");
-          });
-
-          if (!linkStatus) {
-              closestLi.children("ul").slideDown();
-              closestLi.addClass("active");
-          }
-      });*/
-
       // Swiper Default Slider JS
       var mainlSlider2 = new Swiper('.hero-two-slider-container', {
           slidesPerView : 1,
@@ -287,27 +266,6 @@
                 $(".header-navigation li a[href='"+curpage+"']").parents("li").addClass("active");
         }
 
-        // Offcanvas Nav Js
-       /* var $offcanvasNav = $("#offcanvasNav a");
-        $offcanvasNav.on("click", function () {
-            var link = $(this);
-            var closestUl = link.closest("ul");
-            var activeLinks = closestUl.find(".active");
-            var closestLi = link.closest("li");
-            console.log(closestUl.length);
-            var linkStatus = closestLi.hasClass("active");
-            var count = 0;
-
-            closestUl.find("ul").slideUp(function () {
-                if (++count == closestUl.find("ul").length)
-                    activeLinks.removeClass("active");
-            });
-
-            if (!linkStatus) {
-                closestLi.children("ul").slideDown();
-                closestLi.addClass("active");
-            }
-        });*/
 
         // Swiper Default Slider JS
         var mainlSlider2 = new Swiper('.hero-two-slider-container', {

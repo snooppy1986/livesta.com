@@ -84,7 +84,7 @@
 
 <script>
     export default {
-        name: "show_order_modal",
+        name: "_show_order_modal",
         props: ['order', 'order_products'],
 
     }
@@ -104,4 +104,20 @@
     .thumb img{
         width: 50px;
     }
+
+    .product-name{
+        width: 50px;
+    }
+
+    @media only screen and (min-width: 768px) and (max-width: 991px),
+    only screen and (max-width: 767px){
+        .shopping-wishlist-form table {
+            width: 100%;
+        }
+        .product-name{
+            font-size: 14px !important;
+        }
+    }
+
+
 </style>

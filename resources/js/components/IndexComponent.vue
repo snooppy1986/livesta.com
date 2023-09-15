@@ -358,4 +358,13 @@
     .user-in img{
         max-width: none;
     }
+
+    @media only screen and (max-width: 539px) {
+        .pagination{
+            max-width: 100% !important;
+        }
+        .page-link:focus{
+            box-shadow: none;
+        }
+    }
 </style>

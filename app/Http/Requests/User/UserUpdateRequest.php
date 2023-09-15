@@ -18,7 +18,9 @@ class UserUpdateRequest extends FormRequest
             'name' => "min: 3 | max: 255 | string",
             'surname '=> "min: 3 | max: 255 | string",
             'phone' => "numeric",
-            'email' => "string | email | max:255 | unique:users,email,".$this->user->id
+            'email' => "string | email | max:255 | unique:users,email,".$this->user->id,
+            'image' => 'nullable',
+            'remove_image' => 'nullable'
         ];
     }
 }

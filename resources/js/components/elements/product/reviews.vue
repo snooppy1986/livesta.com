@@ -29,8 +29,6 @@
             </div>
         </div>
         <!--== End Reviews Content Item ==-->
-
-
     </div>
 </template>
 
@@ -46,15 +44,31 @@
         },
         data: () => ({
             moment: moment,
-        }),
-        methods:{
-
-        }
+        })
     }
 </script>
 
 <style >
     .product-review-top .review-date{
         margin-left: auto;
+    }
+
+    @media only screen and (max-width: 767px) {
+        .product-review-item .product-review-top{
+            display:block;
+            margin-bottom: 10px;
+        }
+        .product-review-item .product-review-thumb{
+            display:inline-block;
+        }
+        .product-review-item .product-review-content{
+            display:inline-block;
+        }
+        .product-review-top .review-date{
+            margin-top: 10px;
+        }
+        .product-review-item .desc{
+            margin-bottom: .5rem;
+        }
     }
 </style>

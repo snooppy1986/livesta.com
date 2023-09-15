@@ -2,31 +2,14 @@
     <main class="main-content">
 
         <!--== Start Page Header Area Wrapper ==-->
-        <section class="page-header-area pt-10 pb-9" data-bg-color="#FFF3DA">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="page-header-st3-content text-center text-md-start">
-                            <ol class="breadcrumb justify-content-center justify-content-md-start">
-                                <li class="breadcrumb-item">
-                                    <router-link class="text-dark" to="/">
-                                        <i class="fa fa-home"></i>
-                                    </router-link>
-                                </li>
-                                <li class="breadcrumb-item">Особистий кабінет</li>
-
-                            </ol>
-                            <h2 class="page-header-title">Особистий кабінет</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <breadcrumb :pageTitle="pageTitle" ></breadcrumb>
         <!--== End Page Header Area Wrapper ==-->
 
         <!--== Start My Account Area Wrapper ==-->
-        <section class="my-account-area section-space">
+        <!--desctop version -->
+<!--        <section class="my-account-area section-space v-desc">
             <div class="container">
+                <h2 class="page-header-title mb-3">Особистий кабінет</h2>
                 <div class="row">
                     <div class="col-lg-3 col-md-4">
                         <div class="my-account-tab-menu nav nav-tabs" id="nav-tab" role="tablist">
@@ -45,8 +28,8 @@
                             <div class="tab-pane fade show active" id="dashboad" role="tabpanel" aria-labelledby="dashboad-tab">
                                 <div class="myaccount-content">
                                     <h3><img :src="user.avatar_url" alt="" width="50"> Вітаю!</h3>                                  <div class="welcome">
-                                        <p>Добрий день, <strong class="text-capitalize">{{user.name}} {{user.surname}}</strong> <!--(If Not <strong>Tuntuni !</strong><a href="account-login.html" class="logout"> Logout</a>)--></p>
-                                    </div>
+                                    <p>Добрий день, <strong class="text-capitalize">{{user.name}} {{user.surname}}</strong> &lt;!&ndash;(If Not <strong>Tuntuni !</strong><a href="account-login.html" class="logout"> Logout</a>)&ndash;&gt;</p>
+                                </div>
                                     <p>З інформаційної панелі вашого облікового запису. Ви можете легко перевіряти та переглядати свої останні замовлення, керувати адресами доставки та виставлення рахунків, а також редагувати пароль і дані облікового запису.</p>
                                 </div>
                             </div>
@@ -57,32 +40,32 @@
                                     <div class="myaccount-table table-responsive text-center">
                                         <table class="table table-bordered">
                                             <thead class="thead-light">
-                                                <tr>
-                                                    <th>№</th>
-                                                    <th>Дата</th>
-                                                    <th>Статус</th>
-                                                    <th>Сума</th>
-                                                    <th></th>
-                                                </tr>
+                                            <tr>
+                                                <th>№</th>
+                                                <th>Дата</th>
+                                                <th>Статус</th>
+                                                <th>Сума</th>
+                                                <th></th>
+                                            </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="(order, key) in orders">
-                                                    <td>{{key+1}}</td>
-                                                    <td>{{formatDate(order.created_at)}}</td>
-                                                    <td>{{order.status === 0 ? 'Новий' : order.status ===1 ? 'Виконується' : 'Виконаний'}}</td>
-                                                    <td>{{order.total_price}}</td>
-                                                    <td>
-                                                        <button
-                                                            @click="getOrder(order.id)"
-                                                            type="button"
-                                                            class="btn-show-order"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#action-ShowOrder"
-                                                        >
-                                                            <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
-                                                        </button>
-                                                    </td>
-                                                </tr>
+                                            <tr v-for="(order, key) in orders">
+                                                <td>{{key+1}}</td>
+                                                <td>{{formatDate(order.created_at)}}</td>
+                                                <td>{{order.status === 0 ? 'Новий' : order.status ===1 ? 'Виконується' : 'Виконаний'}}</td>
+                                                <td>{{order.total_price}}</td>
+                                                <td>
+                                                    <button
+                                                        @click="getOrder(order.id)"
+                                                        type="button"
+                                                        class="btn-show-order"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#action-ShowOrder"
+                                                    >
+                                                        <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -198,7 +181,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group mb-6 dropzone-box">
-                                                <div ref="avatarDropzone" class="avatar-box">
+                                                <div ref="avatarDropzone"  class="avatar-box">
                                                     Зображення акаунта
                                                     <i class="fa fa-plus"></i>
                                                 </div>
@@ -280,7 +263,39 @@
                     </div>
                 </div>
             </div>
-        </section>
+        </section>-->
+        <v_desctop
+            v-if="windowWidth>767"
+            :orders="orders"
+            :user="user"
+            :address="address"
+            :order_products="order_products"
+            :formatDate="formatDate"
+            :getUser="getUser"
+            :logout="logout"
+            :message_edit_user="message_edit_user"
+            :errors_edit_user="errors_edit_user"
+            :message_edit_password="message_edit_password"
+            :errors_edit_password="errors_edit_password"
+            @editUserData="editUserData"
+            @passwordData="editPassword"
+        ></v_desctop>
+        <!--mobile version -->
+        <v_mobile v-else
+                  :orders="orders"
+                  :user="user"
+                  :address="address"
+                  :order_products="order_products"
+                  :formatDate="formatDate"
+                  :getUser="getUser"
+                  :logout="logout"
+                  :message_edit_user="message_edit_user"
+                  :errors_edit_user="errors_edit_user"
+                  :message_edit_password="message_edit_password"
+                  :errors_edit_password="errors_edit_password"
+                  @editUserData="editUserData"
+                  @passwordData="editPassword"
+        ></v_mobile>
         <!--== End My Account Area Wrapper ==-->
     </main>
     <ScaleLoader
@@ -289,16 +304,18 @@
         height="20px"
         width="5px"
     />
-    <show_order_modal :order="order" :order_products="order_products"></show_order_modal>
-    <address_editor_modal  :address="address" :user_id="user.id" @message="getMessage"></address_editor_modal>
 </template>
 
 <script>
     import Api from '../../api.js';
-    import Dropzone from 'dropzone';
-    import show_order_modal from "../elements/show_order_modal.vue";
-    import address_editor_modal from "../elements/address_editor_modal.vue";
+    import breadcrumbs from "../elements/breadcrumb/_breadcrumbs.vue";
+    import v_desctop from "../elements/wellcome/_v-desctop.vue";
+    import v_mobile from "../elements/wellcome/_v-mobile.vue";
+    import show_order_modal from "../elements/modal/_show_order_modal.vue";
+    import address_editor_modal from "../elements/modal/_address_editor_modal.vue";
     import { ScaleLoader } from "vue3-spinner";
+
+
     export default {
         name: "welcome",
         // meta info
@@ -309,120 +326,75 @@
             return{
                 user: {},
                 orders: [],
-                order: [],
-                order_products: [],
                 address: {},
-                message: null,
                 message_edit_user: null,
                 message_edit_password: null,
                 errors_edit_user: {},
                 error_password_matches: null,
                 error_same_password: null,
                 errors_edit_password: null,
-                name: null,
+                /*name: null,
                 surname: null,
                 phone: null,
                 email: null,
-                avatar: null,
-                current_password: null,
-                password: null,
-                password_confirmation: null,
+                avatar: null,*/
+
                 removeImage: false,
-                statusLoader: true
+                pageTitle: 'Особистий кабінет',
+                statusLoader: true,
+                windowWidth: window.innerWidth
             }
         },
         components:{
+            ScaleLoader,
+            breadcrumbs,
+            v_desctop,
+            v_mobile,
             show_order_modal,
-            address_editor_modal,
-            ScaleLoader
+            address_editor_modal
         },
         mounted() {
+            this.$nextTick(() => {
+                window.addEventListener('resize', this.onResize);
+            });
             this.getUser();
-            const dropzone = document.querySelector('.dropzone-box');
-            this.avatar_dropzone = new Dropzone(this.$refs.avatarDropzone,{
-                url: '/login',
-                autoProcessQueue: false,
-                addRemoveLinks: true,
-                maxFiles: 1,
-                thumbnailWidth: 50,
-                thumbnailHeight: 50,
-                dictRemoveFile: '<div class=""><i class="fa fa-trash " aria-hidden="true"></i> Видалити</div>',
-                multiple: false,
-                success: function (file, response) {
-                    console.log('success');
-                    this.removeFile(file);
-                }
-
-            })
-            this.avatar_dropzone.on('removedfile', (file)=>{
-                this.removeImage = true;
-            })
-            this.avatar_dropzone.on('addedfile', (file)=>{
-                this.removeImage = false;
-            })
-            this.avatar_dropzone.on("maxfilesexceeded", function (file) {
-                this.removeAllFiles();
-                this.addFile(file);
-
-            })
-
-            dropzone.querySelector(".dz-clickable").addEventListener('click', function () {
-                dropzone.querySelector('.dz-complete').style.display = "none";
-            })
-
+        },
+        beforeDestroy() {
+            window.removeEventListener('resize', this.onResize);
         },
         methods:{
-            editPassword(){
+            onResize() {
+                this.windowWidth = window.innerWidth
+            },
+            editPassword(data){
+                this.statusLoader=true;
                 this.errors_edit_password = null;
-                Api.post('/api/auth/update-password', {
-                    current_password: this.current_password,
-                    password: this.password,
-                    password_confirmation: this.password_confirmation
-                }).then(response => {
+                this.message_edit_password = null;
+                Api.post('/api/auth/update-password', data).then(response => {
                     this.message_edit_password = response.data.message;
-                    this.current_password = null;
-                    this.password = null;
-                    this.password_confirmation = null;
+                    this.statusLoader=false;
                 }).catch(error => {
-                    console.log(error);
+                    this.statusLoader=false;
                     this.errors_edit_password = error.response.data.errors;
                 })
             },
-            editUserData(){
+            editUserData(data){
+                this.statusLoader=true;
                 this.message_edit_user = null;
                 this.errors_edit_user = {};
-                //Form data
-                const data = new FormData();
-                const files = this.avatar_dropzone.getAcceptedFiles();
-                files.forEach(file => {
-                    data.append('avatar[]', file);
-                    this.avatar_dropzone.removeFile(file);
-                });
-                data.append('name', this.name);
-                data.append('surname', this.surname);
-                data.append('phone', this.phone);
-                data.append('email', this.email);
-                data.append('password', this.password);
-                data.append('password_confirmation', this.confirm_password);
-                data.append('remove_image', this.removeImage);
-                data.append('_method', 'PATCH');
-
                 Api.post(`/api/auth/update-user/${this.user.id}`, data)
                     .then(result=>{
                         this.message_edit_user = result.data.message;
                         this.getUser();
-                        this.$refs.start.scrollIntoView({behavior: 'smooth'});
                         this.removeImage=false;
+                        this.statusLoader=false;
                     })
                     .catch(error=>{
                         this.errors_edit_user = error.response.data.errors;
-                        this.$refs.start.scrollIntoView({behavior: 'smooth'})
+                        this.statusLoader=false;
                     })
             },
-            getMessage(value){
-                this.message = value;
-                this.getUser();
-            },
+
             getUser(){
                 Api.post('/api/get-auth-user').then(response => {
                     this.user = response.data.user;
@@ -433,23 +405,10 @@
                     this.phone = response.data.user ? response.data.user.phone : null;
                     this.email = response.data.user ? response.data.user.email : null;
                     this.avatar = response.data.user ? response.data.user.avatar_url : null;
-
-                    //get file to dropzone
-                    let file = { name: this.user.avatar, size: response.data.size };
-                    this.avatar_dropzone.displayExistingFile(file, this.user.avatar_url);
-                    //loader off
                     this.statusLoader = false;
                 })
             },
-            getOrder(id){
-                Api.post('/api/auth/get-order', {
-                    order_id: id
-                }).then(result => {
-                    console.log(result.data.order.products);
-                    this.order = result.data.order;
-                    this.order_products = result.data.order.products
-                })
-            },
+
             formatDate(dateSting){
                 const date=new Date(dateSting);
                 return new Intl.DateTimeFormat('uk', {dateStyle: 'long'}).format(date);
@@ -469,7 +428,7 @@
     }
 </script>
 
-<style scoped>
+<style>
     .btn-show-order{
         background: transparent;
         border: none;
@@ -488,5 +447,26 @@
     }
     .myaccount-content .editor-address:hover{
         color: #FF6565;
+    }
+
+    .dz-remove-icon{
+        display: none;
+    }
+    .avatar-box{
+        overflow-wrap: break-word;
+    }
+
+    @media only screen and (max-width: 575px) {
+        .dz-remove-text{
+            display: none;
+        }
+        .dz-remove-icon{
+            display: inline-block;
+            margin-left: 0 !important;
+        }
+        .dz-remove:hover .dz-remove-icon{
+            color: #ff6565;
+        }
+
     }
 </style>

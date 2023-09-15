@@ -2254,10 +2254,10 @@ hr {
 @media only screen and (min-width: 1200px) and (max-width: 1549px), only screen and (min-width: 992px) and (max-width: 1199px), only screen and (min-width: 768px) and (max-width: 991px) {
   .hero-slider-pagination {
     transform: none;
-    left: 30px;
-    top: auto;
-    bottom: 30px;
-    width: 200px;
+    left: 30px !important;
+    top: auto !important;
+    bottom: 30px !important;
+    width: 200px !important;
   }
 }
 @media only screen and (min-width: 768px) and (max-width: 991px) {

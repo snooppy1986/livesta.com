@@ -2,28 +2,7 @@
     <main class="main-content">
 
         <!--== Start Page Header Area Wrapper ==-->
-        <nav aria-label="breadcrumb" class="breadcrumb-style1">
-            <div class="container">
-                <ol class="breadcrumb justify-content-center justify-content-md-start">
-                    <li class="breadcrumb-item">
-                        <router-link class="text-dark" to="/">
-                            <i class="fa fa-home"></i>
-                        </router-link>
-                    </li>
-
-                    <li class="breadcrumb-item">
-                        <router-link class="text-dark" to="/cart">
-                            Кошик
-                        </router-link>
-                    </li>
-
-                    <li class="breadcrumb-item">
-                        Оформлення замовлення
-                    </li>
-
-                </ol>
-            </div>
-        </nav>
+        <breadcrumbs :pageTitle="pageTitle"></breadcrumbs>
         <!--== End Page Header Area Wrapper ==-->
 
 
@@ -309,6 +288,7 @@
 <script>
     import Api from '../../api.js';
     import NewMail from "../../components/elements/delivery/new_mail.vue";
+    import breadcrumbs from "../elements/breadcrumb/_breadcrumbs.vue"
     import term_of_use_modal from "../elements/term_of_use_modal.vue";
     import { ScaleLoader } from "vue3-spinner";
     export default {
@@ -333,18 +313,21 @@
                 paymentMethod: null,
                 errors: {},
                 status_privace: false,
+                pageTitle: 'Оформлення замовлення',
                 statusLoader: true
             }
         },
         components:{
             NewMail,
             term_of_use_modal,
-            ScaleLoader
+            ScaleLoader,
+            breadcrumbs
         },
         mounted() {
             this.getProducts();
             this.getTotalPrice();
             this.getUser();
+            $(document).trigger('change');
         },
         methods:{
             checkout(){

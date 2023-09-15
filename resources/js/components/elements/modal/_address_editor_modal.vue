@@ -16,7 +16,7 @@
                                         <div class="form-group mb-6">
                                             <label for="area">Область</label>
                                             <input
-                                                v-model="area"
+                                                v-model="address.area"
                                                 class="form-control"
                                                 :class="{'is-invalid': errors && errors.area}"
                                                 type="text"
@@ -34,7 +34,7 @@
                                         <div class="form-group mb-6">
                                             <label for="city">Місто</label>
                                             <input
-                                                v-model="city"
+                                                v-model="address.city"
                                                 class="form-control"
                                                 :class="{'is-invalid': errors && errors.city}"
                                                 type="text"
@@ -52,7 +52,7 @@
                                         <div class="form-group mb-6">
                                             <label for="street">Вулиця</label>
                                             <input
-                                                v-model="street"
+                                                v-model="address.street"
                                                 class="form-control"
                                                 :class="{'is-invalid': errors && errors.street}"
                                                 type="text"
@@ -70,7 +70,7 @@
                                         <div class="form-group mb-6">
                                             <label for="house">Будинок</label>
                                             <input
-                                                v-model="house"
+                                                v-model="address.house_number"
                                                 class="form-control"
                                                 :class="{'is-invalid': errors && errors.house_number}"
                                                 type="text"
@@ -88,7 +88,7 @@
                                         <div class="form-group mb-6">
                                             <label for="postcode">Поштовий індекс</label>
                                             <input
-                                                v-model="postcode"
+                                                v-model="address.postcode"
                                                 class="form-control"
                                                 :class="{'is-invalid': errors && errors.postcode}"
                                                 type="text"
@@ -119,58 +119,34 @@
 </template>
 
 <script>
-    import api from '../../api.js';
+    import api from '../../../api.js';
 
     export default {
-        name: "address_editor_modal",
+        name: "_address_editor_modal",
         props: ['user_id', 'address'],
         data(){
             return {
-                area: null,
-                city: null,
-                street: null,
-                house: null,
-                postcode: null,
                 errors: {},
             }
         },
-        mounted() {
-            this.getAddress();
-        },
-        methods:{
-            getAddress(){
 
-                api.post('/api/auth/get-auth-user', {
-                    'user_id': this.user_id,
-                }).then(result=>{
-                    this.area = result.data.address && result.data.address.area ? result.data.address.area : null;
-                    this.city = result.data.address && result.data.address.city ? result.data.address.city : null;
-                    this.street = result.data.address && result.data.address.street ? result.data.address.street : null;
-                    this.house = result.data.address && result.data.address.house_number ? result.data.address.house_number : null;
-                    this.postcode = result.data.address && result.data.address.postcode ? result.data.address.postcode : null;
-                })
-            },
+        methods:{
             edit_user_attributes(){
                 this.errors = {};
                 api.post('/api/auth/add-user-attr', {
                     'user_id': this.user_id,
-                    'area': this.area,
-                    'city': this.city,
-                    'street': this.street,
-                    'house_number': this.house,
-                    'postcode': this.postcode
+                    'area': this.address.area,
+                    'city': this.address.city,
+                    'street': this.address.street,
+                    'house_number': this.address.house_number,
+                    'postcode': this.address.postcode
                 }).then(result=>{
                     this.$emit('message', result.data.message);
                     document.getElementById('close').click();
                 }).catch(error=>{
-                    console.log(error);
                     this.errors = error.response.data.errors;
                 })
             }
-        },
-        created() {
-            /*console.log(this.address.area);
-            this.area = this.address;*/
         }
     }
 </script>

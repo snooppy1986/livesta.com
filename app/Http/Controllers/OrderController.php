@@ -40,7 +40,7 @@ class OrderController extends Controller
             ->attach($data['products_ids']);
 
         //create user info
-        if($data['user_id'])
+        if(isset($data['user_id']))
              $order->users()->attach($data['user_id']);
 
         //delivery options
