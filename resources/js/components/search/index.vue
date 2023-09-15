@@ -1,51 +1,14 @@
 <template>
     <!--== Start Page Header Area Wrapper ==-->
-    <section class="page-header-area pt-10 pb-9" data-bg-color="#FFF3DA">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-5">
-                    <div class="page-header-st3-content text-center text-md-start">
-                        <ol class="breadcrumb justify-content-center justify-content-md-start">
-                            <li class="breadcrumb-item">
-                                <router-link class="text-dark" to="/">
-                                    <i class="fa fa-home"></i>
-                                </router-link>
-                            </li>
-                            <li class="breadcrumb-item active text-dark" aria-current="page">Пошук</li>
-                        </ol>
-                        <h4 class="page-header-title">Пошук по запиту <span class="text-primary">"{{search_req}}"</span></h4>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <h5 class="showing-pagination-results mt-5 mt-md-9 text-center text-md-end">
-                         Знайдено {{count}} товар(ів) :
-                    </h5>
-                </div>
-            </div>
-        </div>
-    </section>
+    <breadcrumbs :pageTitle="pageTitle" :count_product="count"></breadcrumbs>
     <!--== End Page Header Area Wrapper ==-->
 
     <!--== Start Shop Top Bar Area Wrapper ==-->
-    <div  class="shop-top-bar-area">
-        <div class="container">
-            <div v-if="products.length" class="shop-top-bar">
-                <v_select
-                    :options="options"
-                    :selected = "select_default"
-                    @select_option = "selectOptions"
-                ></v_select>
-                <div class="select-on-sale d-flex d-md-none">
-                    <span>On Sale :</span>
-                    <select class="select-on-sale-form" >
-                        <option selected>Yes</option>
-                        <option value="1">No</option>
-                    </select>
-                </div>
-            </div>
-
-        </div>
-    </div>
+    <top_bar
+        v-if="products.length"
+        :statusRangeSlider="false"
+        @sort_option="selectOptions"
+    ></top_bar>
     <!--== End Shop Top Bar Area Wrapper ==-->
 
     <!--== Start Product Area Wrapper ==-->
@@ -119,14 +82,29 @@
                             </div>
                         </div>
                         <div class="product-action-bottom">
-                            <button type="button" class="product-action-btn action-btn-quick-view" data-bs-toggle="modal" data-bs-target="#action-QuickViewModal">
+                            <button
+                                @click="productPreview(product)"
+                                type="button"
+                                class="product-action-btn action-btn-quick-view"
+                                data-bs-toggle="modal"
+                                data-bs-target="#action-QuickViewModal">
                                 <i class="fa fa-expand"></i>
                             </button>
-                            <button type="button" class="product-action-btn action-btn-wishlist" data-bs-toggle="modal" data-bs-target="#action-WishlistModal">
+                            <button
+                                @click="addToWishList(product), productPreview(product)"
+                                type="button"
+                                class="product-action-btn action-btn-wishlist"
+                                data-bs-toggle="modal"
+                                data-bs-target="#action-WishlistModal">
                                 <i class="fa fa-heart-o"></i>
                             </button>
-                            <button type="button" class="product-action-btn action-btn-cart" data-bs-toggle="modal" data-bs-target="#action-CartAddModal">
-                                <span>Add to cart</span>
+                            <button
+                                @click="addToCart(product, true), productPreview(product)"
+                                type="button"
+                                class="product-action-btn action-btn-cart"
+                                data-bs-toggle="modal"
+                                data-bs-target="#action-CartAddModal">
+                                <span>В кошик</span>
                             </button>
                         </div>
                     </div>
@@ -136,9 +114,9 @@
                 <div class="col-12">
                     <paginate v-if="pagination.last_page>1"
                               :page-count="pagination.last_page"
-                              :prev-text= "'Назад'"
+                              :prev-text= "'<i class=\'fa fa-chevron-left\'></i>'"
                               :prev-link-class = "'page-link previous'"
-                              :next-text="'Далі'"
+                              :next-text="'<i class=\'fa fa-chevron-right\'></i>'"
                               :next-link-class = "'page-link next'"
                               :container-class ="'pagination justify-content-center me-auto ms-auto mt-5 mb-10'"
                               :break-view-text="'....'"
@@ -164,12 +142,13 @@
 <script>
     import axios from 'axios';
     import StarRating from 'vue-star-rating';
-
-    import product_preview from '../elements/product_quick_view.vue';
-    import product_wishlist from "../elements/product_wishlist.vue";
+    import breadcrumbs from '../elements/breadcrumb/_breadcrumbs.vue';
+    import top_bar from "../elements/category/_top_bar_area.vue";
+    import product_preview from '../elements/modal/product_quick_view.vue';
+    import product_wishlist from "../elements/modal/product_wishlist.vue";
     import { Bootstrap5Pagination } from 'laravel-vue-pagination';
     import Paginate from 'vuejs-paginate-next';
-    import v_select from "../elements/v-select.vue";
+    import v_select from "../elements/category/_v-select.vue";
     import { ScaleLoader } from "vue3-spinner";
 
     export default {
@@ -195,7 +174,8 @@
                 select_default: 'Сортувати по:',
                 statusLoader: true,
                 meta: {},
-                preview_product: {}
+                preview_product: {},
+                pageTitle: 'Пошук'
             }
         },
        //meta info
@@ -214,6 +194,8 @@
             Bootstrap5Pagination,
             product_wishlist,
             v_select,
+            breadcrumbs,
+            top_bar,
             ScaleLoader
         },
         mounted() {
@@ -241,9 +223,10 @@
 
             //sort search options method
             selectOptions(option){
+                console.log(option);
                 this.statusLoader=true;
                 this.select_default = option.name;
-                this.sort_type = option.value;
+                this.sort_type = option;
                 this.getSearchProducts();
             },
 

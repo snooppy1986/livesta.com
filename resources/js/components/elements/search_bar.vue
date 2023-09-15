@@ -64,7 +64,7 @@
 
 <script>
     import axios from 'axios';
-
+    import * as bootstrap from "bootstrap/dist/js/bootstrap";
     export default {
         name: "search_bar",
         data(){
@@ -77,32 +77,38 @@
 
         methods:{
             goToSearch(){
+                console.log('click search');
                 this.$emit('search_req', this.search);//pass search data
                 this.$router.push({name:'search'});//redirect to search page
                 this.closeModal()
             },
 
             closeModal(){
-                var close_el = (this.$refs.close_search);
                 this.search  = null;//clear search input
-                close_el.click();//close modal element search
+                this.products = null;
+                let myOffcanvas = document.getElementById('AsideOffcanvasSearch');
+                let bsOffcanvas = bootstrap.Offcanvas.getInstance(myOffcanvas);
+                bsOffcanvas.hide();
             }
         },
         watch:{
             search:{
                 handler: function(val) {
-                    this.products = null;
 
                     if(val && val.length>0){
                         axios.post('/api/search', {
                             'search': val,
                             'page': 1
                         }).then(res => {
+                            this.products = null;
                             this.error_message = '';
                             this.products = res.data.data;
                         }).catch(error => {
                             this.error_message = error.response.data.message;
                         });
+                    }else {
+                        this.products = null;
+                        this.error_message = '';
                     }
                 },
                 deep: true

@@ -88,7 +88,7 @@
             getAreas(){
                 this.statusLoader=true;
                 axios.post('https://api.novaposhta.ua/v2.0/json/', {
-                    apiKey: 'd00d8c26062adbddc853fc29ff519a16',
+                    apiKey: 'ebccd9a23a3f43c4628d826613c6f1ac',
                     modelName: "Address",
                     calledMethod: 'getAreas',
                     methodProperties: {}
@@ -96,12 +96,14 @@
                     console.log(response.data.data);
                     this.areas = response.data.data;
                     this.statusLoader=false;
+                }).catch(error=>{
+                    console.log(error);
                 });
             },
             getCities(value){
                 this.statusLoader=true;
                 axios.post('https://api.novaposhta.ua/v2.0/json/', {
-                    apiKey: 'd00d8c26062adbddc853fc29ff519a16',
+                    apiKey: 'ebccd9a23a3f43c4628d826613c6f1ac',
                     modelName: 'Address',
                     calledMethod: 'getCities',
                     methodProperties: {
@@ -122,7 +124,7 @@
             getWarehouses(value){
                 this.statusLoader=true;
                 axios.post('https://api.novaposhta.ua/v2.0/json/', {
-                    apiKey: 'd00d8c26062adbddc853fc29ff519a16',
+                    apiKey: 'ebccd9a23a3f43c4628d826613c6f1ac',
                     modelName: 'Address',
                     calledMethod: 'getWarehouses',
                     methodProperties: {

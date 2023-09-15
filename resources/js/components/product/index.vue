@@ -2,35 +2,7 @@
     <main class="main-content">
 
         <!--== Start Page Header Area Wrapper ==-->
-        <section class="page-header-area pt-10 pb-9" data-bg-color="#FFF3DA">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-7">
-                        <div class="page-header-st3-content text-center text-md-start">
-                            <ol class="breadcrumb justify-content-center justify-content-md-start">
-                                <li class="breadcrumb-item">
-                                    <router-link class="text-dark" to="/">
-                                        <i class="fa fa-home"></i>
-                                    </router-link>
-                                </li>
-
-                                <li v-for="category in categories" class="breadcrumb-item">
-                                    <router-link class="text-dark" :to="'/category/'+category.id">
-                                        {{category.title}}
-                                    </router-link>
-                                </li>
-
-                                <li  class="breadcrumb-item">
-                                    {{product.title}}
-                                </li>
-
-                            </ol>
-                            <h4 class="page-header-title">Продукти категорії <span class="text-primary">{{category.title}}</span></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <breadcrumbs :parents="categories"  :product="product"></breadcrumbs>
         <!--== End Page Header Area Wrapper ==-->
 
         <!--== Start Product Details Area Wrapper ==-->
@@ -69,10 +41,6 @@
                                     <input class="qty-value" type="text" title="Кількість" value="1">
                                 </div>
                             </div>
-                            <!--<div class="product-details-shipping-cost">
-                                <input class="form-check-input" type="checkbox" value="" id="ShippingCost" checked>
-                                <label class="form-check-label" for="ShippingCost">Shipping from USA, Shipping Fees $4.22</label>
-                            </div>-->
                             <div class="product-details-action">
                                 <h4 class="price">{{product.price_special}} &#x20b4</h4>
                                 <div class="product-details-cart-wishlist">
@@ -128,9 +96,8 @@
         <!--== Start Product Banner Area Wrapper ==-->
         <div class="container">
             <!--== Start Product Category Item ==-->
-            <a href="product.html" class="product-banner-item">
-                <img src="/images/shop/banner/7.webp" width="1170" height="240" alt="Image-HasTech">
-            </a>
+            <img src="/storage/images/product_banner.jpg" width="1170" height="240" alt="Image-HasTech">
+
             <!--== End Product Category Item ==-->
         </div>
         <!--== End Product Banner Area Wrapper ==-->
@@ -234,9 +201,10 @@
 <script>
     import Api from '../../api.js'
     import StarRating from 'vue-star-rating';
-    import product_wishlist from "../elements/product_wishlist.vue";
+    import product_wishlist from "../elements/modal/product_wishlist.vue";
     import quick_add_card_product_modal from "../elements/quick_add_card_product_modal.vue";
-    import product_preview from '../elements/product_quick_view.vue';
+    import breadcrumbs from "../elements/breadcrumb/_breadcrumbs.vue";
+    import product_preview from '../elements/modal/product_quick_view.vue';
     import specification from "../elements/product/specification.vue";
     import reviews from "../elements/product/reviews.vue";
     import reviews_form from "../elements/product/reviews_form.vue";
@@ -276,6 +244,7 @@
             StarRating,
             product_wishlist,
             quick_add_card_product_modal,
+            breadcrumbs,
             product_preview,
             specification,
             reviews,

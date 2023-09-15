@@ -27,7 +27,7 @@
         },
         mounted() {
             this.loadCategories();
-            $(document).trigger('change')
+            $(document).trigger('change');
         },
         methods:{
             loadCategories(){

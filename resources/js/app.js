@@ -13,7 +13,7 @@ import {h} from 'vue';
 import IndexComponent from "./components/IndexComponent.vue";
 import main_menu from "./components/elements/_main_menu.vue";
 import child_main_menu from "./components/elements/child_main_menu.vue";
-import rangeSlider from "./components/elements/rangeSlider.vue";
+import rangeSlider from "./components/elements/category/_rangeSlider.vue";
 import router from "./router/index";
 import Paginate from 'vuejs-paginate-next';
 import VueformSlider from '@vueform/slider';

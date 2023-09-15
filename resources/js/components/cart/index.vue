@@ -2,89 +2,117 @@
     <main class="main-content">
 
         <!--== Start Page Header Area Wrapper ==-->
-        <nav aria-label="breadcrumb" class="breadcrumb-style1">
-            <div class="container">
-                <ol class="breadcrumb justify-content-center justify-content-md-start">
-                    <li class="breadcrumb-item">
-                        <router-link class="text-dark" to="/">
-                            <i class="fa fa-home"></i>
-                        </router-link>
-                    </li>
-
-                    <li class="breadcrumb-item">
-                        Кошик
-                    </li>
-
-                </ol>
-            </div>
-        </nav>
+        <breadcrumbs :pageTitle="pageTitle"></breadcrumbs>
         <!--== End Page Header Area Wrapper ==-->
 
         <!--== Start Product Area Wrapper ==-->
         <section class="section-space">
             <div class="container">
-                <div class="shopping-cart-form table-responsive">
-                    <form>
-                        <table class="table text-center">
-                            <thead>
-                            <tr>
-                                <th class="product-remove">&nbsp;</th>
-                                <th class="product-thumbnail">&nbsp;</th>
-                                <th class="product-name">Товар</th>
-                                <th class="product-price">Ціна</th>
-                                <th class="product-quantity">Кількість</th>
-                                <th class="product-subtotal">Загальна сума</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="(cart_product, index) in products" class="tbody-item">
-                                    <td class="product-remove">
-                                        <a @click.prevent="removeProduct(index), preloader()" class="remove" >×</a>
-                                    </td>
-                                    <td class="product-thumbnail">
-                                        <div class="thumb">
-                                            <router-link :to="'/product/'+cart_product.product.id" href="single-product.html">
-                                                <img :src="cart_product.product.image_url" width="68" height="84" alt="Image-HasTech">
-                                            </router-link>
+                <div class="row d-flex justify-content-center my-4">
+                    <div class="col-md-8">
+                        <div class="card mb-4 cart-box">
+                            <div class="card-header py-3">
+                                <h5 class="mb-0">Кошик - {{totalQty}} тов.</h5>
+                            </div>
+                            <div class="card-body">
+                                <!-- Single item -->
+                                <div v-for="(cart_product, index) in products" class="row">
+                                    <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
+                                        <!-- Image -->
+                                        <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
+                                            <img :src="cart_product.product.image_url"
+                                                 class="w-100" alt="Blue Jeans Jacket" />
+                                            <a href="#!">
+                                                <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
+                                            </a>
                                         </div>
-                                    </td>
-                                    <td class="product-name">
-                                        <router-link class="title" :to="'/product/'+cart_product.product.id">{{cart_product.product.title}}</router-link>
-                                    </td>
-                                    <td class="product-price">
-                                        <span class="price">{{cart_product.product.price_special}} &#x20b4</span>
-                                    </td>
-                                    <td class="product-quantity">
-                                        <div class="quantity-toggle">
-                                            <button @click.prevent="decrement(index)" class="dec qty-btn">-</button>
-                                            <input type="text" :value="cart_product.qty" readonly>
-                                            <button @click.prevent="increment(index)" class="inc qty-btn">+</button>
+                                        <!-- Image -->
+                                    </div>
+
+                                    <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
+                                        <!-- Data -->
+                                        <router-link :to="'/product/'+cart_product.product.id"><strong>{{cart_product.product.title}}</strong></router-link>
+                                        <p>Категорія: {{cart_product.product.category[0].title}}</p>
+                                        <p>Об'єм: {{cart_product.product.attributes.weight}}</p>
+                                        <button
+                                            @click.prevent="removeProduct(index), preloader()"
+                                            type="button"
+                                            class="btn btn-danger btn-sm me-1 mb-2"
+                                            data-mdb-toggle="tooltip"
+                                                title="Видалити">
+                                            <i class="fa fa-trash text-white"></i>
+                                        </button>
+                                        <!-- Data -->
+                                    </div>
+
+                                    <div class="col-lg-4 col-md-6 mb-4 mb-lg-0">
+                                        <!-- Quantity -->
+                                        <div class="d-flex mb-4 qty-box" style="max-width: 300px">
+                                            <button class="btn btn-outline-info px-3 me-2"
+                                                    @click.prevent="decrement(index)">
+                                                <i class="fa fa-minus text-info"></i>
+                                            </button>
+
+                                            <div class="form-outline">
+                                                <input
+                                                    :value="cart_product.qty"
+                                                    min="1"
+                                                    name="quantity"
+                                                    value="1"
+                                                    type="number"
+                                                    class="form-control border border-info"
+                                                    readonly/>
+
+                                            </div>
+
+                                            <button class="btn btn-outline-info px-3 ms-2"
+                                                    @click.prevent="increment(index)">
+                                                <i class="fa fa-plus text-info"></i>
+                                            </button>
                                         </div>
-                                    </td>
-                                    <td class="product-subtotal">
-                                        <span class="price">{{cart_product.product.price_special * cart_product.qty}} &#x20b4</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </form>
-                </div>
-                <div class="row">
-                    <div class="col-12 col-lg-6">
-                        <div class="cart-totals-wrap">
-                            <h2 class="title">Сума замовлення</h2>
-                            <table>
-                                <tbody>
-                                <tr class="cart-subtotal">
-                                    <th>Сума</th>
-                                    <td>
-                                        <span class="amount">{{totalPrice}}</span>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            <div class="text-end">
-                                <router-link to="/checkout" class="checkout-button"> Оформлення замовлення</router-link>
+                                        <!-- Quantity -->
+
+                                        <!-- Price -->
+                                        <p class="text-start text-md-center">
+                                            <strong>{{cart_product.product.price_special * cart_product.qty}} &#x20b4</strong>
+                                        </p>
+                                        <!-- Price -->
+                                    </div>
+                                    <hr class="my-4" />
+                                </div>
+                                <!-- Single item -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4">
+                            <div class="card-header py-3">
+                                <h5 class="mb-0">Підсумок</h5>
+                            </div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 pb-0">
+                                        Сума
+                                        <span>{{totalPrice}} &#x20b4</span>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                                        Доставка
+                                        <span>За тарифами перевізника</span>
+                                    </li>
+                                    <li
+                                        class="list-group-item d-flex justify-content-between align-items-center border-0 px-0 mb-3">
+                                        <div>
+                                            <strong>Сума замовлення</strong>
+                                            <strong>
+                                                <p class="mb-0">(без послуг перевізника)</p>
+                                            </strong>
+                                        </div>
+                                        <span><strong>{{totalPrice}} &#x20b4</strong></span>
+                                    </li>
+                                </ul>
+
+                                <router-link to="/checkout" class="btn btn-primary btn-lg btn-block">Оформити</router-link>
                             </div>
                         </div>
                     </div>
@@ -103,6 +131,7 @@
 
 <script>
     import { ScaleLoader } from "vue3-spinner";
+    import breadcrumbs from "../elements/breadcrumb/_breadcrumbs.vue"
     export default {
         name: "index",
         // meta info
@@ -113,12 +142,15 @@
             return{
                 products: {},
                 totalPrice: 0,
+                totalQty: 0,
                 quantity: 1,
+                pageTitle: "Кошик",
                 statusLoader: true
             }
         },
         components:{
-            ScaleLoader
+            ScaleLoader,
+            breadcrumbs
         },
         mounted() {
             $(document).trigger('change');
@@ -127,20 +159,26 @@
         methods:{
             getCartProducts(){
                 this.products = JSON.parse(localStorage.getItem('cart'));
+                console.log(this.products);
                 this.getTotalPrice(this.products);
+                this.totalQty = this.getTotalQty(this.products);
                 this.preloader();
             },
 
             increment (index) {
+                console.log(index);
                 this.products[index].qty++;
                 this.getTotalPrice(this.products);
-                localStorage.setItem('cart', JSON.stringify(this.products))
+                localStorage.setItem('cart', JSON.stringify(this.products));
+                this.totalQty = this.getTotalQty(this.products);
                 this.$emit('countStatusCart', this.products);
             },
             decrement (index) {
+                console.log(index);
                 this.products[index].qty>1 ? this.products[index].qty-- : this.products[index].qty;
                 this.getTotalPrice(this.products);
                 localStorage.setItem('cart', JSON.stringify(this.products));
+                this.totalQty = this.getTotalQty(this.products);
                 this.$emit('countStatusCart', this.products);
             },
             getTotalPrice(cartProduct){
@@ -163,12 +201,32 @@
                 setTimeout(()=>{this.statusLoader= false}, 1000);
             },
 
+            getTotalQty(products){
+                let qty = 0;
+                products.forEach(product=>{
+                    qty += product.qty
+                })
+                return qty;
+            }
+
         }
     }
 </script>
 
 <style>
-    .quantity-toggle{
+    .cart-box .btn{
+        border-radius: 5px;
+        font-size: 16px;
+        letter-spacing: 0;
+
+    }
+    .qty-box .btn{
+        background: none;
+        border: 1px solid rgba(23,162,184);
+        height: 42px;
+        padding: 0;
+    }
+    /*.quantity-toggle{
         display: inline-block;
         position: relative;
     }
@@ -215,6 +273,6 @@
         right: 0;
         border-left: 1px solid #CDCDCD;
         padding-right: 5px;
-    }
+    }*/
 
 </style>

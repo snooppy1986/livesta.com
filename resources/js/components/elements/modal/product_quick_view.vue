@@ -66,7 +66,7 @@
 
 <script>
     import StarRating from 'vue-star-rating';
-    import quick_add_card_product_modal from "./quick_add_card_product_modal.vue";
+    import quick_add_card_product_modal from "../quick_add_card_product_modal.vue";
     export default {
         name: "product_quick_view",
         props:[

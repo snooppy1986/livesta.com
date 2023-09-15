@@ -1,24 +1,8 @@
 <template>
     <main class="main-content">
         <!--== Start Page Header Area Wrapper ==-->
-        <section class="page-header-area pt-10 pb-9" data-bg-color="#FFF3DA">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="page-header-st3-content text-center text-md-start">
-                            <ol class="breadcrumb justify-content-center justify-content-md-start">
-                                <li class="breadcrumb-item">
-                                    <router-link class="text-dark" to="/">
-                                        <i class="fa fa-home"></i>
-                                    </router-link>
-                                </li>
-                                <li class="breadcrumb-item">Контакти</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <breadcrumbs :pageTitle="pageTitle"></breadcrumbs>
+
         <!--== End Page Header Area Wrapper ==-->
         <!--== Start Contact Area Wrapper ==-->
         <section class="contact-area">
@@ -142,10 +126,12 @@
 
 <script>
     import axios from 'axios';
+    import breadcrumbs from '../elements/breadcrumb/_breadcrumbs.vue';
     export default {
         name: "contact",
         data(){
             return{
+                pageTitle: 'Контакти',
                 name: null,
                 surname: null,
                 email: null,
@@ -157,6 +143,12 @@
         // meta info
         metaInfo:{
             title: 'Контакти'
+        },
+        components:{
+            breadcrumbs
+        },
+        mounted() {
+            $(document).trigger('change');
         },
         methods:{
             sendMessage(){

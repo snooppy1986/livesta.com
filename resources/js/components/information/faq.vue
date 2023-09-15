@@ -1,24 +1,7 @@
 <template>
     <main class="main-content">
         <!--== Start Page Header Area Wrapper ==-->
-        <section class="page-header-area pt-10 pb-9" data-bg-color="#FFF3DA">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="page-header-st3-content text-center text-md-start">
-                            <ol class="breadcrumb justify-content-center justify-content-md-start">
-                                <li class="breadcrumb-item">
-                                    <router-link class="text-dark" to="/">
-                                        <i class="fa fa-home"></i>
-                                    </router-link>
-                                </li>
-                                <li class="breadcrumb-item">Питання</li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <breadcrumbs :pageTitle="pageTitle"></breadcrumbs>
         <!--== End Page Header Area Wrapper ==-->
 
         <!--== Start Faq Area Wrapper ==-->
@@ -156,11 +139,23 @@
 </template>
 
 <script>
+    import breadcrumbs from '../elements/breadcrumb/_breadcrumbs.vue';
     export default {
         name: "faq",
+        data(){
+            return{
+                pageTitle: 'Питання'
+            }
+        },
         // meta info
         metaInfo:{
             title: 'Допомога'
+        },
+        components:{
+            breadcrumbs
+        },
+        mounted() {
+            $(document).trigger('change');
         },
     }
 </script>

@@ -2,26 +2,7 @@
     <main class="main-content">
 
         <!--== Start Page Header Area Wrapper ==-->
-        <section class="page-header-area pt-10 pb-9" data-bg-color="#FFF3DA">
-            <div class="container">
-                <div class="row">
-                    <div class="col-md-5">
-                        <div class="page-header-st3-content text-center text-md-start">
-                            <ol class="breadcrumb justify-content-center justify-content-md-start">
-                                <li class="breadcrumb-item">
-                                    <router-link class="text-dark" to="/">
-                                        <i class="fa fa-home"></i>
-                                    </router-link>
-                                </li>
-                                <li class="breadcrumb-item">Авторизація</li>
-
-                            </ol>
-                            <h2 class="page-header-title">Авторизація</h2>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        <breadcrumbs :pageTitle="pageTitle"></breadcrumbs>
         <!--== End Page Header Area Wrapper ==-->
 
         <!--== Start Account Area Wrapper ==-->
@@ -122,6 +103,7 @@
 <script>
     import axios from 'axios';
     import Dropzone from 'dropzone';
+    import breadcrumbs from '../elements/breadcrumb/_breadcrumbs.vue';
     export default {
         name: "auth",
         // meta info
@@ -140,9 +122,12 @@
                 reg_confirm_password: null,
                 login_error: null,
                 avatar_dropzone: null,
+                pageTitle: 'Авторизація та реєстрація'
             }
         },
-
+        components:{
+            breadcrumbs
+        },
         mounted() {
             this.avatar_dropzone = new Dropzone(this.$refs.avatarDropzone,{
                 url: '/login',
@@ -151,8 +136,10 @@
                 maxFiles: 1,
                 thumbnailWidth: 50,
                 thumbnailHeight: 50,
-                dictRemoveFile: 'Видалити'
-            })
+                dictRemoveFile: '<span class="dz-remove-text">Видалити</span>' +
+                    '<i class="fa fa-trash dz-remove-icon" aria-hidden="true"></i>'
+            });
+            $(document).trigger('change');
         },
         methods:{
             login(){
@@ -231,5 +218,21 @@
     .dz-remove:hover{
         border-color: #0a0e14;
         background: #e7e7e7;
+    }
+    .dz-remove-icon{
+        display: none;
+    }
+    @media only screen and (max-width: 575px) {
+        .dz-remove-text{
+            display: none;
+        }
+        .dz-remove-icon{
+            display: inline-block;
+            margin-left: 0 !important;
+        }
+        .dz-remove:hover .dz-remove-icon{
+            color: #ff6565;
+        }
+
     }
 </style>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Auth\PasswordController;
 use App\Http\Requests\User\UserUpdateRequest;
 use App\Http\Resources\User\UserResource;
+use App\Models\Traits\UploadFile;
 use App\Models\User;
 use App\Models\UserAttribute;
 use Carbon\Carbon;
@@ -19,42 +20,38 @@ use function Illuminate\Validation\message;
 
 class UserController extends Controller
 {
+    use UploadFile;
     public function update(UserUpdateRequest $request, User $user)
     {
+
         $data = $request->validated();
 
-        dd($data);
-
         if($user){
+            //update user avatar
+            if($data['image'] !== 'null'){
+
+                if($user->avatar !== 'user_avatar.jpg'){
+                    Storage::disk('public')->delete('images/avatar/'.$user->avatar);
+                }
+
+                //uploag avatar
+                $fileName = $this->UploadFile($data['image'], 50, 50, 'public/images/avatar/');
+                $data['avatar'] = $fileName;
+                $data['avatar_url'] = url('/storage/images/avatar/'. $fileName);
+            }
+
+            if($data['image'] == 'null' && $data['remove_image']){
+                if($user->avatar !== 'user_avatar.jpg'){
+                    Storage::disk('public')->delete('images/avatar/'.$user->avatar);
+                }
+
+                $data['avatar'] = 'user_avatar.jpg';
+                $data['avatar_url'] = url('/storage/images/avatar/user_avatar.jpg');
+
+            }
+
             //update user data
             $user->update($data);
-
-            //update user avatar
-            if($request->avatar){
-                if($user->avatar !== 'user_avatar.jpg'){
-                    Storage::disk('public')->delete('images/'.$user->avatar);
-                }
-                $file = $request->avatar[0];
-                $name = md5(Carbon::now().'_'.$file->getClientOriginalName()).'.'.$file->getClientOriginalExtension();
-
-                Image::make($file)
-                    ->fit(50, 50)
-                    ->save(storage_path('app/public/images/'. $name))
-                ;
-                $user->update([
-                    'avatar'=>$name,
-                    'avatar_url' => url('/storage/images/'. $name)
-                ]);
-            }
-            if(!$request->avatar && $request->remove_image){
-                if($user->avatar !== 'user_avatar.jpg'){
-                    Storage::disk('public')->delete('images/'.$user->avatar);
-                }
-                $user->update([
-                    'avatar'=>'user_avatar.jpg',
-                    'avatar_url' => url('/storage/images/'. 'user_avatar.jpg')
-                ]);
-            }
 
             return response()->json(['message'=>'Особисті дані змінено успішно']);
         }
