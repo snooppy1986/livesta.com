@@ -18,7 +18,7 @@
                         <main_menu></main_menu>
                     </div>
                 </div>
-                <div class="col-7 col-lg-1 col-xl-1">
+                <div class="col-7 col-lg-1 col-xl-1 header-button-box">
                     <div class="header-action justify-content-end">
                         <!--search bar-->
                         <button
@@ -141,8 +141,6 @@
         @logout_status = "logoutStatus($event)"
         @success_checkout = "checkout($event)"
     />
-
-
 
     <!--== Start Footer Area Wrapper ==-->
     <footer_block :access_token="access_token" @logout_status="logoutStatus($event)"></footer_block>
@@ -358,6 +356,39 @@
     .user-in img{
         max-width: none;
     }
+    @media only screen and (min-width: 1200px) and (max-width: 1549px), only screen and (min-width: 992px) and (max-width: 1199px), only screen and (min-width: 768px) and (max-width: 991px){
+        .main-nav > li{
+            margin: 0 1px;
+        }
+    }
+
+    @media only screen and (max-width: 1199px){
+        .d-lg-block {
+            display: none !important;
+        }
+        .header-button-box{
+            flex: auto;
+        }
+        .header-menu-btn{
+            display: inline-block;
+        }
+    }
+   /* @media only screen and (min-width: 1199px){
+        .d-lg-block {
+            display: block!important;
+        }
+    }
+    @media only screen and (max-width: 767px), only screen and (min-width: 768px) and (max-width: 1199px){
+        .header-menu-btn {
+            display: inline-block;
+        }
+    }
+    @media only screen and (min-width: 992px){
+        .d-lg-block {
+            display: none!important;
+        }
+    }*/
+
 
     @media only screen and (max-width: 539px) {
         .pagination{
